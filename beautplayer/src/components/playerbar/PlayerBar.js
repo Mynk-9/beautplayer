@@ -4,6 +4,7 @@ import './../commonstyles.scss';
 
 import BackIcon from './../../assets/buttonsvg/skip-back.svg';
 import PlayIcon from './../../assets/buttonsvg/play.svg';
+import PauseIcon from './../../assets/buttonsvg/pause.svg';
 import NextIcon from './../../assets/buttonsvg/skip-forward.svg';
 import PlusIcon from './../../assets/buttonsvg/plus.svg';
 import MinusIcon from './../../assets/buttonsvg/minus.svg';
@@ -12,6 +13,7 @@ import VolumeLowIcon from './../../assets/buttonsvg/volume-2.svg';
 
 const PlayerBar = props => {
     const [volumeStatus, setVolumeStatus] = useState(false);
+    const [play, setPlay] = useState(false);
 
     return (
         <footer className={`${Styles.playerBar} acrylic`}>
@@ -20,7 +22,20 @@ const PlayerBar = props => {
             </div>
             <div className={Styles.center}>
                 <button><img alt="Back" src={BackIcon} /></button>
-                <button><img alt="Play" src={PlayIcon} /></button>
+                <button
+                    onClick={() =>{
+                        setPlay(!play);
+                    }}
+                >
+                    <img
+                        alt="Play"
+                        src={
+                            play
+                                ? PlayIcon
+                                : PauseIcon
+                        }
+                    />
+                </button>
                 <button><img alt="Next" src={NextIcon} /></button>
             </div>
             <div className={Styles.right}>
