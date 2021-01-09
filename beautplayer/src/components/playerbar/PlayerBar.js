@@ -26,12 +26,9 @@ const PlayerBar = props => {
             className={`${Styles.playerBar} acrylic`}
             style={acrylicColorStyle}
         >
-            <div
-                className={Styles.left}
-                style={{
-                    backgroundImage: `url(${props.nowPlayingAlbumArt})`,
-                }}
-            />
+            <div className={Styles.left}>
+                <img src={props.nowPlayingAlbumArt} />
+            </div>
             <div className={Styles.center}>
                 <button><img alt="Back" src={BackIcon} /></button>
                 <button

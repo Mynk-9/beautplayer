@@ -17,11 +17,12 @@
       flex: 1;
       background-size: cover;
       background-repeat: no-repeat;
+      padding: 0;
 
       img {
          display: inline-block;
-         height: 6rem;
-         width: 6rem;
+         height: 6.25rem;
+         width: 6.25rem;
       }
    }
    .right {

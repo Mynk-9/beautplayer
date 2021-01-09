@@ -5,32 +5,32 @@ import AlbumCard from './../../components/albumcard/AlbumCard';
 import './../../components/commonstyles.scss';
 import Styles from './MainPage.module.scss';
 
-import AlbumArt from './../../assets/images/pexels-sebastian-palomino-1955134.jpg';
+import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg';
 
 export default class MainPage extends React.Component {
     constructor() {
         super();
         this.state = {
-            darkMode: '',
-            acrylicColor: 'rgba(0,200,200,0.6)'
+            acrylicColor: '--acrylic-color',
         };
     }
 
     setDarkMode = e => {
         if (e)
-            this.setState({ darkMode: 'dark-mode' });
+            document.body.classList.add('dark-mode');
         else
-            this.setState({ darkMode: '' });
+            document.body.classList.remove('dark-mode');
     };
+    getDarkMode = () => document.body.classList.contains('dark-mode');
 
     render() {
         return (
-            <div id="color-mode-setter" className={this.state.darkMode}>
+            <div>
                 <Navbar acrylicColor={this.state.acrylicColor} />
                 <div className={Styles.mainBody}>
                     <div className={Styles.section}>
                         <div className={Styles.sectionHead}>
-                            Section Head
+                            Playlist
                         </div>
                         <div className={Styles.sectionBody}>
                             <AlbumCard albumArt={AlbumArt} albumTitle={"Awesome Album"} albumArtist={"Human"} />
@@ -42,7 +42,7 @@ export default class MainPage extends React.Component {
                     </div>
                     <div className={Styles.section}>
                         <div className={Styles.sectionHead}>
-                            Section Head
+                            Playlist
                         </div>
                         <div className={Styles.sectionBody}>
                             <AlbumCard albumArt={AlbumArt} albumTitle={"Awesome Album"} albumArtist={"Human"} />
@@ -50,7 +50,7 @@ export default class MainPage extends React.Component {
                     </div>
                     <div className={Styles.section}>
                         <div className={Styles.sectionHead}>
-                            Section Head
+                            Playlist
                         </div>
                         <div className={Styles.sectionBody}>
                             <AlbumCard albumArt={AlbumArt} albumTitle={"Awesome Album"} albumArtist={"Human"} />
