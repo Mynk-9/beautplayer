@@ -43,6 +43,8 @@ div#color-mode-setter {
 
    --same-tint-level1-color: rgba(255, 255, 255, 0.8);
 
+   --primary-color: black;
+   --secondary-color: white;
 
    transition: color 1s ease;
 }
@@ -50,6 +52,9 @@ div#color-mode-setter.dark-mode {
    --acrylic-color: rgba(0, 0, 0, 0.6);
 
    --same-tint-level1-color: rgba(200, 200, 200, 0.8);
+
+   --primary-color: white;
+   --secondary-color: #505050;
 
    color: #fafafa;
 }
