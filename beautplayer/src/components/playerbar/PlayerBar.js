@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
-import Styles from './PlayerBar.module.scss';
 import './../commonstyles.scss';
+import Styles from './PlayerBar.module.scss';
 
 import BackIcon from './../../assets/buttonsvg/skip-back.svg';
 import PlayIcon from './../../assets/buttonsvg/play.svg';
@@ -26,9 +26,12 @@ const PlayerBar = props => {
             className={`${Styles.playerBar} acrylic`}
             style={acrylicColorStyle}
         >
-            <div className={Styles.left}>
-                Now Playing song info
-            </div>
+            <div
+                className={Styles.left}
+                style={{
+                    backgroundImage: `url(${props.nowPlayingAlbumArt})`,
+                }}
+            />
             <div className={Styles.center}>
                 <button><img alt="Back" src={BackIcon} /></button>
                 <button
