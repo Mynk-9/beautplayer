@@ -28,6 +28,8 @@
       min-width: calc(
          3 * (24px + (2 * 1rem) + (2 * 1px) + (2 * 0.3rem)) + 2 * (1rem)
       );
+      // 3 x play-button + 2 x padding
+      // play-button = width + 2 x padding + 2 x border + 2 x margin
    }
 
    button {

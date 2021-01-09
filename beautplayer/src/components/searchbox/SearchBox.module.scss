@@ -4,6 +4,12 @@
    display: flex;
    border-radius: 5rem;
    background-color: var(--same-tint-level1-color);
+   max-width: 100%;
+
+   @media only screen and (max-width: 540px) {
+      margin: 0.5rem 0 0.5rem 0;
+      width: 100%;
+   }
 
    .searchBox {
       --box-width: 15rem;
@@ -19,5 +25,9 @@
    }
    .searchBox:focus {
       --box-width: 20rem;
+
+      @media only screen and (max-width: 540px) {
+         --box-width: 15rem;
+      }
    }
 }

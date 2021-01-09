@@ -1,22 +1,55 @@
-import React from 'react';
+import { React, useState } from 'react';
 import Styles from './Navbar.module.scss';
 import './../commonstyles.scss';
-
 import SearchBox from './../searchbox/SearchBox';
 
+import UpArrowIcon from './../../assets/buttonsvg/chevron-up.svg';
+import DownArrowIcon from './../../assets/buttonsvg/chevron-down.svg';
+
 const Navbar = props => {
+    const [navOpen, setNavOpen] = useState(false);
+
     return (
-        <nav className={`${Styles.nav} acrylic`}>
+        <nav
+            className={`${Styles.nav} acrylic`}
+            data-nav-state={
+                navOpen
+                    ? 'open'
+                    : 'close'
+            }
+        >
             <div className={Styles.center}>
                 BeautPlayer
             </div>
-            <SearchBox />
+            <span className={Styles.right}>
+                <SearchBox />
+            </span>
             <span className={Styles.right}>
                 Home
             </span>
             <span className={Styles.right}>
                 Settings
             </span>
+            <button
+                className={Styles.openNav}
+                onClick={() => {
+                    if (navOpen) {
+                        setNavOpen(false);
+
+                    } else {
+                        setNavOpen(true);
+                    }
+                }}
+            >
+                <img
+                    alt="Toggle"
+                    src={
+                        navOpen
+                            ? UpArrowIcon
+                            : DownArrowIcon
+                    }
+                />
+            </button>
         </nav>
     );
 };
