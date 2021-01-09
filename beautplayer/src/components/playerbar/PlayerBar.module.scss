@@ -12,10 +12,11 @@
    }
 
    .left {
-      flex: 0;
+      flex: 1;
    }
    .right {
-      flex: 0;
+      flex: 1;
+      text-align: right;
       @media only screen and (max-width: 540px) {
          display: none;
       }
