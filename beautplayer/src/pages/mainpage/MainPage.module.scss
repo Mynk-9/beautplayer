@@ -1,14 +1,21 @@
 .mainBody {
    padding-top: 5.25rem;
+   padding-bottom: 6.25rem;
 
    .section {
+      margin-right: -1rem;
+      margin-left: -1rem;
       padding: 1rem;
+      background-color: var(--secondary-color);
 
       .sectionHead {
-          padding-bottom: 0.5rem;
+         padding-bottom: 0.5rem;
+         padding-left: 1rem;
       }
       .sectionBody {
-          padding-top: 0.5rem;
+         padding-top: 0.5rem;
+         overflow-x: auto;
+         white-space: nowrap;
       }
    }
 }

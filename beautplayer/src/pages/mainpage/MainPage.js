@@ -31,6 +31,26 @@ export default class MainPage extends React.Component {
                         </div>
                         <div className={Styles.sectionBody}>
                             <AlbumCard albumArt={AlbumArt} albumTitle={"Awesome Album"} albumArtist={"Human"} />
+                            <AlbumCard albumArt={AlbumArt} albumTitle={"Awesome Album"} albumArtist={"Human"} />
+                            <AlbumCard albumArt={AlbumArt} albumTitle={"Awesome Album"} albumArtist={"Human"} />
+                            <AlbumCard albumArt={AlbumArt} albumTitle={"Awesome Album"} albumArtist={"Human"} />
+                            <AlbumCard albumArt={AlbumArt} albumTitle={"Awesome Album"} albumArtist={"Human"} />
+                        </div>
+                    </div>
+                    <div className={Styles.section}>
+                        <div className={Styles.sectionHead}>
+                            Section Head
+                        </div>
+                        <div className={Styles.sectionBody}>
+                            <AlbumCard albumArt={AlbumArt} albumTitle={"Awesome Album"} albumArtist={"Human"} />
+                        </div>
+                    </div>
+                    <div className={Styles.section}>
+                        <div className={Styles.sectionHead}>
+                            Section Head
+                        </div>
+                        <div className={Styles.sectionBody}>
+                            <AlbumCard albumArt={AlbumArt} albumTitle={"Awesome Album"} albumArtist={"Human"} />
                         </div>
                     </div>
                 </div>
