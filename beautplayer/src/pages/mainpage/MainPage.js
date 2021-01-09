@@ -10,7 +10,10 @@ import AlbumArt from './../../assets/images/pexels-sebastian-palomino-1955134.jp
 export default class MainPage extends React.Component {
     constructor() {
         super();
-        this.state = { darkMode: '' };
+        this.state = {
+            darkMode: '',
+            acrylicColor: 'rgba(0,200,200,0.6)'
+        };
     }
 
     setDarkMode = e => {
@@ -23,7 +26,7 @@ export default class MainPage extends React.Component {
     render() {
         return (
             <div id="color-mode-setter" className={this.state.darkMode}>
-                <Navbar />
+                <Navbar acrylicColor={this.state.acrylicColor} />
                 <div className={Styles.mainBody}>
                     <div className={Styles.section}>
                         <div className={Styles.sectionHead}>
@@ -54,7 +57,7 @@ export default class MainPage extends React.Component {
                         </div>
                     </div>
                 </div>
-                <PlayerBar />
+                <PlayerBar acrylicColor={this.state.acrylicColor} />
             </div>
         );
     }

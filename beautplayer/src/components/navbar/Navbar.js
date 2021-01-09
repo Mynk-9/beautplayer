@@ -9,6 +9,12 @@ import DownArrowIcon from './../../assets/buttonsvg/chevron-down.svg';
 const Navbar = props => {
     const [navOpen, setNavOpen] = useState(false);
 
+    let acrylicColorStyle;
+    if (props.acrylicColor)
+        acrylicColorStyle = { '--acrylic-color': props.acrylicColor };
+    else
+        acrylicColorStyle = {};
+
     return (
         <nav
             className={`${Styles.nav} acrylic`}
@@ -17,6 +23,7 @@ const Navbar = props => {
                     ? 'open'
                     : 'close'
             }
+            style={acrylicColorStyle}
         >
             <div className={Styles.center}>
                 BeautPlayer

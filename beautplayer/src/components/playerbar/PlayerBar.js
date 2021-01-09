@@ -15,15 +15,24 @@ const PlayerBar = props => {
     const [volumeStatus, setVolumeStatus] = useState(false);
     const [play, setPlay] = useState(false);
 
+    let acrylicColorStyle;
+    if (props.acrylicColor)
+        acrylicColorStyle = { '--acrylic-color': props.acrylicColor };
+    else
+        acrylicColorStyle = {};
+
     return (
-        <footer className={`${Styles.playerBar} acrylic`}>
+        <footer
+            className={`${Styles.playerBar} acrylic`}
+            style={acrylicColorStyle}
+        >
             <div className={Styles.left}>
                 Now Playing song info
             </div>
             <div className={Styles.center}>
                 <button><img alt="Back" src={BackIcon} /></button>
                 <button
-                    onClick={() =>{
+                    onClick={() => {
                         setPlay(!play);
                     }}
                 >
