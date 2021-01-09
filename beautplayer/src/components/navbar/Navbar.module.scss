@@ -1,0 +1,42 @@
+.nav {
+   --nav-padding: 1rem;
+
+   width: calc(100% - 2 * var(--nav-padding));
+   padding: var(--nav-padding);
+   position: fixed;
+
+   font-size: large;
+
+   * {
+      display: block;
+      float: right;
+      padding: 1rem;
+   }
+
+   .menuButton {
+      border-radius: 100%;
+      border: 0;
+      font-size: large;
+      background-color: rgba(1, 1, 1, 0.4);
+
+      float: left;
+   }
+   .menuButton:hover {
+       background-color: rgba(1, 1, 1, 0.6);
+   }
+   .menuButton:active {
+       background-color: rgba(1, 1, 1, 0.8);
+   }
+
+   .logo {
+      float: none;
+      display: inline-block;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+   }
+
+   .links {
+      float: right;
+   }
+}
