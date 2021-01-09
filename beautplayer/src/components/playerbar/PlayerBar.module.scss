@@ -11,8 +11,14 @@
       padding: 1rem;
    }
 
-   .left .right {
+   .left {
       flex: 0;
+   }
+   .right {
+      flex: 0;
+      @media only screen and (max-width: 540px) {
+         display: none;
+      }
    }
    .center {
       flex: 1;
