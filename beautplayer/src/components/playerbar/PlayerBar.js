@@ -2,13 +2,13 @@ import { React, useState } from 'react';
 import Styles from './PlayerBar.module.scss';
 import './../commonstyles.scss';
 
-import BackButton from './../../assets/buttonsvg/skip-back.svg';
-import PlayButton from './../../assets/buttonsvg/play.svg';
-import NextButton from './../../assets/buttonsvg/skip-forward.svg';
-import PlusButton from './../../assets/buttonsvg/plus.svg';
-import MinusButton from './../../assets/buttonsvg/minus.svg';
-import VolumeHighButton from './../../assets/buttonsvg/volume-1.svg';
-import VolumeLowButton from './../../assets/buttonsvg/volume-2.svg';
+import BackIcon from './../../assets/buttonsvg/skip-back.svg';
+import PlayIcon from './../../assets/buttonsvg/play.svg';
+import NextIcon from './../../assets/buttonsvg/skip-forward.svg';
+import PlusIcon from './../../assets/buttonsvg/plus.svg';
+import MinusIcon from './../../assets/buttonsvg/minus.svg';
+import VolumeHighIcon from './../../assets/buttonsvg/volume-1.svg';
+import VolumeLowIcon from './../../assets/buttonsvg/volume-2.svg';
 
 const PlayerBar = props => {
     const [volumeStatus, setVolumeStatus] = useState(false);
@@ -19,22 +19,22 @@ const PlayerBar = props => {
                 Now Playing song info
             </div>
             <div className={Styles.center}>
-                <button><img alt="Back" src={BackButton} /></button>
-                <button><img alt="Play" src={PlayButton} /></button>
-                <button><img alt="Next" src={NextButton} /></button>
+                <button><img alt="Back" src={BackIcon} /></button>
+                <button><img alt="Play" src={PlayIcon} /></button>
+                <button><img alt="Next" src={NextIcon} /></button>
             </div>
             <div className={Styles.right}>
-                <button><img alt="VolUp" src={PlusButton} /></button>
+                <button><img alt="VolDown" src={MinusIcon} /></button>
                 <img
                     alt="Volume Status"
                     src={
-                        volumeStatus 
-                            ? VolumeHighButton
-                            : VolumeLowButton
+                        volumeStatus
+                            ? VolumeHighIcon
+                            : VolumeLowIcon
                     }
                     className={Styles.volumeStatus}
                 />
-                <button><img alt="VolDown" src={MinusButton} /></button>
+                <button><img alt="VolUp" src={PlusIcon} /></button>
             </div>
         </footer>
     );
