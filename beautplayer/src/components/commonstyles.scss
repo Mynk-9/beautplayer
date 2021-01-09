@@ -1,20 +1,19 @@
 // normalize font
 @font-face {
-    font-family: 'Lato';
-    src: local('Lato'), url(./../assets/fonts/Lato/Lato-Regular.ttf) format('truetype');
+   font-family: "Lato";
+   src: local("Lato"),
+      url(./../assets/fonts/Lato/Lato-Regular.ttf) format("truetype");
 }
 body {
-    background-image: url("https://upload.wikimedia.org/wikipedia/commons/c/c9/Rainbow-diagram-ROYGBIV.svg");
-    font-family: 'Lato';
- }
- 
+   background-image: url("https://upload.wikimedia.org/wikipedia/commons/c/c9/Rainbow-diagram-ROYGBIV.svg");
+   font-family: "Lato";
+}
 
-.acrylic {
-   /**
+/**
     thanks to this stackoverflow answer: 
-        https://stackoverflow.com/questions/44522299/css-only-acrylic-material-from-fluent-design-system
-    */
-
+    https://stackoverflow.com/questions/44522299/css-only-acrylic-material-from-fluent-design-system
+*/
+.acrylic {
    backdrop-filter: blur(10px);
    -webkit-backdrop-filter: blur(10px);
 
