@@ -6,6 +6,8 @@
    flex-wrap: wrap;
    font-size: large;
 
+   z-index: 10;
+
    > * {
       display: block;
       padding: 1rem;
