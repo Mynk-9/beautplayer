@@ -57,7 +57,12 @@ export default class MainPage extends React.Component {
                         </div>
                     </div>
                 </div>
-                <PlayerBar acrylicColor={this.state.acrylicColor} nowPlayingAlbumArt={AlbumArt} />
+                <PlayerBar
+                    acrylicColor={this.state.acrylicColor}
+                    albumArt={AlbumArt}
+                    AlbumTitle="Awesome Album"
+                    albumArtist="Human"
+                />
             </div>
         );
     }

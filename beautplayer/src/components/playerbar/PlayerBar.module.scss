@@ -14,15 +14,27 @@
    }
 
    .left {
+      display: inline-table;
       flex: 1;
-      background-size: cover;
-      background-repeat: no-repeat;
       padding: 0;
 
-      img {
-         display: inline-block;
-         height: 6.25rem;
-         width: 6.25rem;
+      .albumArt {
+         display: table-cell;
+         background-size: cover;
+         background-repeat: no-repeat;
+         height: 100px;
+         width: 100px;
+      }
+      .albumInfo{
+         display: inline-table;
+         height: 100%;
+
+         span {
+            display: flex;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+         }
       }
    }
    .right {

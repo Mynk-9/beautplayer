@@ -27,7 +27,14 @@ const PlayerBar = props => {
             style={acrylicColorStyle}
         >
             <div className={Styles.left}>
-                <img src={props.nowPlayingAlbumArt} />
+                <div className={Styles.albumArt} style={{ backgroundImage: `url(${props.albumArt})` }} />
+                <div className={Styles.albumInfo}>
+                    <span>
+                        <b>{props.AlbumTitle}</b>
+                        <br />
+                        <i>{props.albumArtist}</i>
+                    </span>
+                </div>
             </div>
             <div className={Styles.center}>
                 <button><img alt="Back" src={BackIcon} /></button>
