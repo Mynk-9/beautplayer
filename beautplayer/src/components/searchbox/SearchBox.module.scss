@@ -1,6 +1,7 @@
 .searchBoxWrapper {
    padding: 0 0 0 0.5rem;
-   margin-right: 1rem;
+   // margin-right: 1rem;
+   margin: -0.5rem 1rem -0.5rem 0;
    display: flex;
    border-radius: 5rem;
    background-color: var(--same-tint-level1-color);
@@ -14,7 +15,7 @@
    .searchBox {
       --box-width: 15rem;
 
-      padding: 0.5rem 0.5rem;
+      padding: 0.5rem;
       margin: 0;
       border: 0;
       outline: 0;
