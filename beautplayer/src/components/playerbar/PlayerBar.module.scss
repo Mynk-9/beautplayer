@@ -24,6 +24,10 @@
    .center {
       flex: 1;
       text-align: center;
+
+      min-width: calc(
+         3 * (24px + (2 * 1rem) + (2 * 1px) + (2 * 0.3rem)) + 2 * (1rem)
+      );
    }
 
    button {
