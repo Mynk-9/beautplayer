@@ -1,0 +1,48 @@
+.playerBar {
+   width: 100%;
+   position: fixed;
+   bottom: 0;
+   display: flex;
+   flex-wrap: wrap;
+   font-size: large;
+
+   > * {
+      display: block;
+      padding: 1rem;
+   }
+
+   .left .right {
+      flex: 0;
+   }
+   .center {
+      flex: 1;
+      text-align: center;
+   }
+
+   button {
+      border: 0;
+      margin: 0.3rem;
+      padding: 1rem;
+      background-color: rgba(200, 200, 200, 0.1);
+      outline: 0;
+      border-radius: 50%;
+      border-style: solid;
+      border-width: 1px;
+      border-color: #a0a0a0;
+
+      img {
+         vertical-align: middle;
+      }
+   }
+   button:hover {
+      background-color: rgba(200, 200, 200, 0.6);
+   }
+   button:active {
+      background-color: rgba(200, 200, 200, 0.8);
+   }
+
+   .volumeStatus {
+      vertical-align: middle;
+      padding: 1rem;
+   }
+}
