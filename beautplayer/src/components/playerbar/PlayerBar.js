@@ -14,6 +14,7 @@ import VolumeLowIcon from './../../assets/buttonsvg/volume-2.svg';
 const PlayerBar = props => {
     const [volumeStatus, setVolumeStatus] = useState(false);
     const [play, setPlay] = useState(false);
+    const [mobileOpenAlbumDetails, setMobileOpenAlbumDetails] = useState(false);
 
     let acrylicColorStyle;
     if (props.acrylicColor)
@@ -27,8 +28,17 @@ const PlayerBar = props => {
             style={acrylicColorStyle}
         >
             <div className={Styles.left}>
-                <div className={Styles.albumArt} style={{ backgroundImage: `url(${props.albumArt})` }} />
-                <div className={Styles.albumInfo}>
+                <div
+                    className={Styles.albumArt}
+                    style={{ backgroundImage: `url(${props.albumArt})` }} 
+                    onClick={
+                        () => setMobileOpenAlbumDetails(!mobileOpenAlbumDetails)
+                    }
+                />
+                <div
+                    className={Styles.albumInfo}
+                    data-visible={mobileOpenAlbumDetails ? 'true' : 'false'}
+                >
                     <span>
                         <b>{props.AlbumTitle}</b>
                         <br />

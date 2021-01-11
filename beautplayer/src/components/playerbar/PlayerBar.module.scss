@@ -7,6 +7,7 @@
    font-size: large;
 
    z-index: 10;
+   transition: height 1s ease;
 
    > * {
       display: block;
@@ -17,6 +18,10 @@
       display: inline-table;
       flex: 1;
       padding: 0;
+
+      @media only screen and (max-width: 540px) {
+         display: block;
+      }
 
       .albumArt {
          display: table-cell;
@@ -33,12 +38,27 @@
       .albumInfo {
          display: inline-table;
          height: 100%;
+         // copied from .albumArt
+         max-width: calc(24px + 2 * 1rem + 2 * 1px + 2 * 0.3rem + 2 * 1rem);
 
          span {
             display: flex;
             height: 100%;
             flex-direction: column;
             justify-content: center;
+
+            @media only screen and (max-width: 540px) {
+               display: block;
+            }
+         }
+
+         @media only screen and (max-width: 540px) {
+            display: block;
+         }
+      }
+      .albumInfo[data-visible="false"] {
+         @media only screen and (max-width: 540px) {
+            display: none;
          }
       }
    }
