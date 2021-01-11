@@ -1,8 +1,8 @@
 import { React, useState } from 'react';
 import SearchBox from './../searchbox/SearchBox';
 import ColorModeSwitch from './../../components/colormodeswitch/ColorModeSwitch';
-import Styles from './Navbar.module.scss';
 import './../commonstyles.scss';
+import Styles from './Navbar.module.scss';
 
 import UpArrowIcon from './../../assets/buttonsvg/chevron-up.svg';
 import DownArrowIcon from './../../assets/buttonsvg/chevron-down.svg';
@@ -51,7 +51,7 @@ const Navbar = props => {
                     }
                 }}
             >
-                <img
+                <img data-dark-mode-compatible
                     alt="Toggle"
                     src={
                         navOpen

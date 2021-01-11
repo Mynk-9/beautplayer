@@ -27,8 +27,8 @@
          //                   + 2*button-border
          //                   + 2*button-margin
          //                   + 2*playerBar-sections-padding
-         height: calc(24px + 2*1rem + 2*1px + 2*0.3rem + 2*1rem);
-         width: calc(24px + 2*1rem + 2*1px + 2*0.3rem + 2*1rem);
+         height: calc(24px + 2 * 1rem + 2 * 1px + 2 * 0.3rem + 2 * 1rem);
+         width: calc(24px + 2 * 1rem + 2 * 1px + 2 * 0.3rem + 2 * 1rem);
       }
       .albumInfo {
          display: inline-table;
@@ -77,6 +77,10 @@
    }
    button:hover {
       background-color: var(--tint-level2-color);
+
+      @media only screen and (max-width: 540px) {
+         background-color: var(--tint-level1-color);
+      }
    }
    button:active {
       background-color: var(--tint-level3-color);

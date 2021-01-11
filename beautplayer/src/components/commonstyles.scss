@@ -30,7 +30,6 @@ body {
    transition: background-color 1s ease;
 }
 
-
 /**
    Colors
 */
@@ -47,17 +46,25 @@ body {
    --primary-color: black;
    --secondary-color: white;
 
+   color: var(--primary-color);
+
    transition: color 1s ease;
+
+   input {
+      color: var(--primary-color);
+   }
+   img[data-dark-mode-compatible] {
+      filter: invert(0);
+      transition: filter ease 1s;
+   }
 }
 body.dark-mode {
    --acrylic-color: rgba(0, 0, 0, 0.6);
 
-   --same-tint-level1-color: rgba(200, 200, 200, 0.8);
+   --same-tint-level1-color: rgba(70, 70, 70, 0.8);
 
-   --primary-color: white;
+   --primary-color: #fafafa;
    --secondary-color: black;
-
-   color: #fafafa;
 
    img[data-dark-mode-compatible] {
       filter: invert(0.9);
