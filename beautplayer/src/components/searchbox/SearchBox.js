@@ -9,7 +9,7 @@ const SearchBox = props => {
 
     return (
         <div className={Styles.searchBoxWrapper}>
-            <img src={SearchIcon} />
+            <img src={SearchIcon} alt="Search" />
             <input className={Styles.searchBox} type="text" value={query} onChange={(e) => setQuery(e.target.value)} />
         </div>
     );

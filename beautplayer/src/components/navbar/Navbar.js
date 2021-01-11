@@ -1,7 +1,8 @@
 import { React, useState } from 'react';
+import SearchBox from './../searchbox/SearchBox';
+import ColorModeSwitch from './../../components/colormodeswitch/ColorModeSwitch';
 import Styles from './Navbar.module.scss';
 import './../commonstyles.scss';
-import SearchBox from './../searchbox/SearchBox';
 
 import UpArrowIcon from './../../assets/buttonsvg/chevron-up.svg';
 import DownArrowIcon from './../../assets/buttonsvg/chevron-down.svg';
@@ -37,12 +38,14 @@ const Navbar = props => {
             <span className={Styles.right}>
                 Settings
             </span>
+            <span className={Styles.right}>
+                <ColorModeSwitch />
+            </span>
             <button
                 className={Styles.openNav}
                 onClick={() => {
                     if (navOpen) {
                         setNavOpen(false);
-
                     } else {
                         setNavOpen(true);
                     }
