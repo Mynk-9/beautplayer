@@ -1,0 +1,52 @@
+.nav {
+   --nav-padding: 1rem;
+
+   width: calc(100% - 2 * var(--nav-padding));
+   padding: var(--nav-padding);
+   position: fixed;
+   display: flex;
+   flex-wrap: wrap;
+   font-size: large;
+
+   z-index: 10;
+
+   > * {
+      display: block;
+      padding: 1rem;
+   }
+
+   // .left is unused
+   .left .right {
+      flex: 0;
+   }
+   .center {
+      flex: 1;
+   }
+
+   .openNav {
+      display: none;
+      position: absolute;
+      right: var(--nav-padding);
+      top: var(--nav-padding);
+      outline: 0;
+      background: none;
+
+      border: 0;
+   }
+}
+
+@media only screen and (max-width: 540px) {
+   .nav .openNav {
+      display: initial;
+   }
+   .nav[data-nav-state="open"] {
+      .right {
+         display: initial;
+      }
+   }
+   .nav[data-nav-state="close"] {
+      .right {
+         display: none;
+      }
+   }
+}

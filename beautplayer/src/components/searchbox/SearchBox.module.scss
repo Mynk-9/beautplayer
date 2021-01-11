@@ -1,0 +1,34 @@
+.searchBoxWrapper {
+   padding: 0 0 0 0.5rem;
+   // margin-right: 1rem;
+   margin: -0.5rem 1rem -0.5rem 0;
+   display: flex;
+   border-radius: 5rem;
+   background-color: var(--same-tint-level1-color);
+   max-width: 100%;
+
+   @media only screen and (max-width: 540px) {
+      margin: 0.5rem 0 0.5rem 0;
+      width: 100%;
+   }
+
+   .searchBox {
+      --box-width: 15rem;
+
+      padding: 0.5rem;
+      margin: 0;
+      border: 0;
+      outline: 0;
+      background-color: var(--transparent-color);
+      width: var(--box-width);
+
+      transition: width 0.3s ease;
+   }
+   .searchBox:focus {
+      --box-width: 20rem;
+
+      @media only screen and (max-width: 540px) {
+         --box-width: 15rem;
+      }
+   }
+}

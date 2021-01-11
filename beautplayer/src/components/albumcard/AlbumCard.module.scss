@@ -1,0 +1,23 @@
+.albumCard {
+   --albumCard-width: 10rem;
+   --albumCard-maxHeight: 15rem;
+
+   display: inline-block;
+   position: relative;
+   width: var(--albumCard-width);
+   max-height: var(--albumCard-maxHeight);
+   margin: 0 1rem 0 1rem;
+
+   img {
+      border-radius: 50%;
+      width: var(--albumCard-width);
+      height: var(--albumCard-width);
+   }
+   span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: center;
+   }
+}
