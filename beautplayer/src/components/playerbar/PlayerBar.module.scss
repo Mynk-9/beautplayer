@@ -22,10 +22,15 @@
          display: table-cell;
          background-size: cover;
          background-repeat: no-repeat;
-         height: 100px;
-         width: 100px;
+         // height = width = image-height
+         //                   + 2*button-padding
+         //                   + 2*button-border
+         //                   + 2*button-margin
+         //                   + 2*playerBar-sections-padding
+         height: calc(24px + 2*1rem + 2*1px + 2*0.3rem + 2*1rem);
+         width: calc(24px + 2*1rem + 2*1px + 2*0.3rem + 2*1rem);
       }
-      .albumInfo{
+      .albumInfo {
          display: inline-table;
          height: 100%;
 
