@@ -37,13 +37,13 @@ const PlayerBar = props => {
                 </div>
             </div>
             <div className={Styles.center}>
-                <button><img alt="Back" src={BackIcon} /></button>
+                <button><img data-dark-mode-compatible alt="Back" src={BackIcon} /></button>
                 <button
                     onClick={() => {
                         setPlay(!play);
                     }}
                 >
-                    <img
+                    <img data-dark-mode-compatible
                         alt="Play"
                         src={
                             play
@@ -52,11 +52,11 @@ const PlayerBar = props => {
                         }
                     />
                 </button>
-                <button><img alt="Next" src={NextIcon} /></button>
+                <button><img data-dark-mode-compatible alt="Next" src={NextIcon} /></button>
             </div>
             <div className={Styles.right}>
-                <button><img alt="VolDown" src={MinusIcon} /></button>
-                <img
+                <button><img data-dark-mode-compatible alt="VolDown" src={MinusIcon} /></button>
+                <img data-dark-mode-compatible
                     alt="Volume Status"
                     src={
                         volumeStatus
@@ -65,7 +65,7 @@ const PlayerBar = props => {
                     }
                     className={Styles.volumeStatus}
                 />
-                <button><img alt="VolUp" src={PlusIcon} /></button>
+                <button><img data-dark-mode-compatible alt="VolUp" src={PlusIcon} /></button>
             </div>
         </footer>
     );

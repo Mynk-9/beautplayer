@@ -58,4 +58,8 @@ body.dark-mode {
    --secondary-color: black;
 
    color: #fafafa;
+
+   img[data-dark-mode-compatible] {
+      filter: invert(0.9);
+   }
 }

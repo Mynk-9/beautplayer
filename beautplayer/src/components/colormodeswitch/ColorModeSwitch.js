@@ -24,7 +24,7 @@ const ColorModeSwitch = props => {
         <button className={Styles.button} onClick={
             () => setColorMode(!getColorMode())
         }>
-            <img
+            <img data-dark-mode-compatible
                 alt="Toggle Color Mode"
                 src={
                     colorConfig === 'dark'
