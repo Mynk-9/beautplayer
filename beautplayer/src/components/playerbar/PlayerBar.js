@@ -10,6 +10,8 @@ import PlusIcon from './../../assets/buttonsvg/plus.svg';
 import MinusIcon from './../../assets/buttonsvg/minus.svg';
 import VolumeHighIcon from './../../assets/buttonsvg/volume-1.svg';
 import VolumeLowIcon from './../../assets/buttonsvg/volume-2.svg';
+import UpIcon from './../../assets/buttonsvg/chevron-up.svg';
+import DownIcon from './../../assets/buttonsvg/chevron-down.svg';
 
 const PlayerBar = props => {
     const [volumeStatus, setVolumeStatus] = useState(false);
@@ -30,11 +32,19 @@ const PlayerBar = props => {
             <div className={Styles.left}>
                 <div
                     className={Styles.albumArt}
-                    style={{ backgroundImage: `url(${props.albumArt})` }} 
+                    style={{ backgroundImage: `url(${props.albumArt})` }}
                     onClick={
                         () => setMobileOpenAlbumDetails(!mobileOpenAlbumDetails)
                     }
-                />
+                >
+                    <img
+                        alt=""
+                        src={
+                            mobileOpenAlbumDetails
+                                ? DownIcon
+                                : UpIcon
+                        } />
+                </div>
                 <div
                     className={Styles.albumInfo}
                     data-visible={mobileOpenAlbumDetails ? 'true' : 'false'}

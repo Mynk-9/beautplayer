@@ -34,6 +34,18 @@
          //                   + 2*playerBar-sections-padding
          height: calc(24px + 2 * 1rem + 2 * 1px + 2 * 0.3rem + 2 * 1rem);
          width: calc(24px + 2 * 1rem + 2 * 1px + 2 * 0.3rem + 2 * 1rem);
+
+         img {
+            display: none;
+            position: absolute;
+            padding: 0.3rem;
+            border-radius: 50%;
+            background-color: rgba(100, 100, 100, 0.5);
+
+            @media only screen and (max-width: 540px) {
+               display: block;
+            }
+         }
       }
       .albumInfo {
          display: inline-table;
