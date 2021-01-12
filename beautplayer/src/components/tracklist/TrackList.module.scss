@@ -1,0 +1,19 @@
+.trackList {
+    width: 100%;
+    border-radius: var(--border-radius);
+    border-spacing: 0;
+
+    .trackEntry {
+
+        td {
+            padding: 1rem;
+            border: 0;
+        }
+        td:nth-child(3) {
+            text-align: right;
+        }
+    }
+    .trackEntry:hover {
+        background-color: var(--tint-level1-color);
+    }
+}
