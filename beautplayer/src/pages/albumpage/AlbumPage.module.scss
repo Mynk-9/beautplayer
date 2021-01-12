@@ -6,11 +6,10 @@
       --albumArtHeight: 30vh;
 
       background-color: var(--acrylic-color);
-    //   max-height: 30%;
       padding: 3rem;
 
       @media only screen and (max-width: 540px) {
-         height: 100%;
+         padding: 1rem;
       }
 
       .back {
@@ -19,6 +18,12 @@
          width: 3rem;
          margin-top: -1rem;
          margin-left: -1rem;
+
+         @media only screen and (max-width: 540px) {
+            position: relative;
+            display: block;
+            margin: 0;
+         }
       }
 
       .albumArt {
@@ -27,6 +32,15 @@
          width: var(--albumArtHeight);
          margin-left: 5rem;
          border-radius: var(--border-radius);
+
+         @media only screen and (max-width: 540px) {
+            position: relative;
+            display: block;
+            margin-left: 0;
+            margin-top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+         }
       }
 
       table {
@@ -48,7 +62,7 @@
       padding: 0 8rem 0 8rem;
 
       @media only screen and (max-width: 540px) {
-         padding: 0;
+         padding: 1rem;
       }
    }
 }
