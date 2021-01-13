@@ -2,8 +2,8 @@ import React from 'react';
 import './../commonstyles.scss';
 // import Styles from './TrackLike.module.scss';
 
-import HeartIcon from './../../assets/buttonsvg/heart.svg';
-import pqr from './../../assets/buttonsvg/sun.svg';
+import HeartIconFilled from './../../assets/buttonsvg/heart-filled.svg';
+import HeartIconEmpty from './../../assets/buttonsvg/heart.svg';
 
 class TrackLike extends React.Component {
     constructor() {
@@ -30,8 +30,8 @@ class TrackLike extends React.Component {
                 data-dark-mode-compatible
                 src={
                     this.state.liked
-                        ? HeartIcon
-                        : pqr
+                        ? HeartIconFilled
+                        : HeartIconEmpty
                 }
                 onClick={this.toggleLikeStatus}
                 alt={
