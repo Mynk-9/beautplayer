@@ -1,0 +1,68 @@
+.section {
+   padding-top: 6rem;
+   padding-bottom: 6.25rem;
+
+   .header {
+      --albumArtHeight: 30vh;
+
+      background-color: var(--acrylic-color);
+      padding: 3rem;
+
+      @media only screen and (max-width: 540px) {
+         padding: 1rem;
+      }
+
+      .back {
+         position: absolute;
+         height: 3rem;
+         width: 3rem;
+         margin-top: -1rem;
+         margin-left: -1rem;
+
+         @media only screen and (max-width: 540px) {
+            position: relative;
+            display: block;
+            margin: 0;
+         }
+      }
+
+      .albumArt {
+         display: inline-block;
+         height: var(--albumArtHeight);
+         width: var(--albumArtHeight);
+         margin-left: 5rem;
+         border-radius: var(--border-radius);
+
+         @media only screen and (max-width: 540px) {
+            position: relative;
+            display: block;
+            margin-left: 0;
+            margin-top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+         }
+      }
+
+      table {
+         display: inline-block;
+         height: var(--albumArtHeight);
+         padding-left: 2rem;
+
+         tr {
+            height: calc(var(--albumArtHeight) / 4);
+
+            td:first-child {
+               font-family: "Lato-LightItalic";
+            }
+         }
+      }
+   }
+
+   .content {
+      padding: 0 8rem 1.5rem 8rem;
+
+      @media only screen and (max-width: 540px) {
+         padding: 1rem;
+      }
+   }
+}

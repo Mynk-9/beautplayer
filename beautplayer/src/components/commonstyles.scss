@@ -4,6 +4,18 @@
    src: local("Lato"),
       url(./../assets/fonts/Lato/Lato-Regular.ttf) format("truetype");
 }
+@font-face {
+   font-family: "Lato-Italic";
+   src: url(./../assets/fonts/Lato/Lato-Italic.ttf) format("truetype");
+}
+@font-face {
+   font-family: "Lato-Light";
+   src: url(./../assets/fonts/Lato/Lato-Light.ttf) format("truetype");
+}
+@font-face {
+   font-family: "Lato-LightItalic";
+   src: url(./../assets/fonts/Lato/Lato-LightItalic.ttf) format("truetype");
+}
 body {
    // background-image: url("https://upload.wikimedia.org/wikipedia/commons/c/c9/Rainbow-diagram-ROYGBIV.svg");
    font-family: "Lato";
@@ -36,6 +48,7 @@ body {
 body {
    --transparent-color: rgba(0, 0, 0, 0);
    --acrylic-color: rgba(255, 255, 255, 0.6);
+   --non-transparent-acrylic-like-color: rgba(220, 220, 220, 1);
 
    --tint-level1-color: rgba(200, 200, 200, 0.1);
    --tint-level2-color: rgba(200, 200, 200, 0.6);
@@ -45,6 +58,8 @@ body {
 
    --primary-color: black;
    --secondary-color: white;
+
+   --border-radius: 1rem;
 
    color: var(--primary-color);
 
@@ -60,6 +75,11 @@ body {
 }
 body.dark-mode {
    --acrylic-color: rgba(0, 0, 0, 0.6);
+   --non-transparent-acrylic-like-color: rgba(35, 35, 35, 1);
+
+   --tint-level1-color: rgba(100, 100, 100, 0.1);
+   --tint-level2-color: rgba(100, 100, 100, 0.3);
+   --tint-level3-color: rgba(100, 100, 100, 0.6);
 
    --same-tint-level1-color: rgba(70, 70, 70, 0.8);
 

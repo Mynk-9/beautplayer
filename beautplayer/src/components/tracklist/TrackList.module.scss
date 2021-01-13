@@ -1,0 +1,42 @@
+.trackList {
+    width: 100%;
+    border-radius: var(--border-radius);
+    border-spacing: 0;
+    background-color: var(--non-transparent-acrylic-like-color);
+
+    .trackEntry {
+        td {
+            padding: 1rem;
+            border: 0;
+        }
+        td:nth-child(3) {
+            @media only screen and (max-width: 540px) {
+                display: none;
+            }
+        }
+        td:nth-child(4) {
+            text-align: right;
+        }
+    }
+    .trackEntry:hover {
+        background-color: var(--tint-level2-color);
+
+        @media only screen and (max-width: 540px) {
+            background-color: initial;
+        }
+    }
+    .trackEntry:active {
+        background-color: var(--tint-level3-color);
+    }
+}
+
+body[class~="dark-mode"] {
+    .trackList {
+        .trackEntry:hover {
+            background-color: var(--tint-level1-color);
+        }
+        .trackEntry:active {
+            background-color: var(--tint-level2-color);
+        }
+    }
+}
