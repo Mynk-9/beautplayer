@@ -48,6 +48,7 @@ body {
 body {
    --transparent-color: rgba(0, 0, 0, 0);
    --acrylic-color: rgba(255, 255, 255, 0.6);
+   --non-transparent-acrylic-like-color: rgba(220, 220, 220, 1);
 
    --tint-level1-color: rgba(200, 200, 200, 0.1);
    --tint-level2-color: rgba(200, 200, 200, 0.6);
@@ -74,6 +75,11 @@ body {
 }
 body.dark-mode {
    --acrylic-color: rgba(0, 0, 0, 0.6);
+   --non-transparent-acrylic-like-color: rgba(35, 35, 35, 1);
+
+   --tint-level1-color: rgba(100, 100, 100, 0.1);
+   --tint-level2-color: rgba(100, 100, 100, 0.3);
+   --tint-level3-color: rgba(100, 100, 100, 0.6);
 
    --same-tint-level1-color: rgba(70, 70, 70, 0.8);
 
