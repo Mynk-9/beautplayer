@@ -95,4 +95,8 @@ body.dark-mode {
 // Misc Classes
 .cursor-pointer {
    cursor: pointer;
+
+   @media only screen and (max-width: 540px) {
+      cursor: initial;
+   }
 }
