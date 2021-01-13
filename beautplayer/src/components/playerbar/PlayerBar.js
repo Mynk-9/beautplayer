@@ -67,8 +67,11 @@ const PlayerBar = props => {
                 </div>
             </div>
             <div className={Styles.center}>
-                <button><img data-dark-mode-compatible alt="Back" src={BackIcon} /></button>
+                <button className={"cursor-pointer"}>
+                    <img data-dark-mode-compatible alt="Back" src={BackIcon} />
+                </button>
                 <button
+                    className={"cursor-pointer"}
                     onClick={() => {
                         setPlay(!play);
                     }}
@@ -82,10 +85,14 @@ const PlayerBar = props => {
                         }
                     />
                 </button>
-                <button><img data-dark-mode-compatible alt="Next" src={NextIcon} /></button>
+                <button className={"cursor-pointer"}>
+                    <img data-dark-mode-compatible alt="Next" src={NextIcon} />
+                </button>
             </div>
             <div className={Styles.right}>
-                <button><img data-dark-mode-compatible alt="VolDown" src={MinusIcon} /></button>
+                <button className={"cursor-pointer"}>
+                    <img data-dark-mode-compatible alt="VolDown" src={MinusIcon} />
+                </button>
                 <img data-dark-mode-compatible
                     alt="Volume Status"
                     src={
@@ -95,7 +102,9 @@ const PlayerBar = props => {
                     }
                     className={Styles.volumeStatus}
                 />
-                <button><img data-dark-mode-compatible alt="VolUp" src={PlusIcon} /></button>
+                <button className={"cursor-pointer"}>
+                    <img data-dark-mode-compatible alt="VolUp" src={PlusIcon} />
+                </button>
             </div>
         </footer>
     );
