@@ -4,6 +4,8 @@
     border-spacing: 0;
     background-color: var(--non-transparent-acrylic-like-color);
 
+    transition: background-color var(--background-color-transition-time) ease;
+
     .trackEntry {
         td {
             padding: 1rem;
@@ -34,6 +36,10 @@ body[class~="dark-mode"] {
     .trackList {
         .trackEntry:hover {
             background-color: var(--tint-level1-color);
+
+            @media only screen and (max-width: 540px) {
+                background-color: initial;
+            }
         }
         .trackEntry:active {
             background-color: var(--tint-level2-color);

@@ -7,7 +7,7 @@
    font-size: large;
 
    z-index: 10;
-   transition: height 1s ease;
+   transition: height 1s ease, background-color var(--background-color-transition-time) ease;
 
    > * {
       display: block;
@@ -45,6 +45,9 @@
             @media only screen and (max-width: 540px) {
                display: block;
             }
+         }
+         img[data-visible="false"] {
+            display: none;
          }
       }
       .albumInfo {

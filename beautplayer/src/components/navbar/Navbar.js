@@ -26,17 +26,17 @@ const Navbar = props => {
             }
             style={acrylicColorStyle}
         >
-            <div className={Styles.center}>
-                BeautPlayer
-            </div>
+            <span className={Styles.center}>
+                <span className={"cursor-pointer"}>BeautPlayer</span>
+            </span>
             <span className={Styles.right}>
                 <SearchBox />
             </span>
             <span className={Styles.right}>
-                Home
+                <span className={"cursor-pointer"}>Home</span>
             </span>
             <span className={Styles.right}>
-                Settings
+                <span className={"cursor-pointer"}>Settings</span>
             </span>
             <span className={Styles.right}>
                 <ColorModeSwitch />
