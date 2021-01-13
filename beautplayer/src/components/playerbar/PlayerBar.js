@@ -53,7 +53,11 @@ const PlayerBar = props => {
                 </div>
                 <div
                     className={Styles.albumInfo}
-                    data-visible={mobileOpenAlbumDetails ? 'true' : 'false'}
+                    data-visible={
+                        mobileOpenAlbumDetails && props.albumArt
+                            ? 'true'
+                            : 'false'
+                    }
                 >
                     <span>
                         <b>{props.AlbumTitle}</b>
