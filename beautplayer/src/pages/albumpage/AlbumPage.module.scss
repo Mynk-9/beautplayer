@@ -4,8 +4,6 @@
 
    .header {
       --albumArtHeight: 30vh;
-
-      background-color: var(--acrylic-color);
       padding: 3rem;
 
       @media only screen and (max-width: 540px) {
