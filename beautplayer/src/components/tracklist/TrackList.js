@@ -1,4 +1,5 @@
 import { React, useState } from 'react';
+import TrackLiker from './../../components/trackliker/TrackLiker';
 import './../commonstyles.scss';
 import Styles from './TrackList.module.scss';
 
@@ -10,6 +11,7 @@ const TrackList = props => {
         ++key;
         return (
             <tr key={key} className={Styles.trackEntry}>
+                <td><TrackLiker /></td>
                 <td>{data[0]}</td>
                 <td>{data[1]}</td>
                 <td>{data[2]}</td>
@@ -18,7 +20,7 @@ const TrackList = props => {
     });
 
     return (
-        <table className={`${Styles.trackList} acrylic`}>
+        <table className={Styles.trackList}>
             <tbody>
                 {trackList}
             </tbody>
