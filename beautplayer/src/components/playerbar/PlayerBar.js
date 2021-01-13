@@ -43,7 +43,13 @@ const PlayerBar = props => {
                             mobileOpenAlbumDetails
                                 ? DownIcon
                                 : UpIcon
-                        } />
+                        }
+                        data-visible={
+                            props.albumArt
+                                ? 'true'
+                                : 'false'
+                        }
+                    />
                 </div>
                 <div
                     className={Styles.albumInfo}
