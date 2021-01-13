@@ -34,6 +34,10 @@ body[class~="dark-mode"] {
     .trackList {
         .trackEntry:hover {
             background-color: var(--tint-level1-color);
+
+            @media only screen and (max-width: 540px) {
+                background-color: initial;
+            }
         }
         .trackEntry:active {
             background-color: var(--tint-level2-color);
