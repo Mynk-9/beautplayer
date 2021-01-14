@@ -5,6 +5,7 @@
    display: flex;
    flex-wrap: wrap;
    font-size: large;
+   border-radius: var(--border-radius) var(--border-radius) 0 0;
 
    z-index: 10;
    transition: height 1s ease, background-color var(--background-color-transition-time) ease;
