@@ -5,18 +5,18 @@ import SunIcon from './../../assets/buttonsvg/sun.svg';
 import MoonIcon from './../../assets/buttonsvg/moon.svg';
 
 const ColorModeSwitch = props => {
-    const [colorConfig, setColorConfig] = useState('light');
+    const [colorConfig, setColorConfig] = useState('dark');
 
-    let getColorMode = () => document.body.classList.contains('dark-mode');
+    let getColorMode = () => document.body.classList.contains('light-mode');
     let setColorMode = e => {
         console.log(getColorMode(), e);
         if (e) {
-            document.body.classList.add('dark-mode');
-            setColorConfig('dark');
+            document.body.classList.add('light-mode');
+            setColorConfig('light');
         }
         else {
-            document.body.classList.remove('dark-mode');
-            setColorConfig('light');
+            document.body.classList.remove('light-mode');
+            setColorConfig('dark');
         }
     };
 

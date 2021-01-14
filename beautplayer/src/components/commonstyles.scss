@@ -47,34 +47,6 @@ body {
 */
 body {
    --transparent-color: rgba(0, 0, 0, 0);
-   --acrylic-color: rgba(255, 255, 255, 0.6);
-   --non-transparent-acrylic-like-color: rgba(220, 220, 220, 1);
-
-   --tint-level1-color: rgba(200, 200, 200, 0.1);
-   --tint-level2-color: rgba(200, 200, 200, 0.6);
-   --tint-level3-color: rgba(200, 200, 200, 0.8);
-
-   --same-tint-level1-color: rgba(255, 255, 255, 0.8);
-
-   --primary-color: black;
-   --secondary-color: white;
-
-   --border-radius: 1rem;
-   --background-color-transition-time: 0.5s;
-
-   color: var(--primary-color);
-
-   transition: color 1s ease, background-color var(--background-color-transition-time) ease;
-
-   input {
-      color: var(--primary-color);
-   }
-   img[data-dark-mode-compatible] {
-      filter: invert(0);
-      transition: filter ease 1s;
-   }
-}
-body.dark-mode {
    --acrylic-color: rgba(0, 0, 0, 0.6);
    --non-transparent-acrylic-like-color: rgba(35, 35, 35, 1);
 
@@ -87,8 +59,36 @@ body.dark-mode {
    --primary-color: #fafafa;
    --secondary-color: black;
 
+   --border-radius: 1rem;
+   --background-color-transition-time: 0.5s;
+
+   color: var(--primary-color);
+
+   transition: color 1s ease, background-color var(--background-color-transition-time) ease;
+
+   input {
+      color: var(--primary-color);
+   }
    img[data-dark-mode-compatible] {
       filter: invert(0.9);
+      transition: filter ease 1s;
+   }
+}
+body.light-mode {
+   --acrylic-color: rgba(255, 255, 255, 0.6);
+   --non-transparent-acrylic-like-color: rgba(220, 220, 220, 1);
+
+   --tint-level1-color: rgba(200, 200, 200, 0.1);
+   --tint-level2-color: rgba(200, 200, 200, 0.6);
+   --tint-level3-color: rgba(200, 200, 200, 0.8);
+
+   --same-tint-level1-color: rgba(255, 255, 255, 0.8);
+
+   --primary-color: black;
+   --secondary-color: white;
+
+   img[data-dark-mode-compatible] {
+      filter: invert(0);
    }
 }
 
