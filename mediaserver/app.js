@@ -4,7 +4,12 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+let configs = require('./api/configs');
+configs.musicFolders.push('D:/Music/Music');
+configs.musicFolders.push('D:/Music/Hindi');
+
 const tracksRoutes = require('./api/routes/tracks');
+const mediaScannerRoute = require('./api/routes/mediaScanner');
 
 mongoose
     .connect('mongodb://localhost:27017/player', {
@@ -45,6 +50,7 @@ app.use((req, res, next) => {
 
 // routes which should handle requests
 app.use('/tracks', tracksRoutes);
+app.use('/mediascanner', mediaScannerRoute);
 
 // error handling
 app.use((req, res, next) => {
