@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const mm = require('music-metadata');
 
-const mediaScanner = require('./../routines/mediaScanner');
+const mediaScanner = require('../subroutines/mediaScanner');
 
 router.post('/', async (req, res, next) => {
 

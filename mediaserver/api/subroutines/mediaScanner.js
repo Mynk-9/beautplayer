@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const glob = require('glob-promise');
 
-const Files = require('./../models/files');
-let configs = require('./../configs');
+const Files = require('../models/files');
+let configs = require('../configs');
 
 module.exports = async () => {
 
