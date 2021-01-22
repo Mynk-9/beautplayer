@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-// TODO: require the routes
+const tracksRoutes = require('./api/routes/tracks');
 
 mongoose
     .connect('mongodb://localhost:27017/player', {
@@ -44,7 +44,7 @@ app.use((req, res, next) => {
 });
 
 // routes which should handle requests
-// TODO: Add routes
+app.use('/tracks', tracksRoutes);
 
 // error handling
 app.use((req, res, next) => {
