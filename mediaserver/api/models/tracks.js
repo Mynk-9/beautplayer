@@ -2,14 +2,26 @@ const mongoose = require('mongoose');
 
 const trackSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    name: { type: String, required: true },
+
+    title: { type: String, required: true },
     album: { type: String, default: 'Single' },
     albumArtist: String,
-    contributingArtists: String,
+    contributingArtists: [],
     year: Number,
-    albumTrackNumber: Number,
-    genre: String,
-    length: { type: Number, required: true }
+    genre: [],
+    label: [],
+    trackXofY: {},
+    diskXofY: {},
+
+    length: { type: Number, required: true },
+    sampleRate: Number,
+    channelCount: Number,
+    codec: String,
+    lossless: Boolean,
+
+    musicbrainz_trackid: String,
+
+    path: { type: String, required: true },
 });
 
-module.exports = mongoose.model('Track', trackSchema);
+module.exports = mongoose.model('Tracks', trackSchema);
