@@ -16,6 +16,7 @@
     "glob-promise": "^3.4.0",
     "mongoose": "^5.11.12",
     "morgan": "^1.10.0",
+    "music-metadata": "^7.6.4",
     "nodemon": "^2.0.7"
   }
 }

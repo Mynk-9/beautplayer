@@ -8,15 +8,13 @@ let configs = require('./../configs');
 
 router.post('/', async (req, res, next) => {
     let pattern = '/**/*';
-    let files = {};
-    let fileListForDB = [];
+    let files = [];
 
     for (const path of configs.musicFolders) {
         await glob(path + pattern)
             .then(result => {
-                files[path] = result;
                 result.forEach(eachPath => {
-                    fileListForDB.push({ path: eachPath });
+                    files.push({ path: eachPath });
                 });
             })
             .catch(e => {
@@ -28,7 +26,7 @@ router.post('/', async (req, res, next) => {
 
     await mongoose.connection.db.dropCollection('files')
         .then(() => {
-            Files.insertMany(fileListForDB)
+            Files.insertMany(files)
                 .then(result => {
                     res.status(201).json({
                         files: files,
