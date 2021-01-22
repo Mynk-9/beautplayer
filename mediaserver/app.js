@@ -9,7 +9,7 @@ configs.musicFolders.push('D:/Music/Music');
 configs.musicFolders.push('D:/Music/Hindi');
 
 const tracksRoutes = require('./api/routes/tracks');
-const mediaScannerRoute = require('./api/routes/mediaScanner');
+const libraryRefreshRoute = require('./api/routes/libraryRefresh');
 
 mongoose
     .connect('mongodb://localhost:27017/player', {
@@ -50,7 +50,7 @@ app.use((req, res, next) => {
 
 // routes which should handle requests
 app.use('/tracks', tracksRoutes);
-app.use('/mediascanner', mediaScannerRoute);
+app.use('/refreshlibrary', libraryRefreshRoute);
 
 // error handling
 app.use((req, res, next) => {
