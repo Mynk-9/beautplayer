@@ -4,8 +4,19 @@
   "description": "Media Server for beautplayer",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
   },
-  "author": "",
-  "license": "Apache License 2.0"
+  "author": "Mayank Mathur",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "glob": "^7.1.6",
+    "glob-promise": "^3.4.0",
+    "mongoose": "^5.11.12",
+    "morgan": "^1.10.0",
+    "music-metadata": "^7.6.4",
+    "nodemon": "^2.0.7"
+  }
 }
