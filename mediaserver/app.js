@@ -9,6 +9,7 @@ configs.musicFolders.push('D:/Music/Music');
 configs.musicFolders.push('D:/Music/Hindi');
 
 const tracksRoutes = require('./api/routes/tracks');
+const albumsRoutes = require('./api/routes/albums');
 const libraryRefreshRoute = require('./api/routes/libraryRefresh');
 
 mongoose
@@ -51,6 +52,7 @@ app.use((req, res, next) => {
 // routes which should handle requests
 app.use('/tracks', tracksRoutes);
 app.use('/refreshlibrary', libraryRefreshRoute);
+app.use('/albums', albumsRoutes);
 
 // error handling
 app.use((req, res, next) => {
