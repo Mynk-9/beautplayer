@@ -44,15 +44,15 @@ module.exports = async (files) => {
             })
             .catch(e => {
                 // console.log(e);
-                console.log('debug: path=', path);
+                console.log('debug: metaDataScanner:  NOT_MUSIC_FILE: ', path);
             });
     }
 
-    mongoose.connection.db.listCollections({ name: 'tracks' })
-        .next(async (err, callInfo) => {
-            if (callInfo)
-                await mongoose.connection.db.dropCollection('tracks');
-        });
+    await mongoose.connection.db.collection('tracks')
+        .drop()
+        .catch(e => console.log(e));
+    await mongoose.connection.db.createCollection('tracks')
+        .catch(e => console.log(e));
 
     await Tracks.insertMany(finalList)
         .catch(e => {
