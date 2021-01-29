@@ -19,45 +19,70 @@ const MainPage = (props) => {
 
     useEffect(() => {
         // fetch albums
-        axios.get(API + '/albums')
-            .then(async resp => {
-                if (resp.status === 200) {
-                    const albumList = resp.data.AlbumsList;
-                    let albumCards = [];
-                    for (const album of albumList) {
-                        // console.log(album);
-                        const name = album._id;
-                        const track0Id = album.tracks[0]._id;
-                        let albumArtist;
+        let localStorageData = localStorage.getItem('all-albums')
+        if (localStorageData) {
+            localStorageData = JSON.parse(localStorageData);
+            let albumCards = [];
+            for (const info of localStorageData) {
+                albumCards.push(
+                    <AlbumCard
+                        key={info.name}
+                        albumArt={AlbumArt}
+                        albumTitle={info.name}
+                        albumArtist={info.albumArtist}
+                        firstTrackId={info.track0Id}
+                    />
+                );
+            }
+            setAllAlbums(albumCards);
+        }
+        else
+            axios.get(API + '/albums')
+                .then(async resp => {
+                    if (resp.status === 200) {
+                        const albumList = resp.data.AlbumsList;
+                        let albumCards = [];
+                        let localStorageData = [];
+                        for (const album of albumList) {
+                            // console.log(album);
+                            const name = album._id;
+                            const track0Id = album.tracks[0]._id;
+                            let albumArtist;
 
-                        // get album artist
-                        await axios.get(API + '/tracks/' + track0Id)
-                            .then(resp => {
-                                const trackInfo = resp.data.Track;
-                                albumArtist = trackInfo.albumArtist;
-                            })
-                            .catch(err => {
-                                console.log(err);
+                            // get album artist
+                            await axios.get(API + '/tracks/' + track0Id)
+                                .then(resp => {
+                                    const trackInfo = resp.data.Track;
+                                    albumArtist = trackInfo.albumArtist;
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                });
+
+                            albumCards.push(
+                                <AlbumCard
+                                    key={name}
+                                    albumArt={AlbumArt}
+                                    albumTitle={name}
+                                    albumArtist={albumArtist}
+                                    firstTrackId={track0Id}
+                                />
+                            );
+                            localStorageData.push({
+                                name: name,
+                                albumArtist: albumArtist,
+                                track0Id: track0Id
                             });
-
-                        albumCards.push(
-                            <AlbumCard
-                                key={name}
-                                albumArt={AlbumArt}
-                                albumTitle={name}
-                                albumArtist={albumArtist}
-                                firstTrackId={track0Id}
-                            />
-                        );
+                        }
+                        localStorage.setItem('all-albums', JSON.stringify(localStorageData));
+                        setAllAlbums(albumCards);
+                    } else {
+                        console.log('Error:', resp);
                     }
-                    setAllAlbums(albumCards);
-                } else {
-                    console.log('Error:', resp);
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            });
+                })
+                .catch(err => {
+                    console.log(err);
+                });
     }, []);
 
     return (
