@@ -11,8 +11,8 @@ function App() {
           render={props => <MainPage />}
         />
         <Route
-          path="/album"
-          render={props => <AlbumPage />}
+          path="/album/:albumName"
+          render={props => <AlbumPage {...props} />}
         />
       </Switch>
     </BrowserRouter>

@@ -1,4 +1,5 @@
 import { React, useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import * as base64 from 'byte-base64';
 import './../commonstyles.scss';
@@ -29,10 +30,13 @@ const AlbumCard = props => {
         fetchAlbumArt();
     }, []);
 
+    let history = useHistory();
+    let openAlbum = () => history.push('/album/' + props.albumTitle);
+
     return (
         <div className={Styles.albumCard}>
-            <img alt="Album Art" src={imgSource || props.albumArt} />
-            <span>
+            <img alt="Album Art" src={imgSource || props.albumArt} onClick={openAlbum} />
+            <span onClick={openAlbum}>
                 <b>{props.albumTitle}</b>
             </span>
             <span>
