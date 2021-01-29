@@ -1,4 +1,5 @@
 import { React, useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import * as base64 from 'byte-base64';
 import Navbar from '../../components/navbar/Navbar';
@@ -12,19 +13,21 @@ import LeftIcon from './../../assets/buttonsvg/chevron-left.svg'
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
 
 const AlbumPage = props => {
+    // tracks has the format: [title, artist, duration, trackId]
     const [tracks, setTracks] = useState([]);
     const [albumArtist, setAlbumArtist] = useState('');
     const [albumYear, setAlbumYear] = useState(0);
     const [albumGenre, setAlbumGenre] = useState('');
     const [coverArt, setCoverArt] = useState(``);
+    let history = useHistory();
 
-    // api endpoint
+    // api endpoint -- same domain, port 5000
     let API = window.location.origin;
     API = API.substring(0, API.lastIndexOf(':'));
     API += ':5000';
 
     // get the tracks of the album
-    const albumName = 'A Thousand Suns';
+    const albumName = props.albumName || 'A Thousand Suns';
     useEffect(() => {
         let tracksTemp = [];
         axios.get(API + '/albums/' + albumName)
@@ -39,12 +42,14 @@ const AlbumPage = props => {
                             const trackAlbumArtist = trackInfo.albumArtist;
                             const trackMins = Math.floor(trackInfo.length / 60);
                             const trackSecs = Math.round(trackInfo.length % 60);
+                            const trackId = trackInfo._id;
 
                             tracksTemp.push(
                                 [
                                     trackTitle,
                                     trackAlbumArtist,
-                                    trackMins + ':' + (trackSecs < 10 ? '0' : '') + trackSecs
+                                    trackMins + ':' + (trackSecs < 10 ? '0' : '') + trackSecs,
+                                    trackId
                                 ]
                             );
                         })
@@ -107,6 +112,7 @@ const AlbumPage = props => {
                         alt="Go Back"
                         className={Styles.back}
                         src={LeftIcon}
+                        onClick={() => history.goBack()}
                     />
                     <img
                         alt="Album Art"
