@@ -10,6 +10,7 @@
    transition: background-color var(--std-color-transition-time) ease;
 
    @media only screen and (max-width: 540px) {
+      transition: none;
       margin: 0.5rem 0 0.5rem 0;
       width: 100%;
    }
