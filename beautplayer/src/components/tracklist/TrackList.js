@@ -11,7 +11,7 @@ const TrackList = props => {
         ++key;
         return (
             <tr key={key} className={Styles.trackEntry}>
-                <td><TrackLiker /></td>
+                <td><TrackLiker trackId={data[3]} /></td>
                 <td>{data[0]}</td>
                 <td>{data[1]}</td>
                 <td>{data[2]}</td>
