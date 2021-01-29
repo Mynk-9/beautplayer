@@ -46,13 +46,18 @@ router.get('/:playlistName/:trackId', (req, res, next) => {
     const trackId = req.params.trackId;
     PlaylistTracks.find({ playlistName_lower: plName.toLowerCase(), trackId: trackId })
         .then(track => {
-            res.status(200).json({
-                Track: track
-            });
+            if (track.length > 0)
+                res.status(200).json({
+                    Track: track
+                });
+            else
+                res.status(404).json({
+                    message: 'No object'
+                });
         })
         .catch(e => {
             console.log(e);
-            res.status(500).json({
+            res.status(404).json({
                 error: e
             });
         });
