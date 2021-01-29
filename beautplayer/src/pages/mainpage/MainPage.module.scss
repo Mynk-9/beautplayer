@@ -16,8 +16,15 @@
          white-space: nowrap;
       }
       .sectionBodyNoScroll {
-         overflow-x: inherit;
-         white-space: inherit;
+         display: flex;
+         flex-wrap: wrap;
+         justify-content: space-around;
+
+         > div {
+            @media only screen and (max-width: 540px) {
+               margin: 0;
+            }
+         }
       }
    }
 }
