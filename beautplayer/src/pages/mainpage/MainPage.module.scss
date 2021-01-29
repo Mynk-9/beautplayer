@@ -15,5 +15,9 @@
          overflow-x: auto;
          white-space: nowrap;
       }
+      .sectionBodyNoScroll {
+         overflow-x: inherit;
+         white-space: inherit;
+      }
    }
 }
