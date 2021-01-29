@@ -15,22 +15,11 @@ export default class MainPage extends React.Component {
         };
     }
 
-    setDarkMode = e => {
-        console.log(this.getDarkMode(), e);
-        if (e)
-            document.body.classList.add('dark-mode');
-        else
-            document.body.classList.remove('dark-mode');
-    };
-    getDarkMode = () => document.body.classList.contains('dark-mode');
-    toggleColorMode = () => this.setDarkMode(!this.getDarkMode());
-
     render() {
         return (
             <div>
                 <Navbar
                     acrylicColor={this.state.acrylicColor}
-                    toggleMode={this.toggleColorMode}
                 />
                 <div className={Styles.mainBody}>
                     <div className={Styles.section}>
