@@ -12,6 +12,8 @@
       border-radius: 50%;
       width: var(--albumCard-width);
       height: var(--albumCard-width);
+
+      cursor: pointer;
    }
    span {
       display: block;
@@ -19,6 +21,8 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       text-align: center;
+      
+      cursor: pointer;
    }
 }
 
