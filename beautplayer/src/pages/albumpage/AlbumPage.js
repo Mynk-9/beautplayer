@@ -1,4 +1,5 @@
 import { React, useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import * as base64 from 'byte-base64';
 import Navbar from '../../components/navbar/Navbar';
@@ -12,13 +13,13 @@ import LeftIcon from './../../assets/buttonsvg/chevron-left.svg'
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
 
 const AlbumPage = props => {
+    // tracks has the format: [title, artist, duration, trackId]
     const [tracks, setTracks] = useState([]);
     const [albumArtist, setAlbumArtist] = useState('');
     const [albumYear, setAlbumYear] = useState(0);
     const [albumGenre, setAlbumGenre] = useState('');
     const [coverArt, setCoverArt] = useState(``);
-
-    // tracks has the format: [title, artist, duration, trackId]
+    let history = useHistory();
 
     // api endpoint -- same domain, port 5000
     let API = window.location.origin;
@@ -111,6 +112,7 @@ const AlbumPage = props => {
                         alt="Go Back"
                         className={Styles.back}
                         src={LeftIcon}
+                        onClick={() => history.goBack()}
                     />
                     <img
                         alt="Album Art"
