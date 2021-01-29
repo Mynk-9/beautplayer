@@ -12,4 +12,6 @@ const playlistTracksSchema = mongoose.Schema({
     playlistName_lower: String
 });
 
+playlistTracksSchema.index({ trackId: 1, playlistName_lower: 1 }, { unique: true });
+
 module.exports = mongoose.model('PlaylistTracks', playlistTracksSchema);
