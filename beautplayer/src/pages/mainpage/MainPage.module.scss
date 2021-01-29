@@ -20,9 +20,11 @@
          flex-wrap: wrap;
          justify-content: space-around;
 
+         // this is album card
          > div {
             @media only screen and (max-width: 540px) {
-               margin: 0;
+               margin-left: 0;
+               margin-right: 0;
             }
          }
       }
