@@ -19,7 +19,7 @@
 body {
    // background-image: url("https://upload.wikimedia.org/wikipedia/commons/c/c9/Rainbow-diagram-ROYGBIV.svg");
    font-family: "Lato";
-   background-color: var(--secondary-color);
+   background-color: white;
 }
 
 /**
@@ -60,18 +60,18 @@ body {
    --secondary-color: black;
 
    --border-radius: 1rem;
-   --background-color-transition-time: 0.5s;
+   --std-color-transition-time: 0.5s;
 
    color: var(--primary-color);
 
-   transition: color 1s ease, background-color var(--background-color-transition-time) ease;
+   transition: color var(--std-color-transition-time) ease;
 
    input {
       color: var(--primary-color);
    }
    img[data-dark-mode-compatible] {
       filter: invert(0.9);
-      transition: filter ease 1s;
+      transition: filter ease var(--std-color-transition-time);
    }
 }
 body.light-mode {
@@ -90,6 +90,23 @@ body.light-mode {
    img[data-dark-mode-compatible] {
       filter: invert(0);
    }
+}
+
+// optimization for body background-color switching transition
+body::before {
+   content: "";
+   position: fixed;
+   top: 0;
+   left: 0;
+   bottom: 0;
+   right: 0;
+   background-color: black;
+   opacity: 1;
+   transition: opacity var(--std-color-transition-time) ease;
+   z-index: -1;
+}
+body.light-mode::before {
+   opacity: 0;
 }
 
 // Misc Classes
