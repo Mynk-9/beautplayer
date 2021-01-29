@@ -13,7 +13,7 @@ const MainPage = (props) => {
     return (
         <div>
             <Navbar
-                acrylicColor={this.state.acrylicColor}
+                acrylicColor={acrylicColor}
             />
             <div className={Styles.mainBody}>
                 <div className={Styles.section}>
@@ -54,7 +54,7 @@ const MainPage = (props) => {
                 </div>
             </div>
             <PlayerBar
-                acrylicColor={this.state.acrylicColor}
+                acrylicColor={acrylicColor}
                 albumArt={AlbumArt}
                 AlbumTitle="Awesome Album"
                 albumArtist="Human"
