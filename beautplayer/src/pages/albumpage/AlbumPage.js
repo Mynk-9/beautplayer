@@ -27,7 +27,7 @@ const AlbumPage = props => {
     API += ':5000';
 
     // get the tracks of the album
-    const albumName = 'A Thousand Suns';
+    const albumName = props.albumName || 'A Thousand Suns';
     useEffect(() => {
         let tracksTemp = [];
         axios.get(API + '/albums/' + albumName)
