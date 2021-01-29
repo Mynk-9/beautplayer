@@ -11,6 +11,7 @@ configs.musicFolders.push('D:/Music/Hindi');
 const tracksRoutes = require('./api/routes/tracks');
 const albumsRoutes = require('./api/routes/albums');
 const libraryRefreshRoute = require('./api/routes/libraryRefresh');
+const coverArtRoute = require('./api/routes/coverArt');
 
 mongoose
     .connect('mongodb://localhost:27017/player', {
@@ -53,6 +54,7 @@ app.use((req, res, next) => {
 app.use('/tracks', tracksRoutes);
 app.use('/refreshlibrary', libraryRefreshRoute);
 app.use('/albums', albumsRoutes);
+app.use('/coverart', coverArtRoute);
 
 // error handling
 app.use((req, res, next) => {
