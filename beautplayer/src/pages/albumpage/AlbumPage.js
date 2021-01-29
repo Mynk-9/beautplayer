@@ -18,7 +18,9 @@ const AlbumPage = props => {
     const [albumGenre, setAlbumGenre] = useState('');
     const [coverArt, setCoverArt] = useState(``);
 
-    // api endpoint
+    // tracks has the format: [title, artist, duration, trackId]
+
+    // api endpoint -- same domain, port 5000
     let API = window.location.origin;
     API = API.substring(0, API.lastIndexOf(':'));
     API += ':5000';
@@ -39,12 +41,14 @@ const AlbumPage = props => {
                             const trackAlbumArtist = trackInfo.albumArtist;
                             const trackMins = Math.floor(trackInfo.length / 60);
                             const trackSecs = Math.round(trackInfo.length % 60);
+                            const trackId = trackInfo._id;
 
                             tracksTemp.push(
                                 [
                                     trackTitle,
                                     trackAlbumArtist,
-                                    trackMins + ':' + (trackSecs < 10 ? '0' : '') + trackSecs
+                                    trackMins + ':' + (trackSecs < 10 ? '0' : '') + trackSecs,
+                                    trackId
                                 ]
                             );
                         })
