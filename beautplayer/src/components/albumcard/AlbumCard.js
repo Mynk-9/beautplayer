@@ -1,11 +1,37 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
+import axios from 'axios';
+import * as base64 from 'byte-base64';
 import './../commonstyles.scss';
 import Styles from './AlbumCard.module.scss';
 
 const AlbumCard = props => {
+    const [imgSource, setImgSource] = useState();
+
+    // api endpoint -- same domain, port 5000
+    let API = window.location.origin;
+    API = API.substring(0, API.lastIndexOf(':'));
+    API += ':5000';
+
+    useEffect(() => {
+        async function fetchAlbumArt() {
+            // get album cover art
+            axios.get(API + '/coverart/' + props.firstTrackId)
+                .then(resp => {
+                    const picture = resp.data.coverArt[0];
+                    let base64Data = base64.bytesToBase64(picture.data.data);
+                    let albumArtSrc = `data:${picture.format};base64,${base64Data}`;
+                    setImgSource(albumArtSrc);
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
+        fetchAlbumArt();
+    }, []);
+
     return (
         <div className={Styles.albumCard}>
-            <img alt="Album Art" src={props.albumArt} />
+            <img alt="Album Art" src={imgSource || props.albumArt} />
             <span>
                 <b>{props.albumTitle}</b>
             </span>

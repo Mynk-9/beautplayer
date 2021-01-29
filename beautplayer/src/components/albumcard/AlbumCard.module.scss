@@ -21,3 +21,7 @@
       text-align: center;
    }
 }
+
+.albumCard + .albumCard {
+   margin-left: 1rem;
+}
