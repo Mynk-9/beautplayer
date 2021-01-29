@@ -41,6 +41,23 @@ router.get('/:playlistName', (req, res, next) => {
         });
 });
 
+router.get('/:playlistName/:trackId', (req, res, next) => {
+    const plName = req.params.playlistName;
+    const trackId = req.params.trackId;
+    PlaylistTracks.find({ playlistName_lower: plName.toLowerCase(), trackId: trackId })
+        .then(track => {
+            res.status(200).json({
+                Track: track
+            });
+        })
+        .catch(e => {
+            console.log(e);
+            res.status(500).json({
+                error: e
+            });
+        });
+});
+
 // handle POST requests on /playlistTracks
 router.post('/', (req, res, next) => {
     const track = new PlaylistTracks({
