@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import axios from 'axios';
+import * as base64 from 'byte-base64';
 import Navbar from '../../components/navbar/Navbar';
 import PlayerBar from './../../components/playerbar/PlayerBar';
 import TrackList from './../../components/tracklist/TrackList';
@@ -15,6 +16,7 @@ const AlbumPage = props => {
     const [albumArtist, setAlbumArtist] = useState('');
     const [albumYear, setAlbumYear] = useState(0);
     const [albumGenre, setAlbumGenre] = useState('');
+    const [coverArt, setCoverArt] = useState(``);
 
     // api endpoint
     let API = window.location.origin;
@@ -57,11 +59,13 @@ const AlbumPage = props => {
             });
     }, []);
 
-    // load the header album info from the first track of album
+    // load the header album info and cover art from the first track of album
     useEffect(() => {
         axios.get(API + '/albums/' + albumName)
             .then(async resp => {
                 const firstTrack = resp.data.Album.tracks[0];
+
+                // get album info
                 await axios.get(API + '/tracks/' + firstTrack._id)
                     .then(resp => {
                         const trackInfo = resp.data.Track;
@@ -71,6 +75,19 @@ const AlbumPage = props => {
                         for (const genre of trackInfo.genre)
                             genres += genre + ' ';
                         setAlbumGenre(genres);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+
+                // get album cover art
+                await axios.get(API + '/coverart/' + firstTrack._id)
+                    .then(resp => {
+                        const picture = resp.data.coverArt[0];
+                        console.log(picture);
+                        let base64Data = base64.bytesToBase64(picture.data.data);
+                        let src = `data:${picture.format};base64,${base64Data}`;
+                        setCoverArt(src);
                     })
                     .catch(err => {
                         console.log(err);
@@ -91,7 +108,11 @@ const AlbumPage = props => {
                         className={Styles.back}
                         src={LeftIcon}
                     />
-                    <img alt="Album Art" className={Styles.albumArt} src={AlbumArt} />
+                    <img
+                        alt="Album Art"
+                        className={Styles.albumArt}
+                        src={coverArt || AlbumArt}
+                    />
                     <table>
                         <tbody>
                             <tr>
