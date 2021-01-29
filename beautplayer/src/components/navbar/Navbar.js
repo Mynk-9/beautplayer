@@ -1,4 +1,5 @@
 import { React, useState } from 'react';
+import { Link } from 'react-router-dom';
 import SearchBox from './../searchbox/SearchBox';
 import ColorModeSwitch from './../../components/colormodeswitch/ColorModeSwitch';
 import './../commonstyles.scss';
@@ -27,13 +28,17 @@ const Navbar = props => {
             style={acrylicColorStyle}
         >
             <span className={Styles.center}>
-                <span className={"cursor-pointer"}>BeautPlayer</span>
+                <span className={"cursor-pointer"}>
+                    <Link to={`/`}>BeautPlayer</Link>
+                </span>
             </span>
             <span className={Styles.right}>
                 <SearchBox />
             </span>
             <span className={Styles.right}>
-                <span className={"cursor-pointer"}>Home</span>
+                <span className={"cursor-pointer"}>
+                    <Link to={`/`}>Home</Link>
+                </span>
             </span>
             <span className={Styles.right}>
                 <span className={"cursor-pointer"}>Settings</span>
