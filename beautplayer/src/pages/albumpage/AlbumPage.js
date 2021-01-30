@@ -88,9 +88,8 @@ const AlbumPage = props => {
                 // get album cover art
                 await axios.get(API + '/coverart/' + firstTrack._id)
                     .then(resp => {
-                        const picture = resp.data.coverArt[0];
-                        console.log(picture);
-                        let base64Data = base64.bytesToBase64(picture.data.data);
+                        const picture = resp.data.coverArt.data;
+                        let base64Data = base64.bytesToBase64(picture);
                         let src = `data:${picture.format};base64,${base64Data}`;
                         setCoverArt(src);
                     })
@@ -123,7 +122,7 @@ const AlbumPage = props => {
                         <tbody>
                             <tr>
                                 <td>Album</td>
-                                <td>{albumName}</td>
+                                <td>{albumName.replace('%2F', '/')}</td>
                             </tr>
                             <tr>
                                 <td>Artist</td>

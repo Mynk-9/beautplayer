@@ -15,23 +15,26 @@ const AlbumCard = props => {
 
     useEffect(() => {
         async function fetchAlbumArt() {
-            // get album cover art
-            axios.get(API + '/coverart/' + props.firstTrackId)
-                .then(resp => {
-                    const picture = resp.data.coverArt[0];
-                    let base64Data = base64.bytesToBase64(picture.data.data);
-                    let albumArtSrc = `data:${picture.format};base64,${base64Data}`;
-                    setImgSource(albumArtSrc);
-                })
-                .catch(err => {
-                    console.log(err);
-                });
+
+            // check if props.firstTrackId is present
+            if (props.firstTrackId)
+                // get album cover art
+                axios.get(API + '/coverart/compressed/' + props.firstTrackId)
+                    .then(resp => {
+                        const picture = resp.data.coverArt.data;
+                        let base64Data = base64.bytesToBase64(picture);
+                        let albumArtSrc = `data:${picture.format};base64,${base64Data}`;
+                        setImgSource(albumArtSrc);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
         }
         fetchAlbumArt();
     }, []);
 
     let history = useHistory();
-    let openAlbum = () => history.push('/album/' + props.albumTitle);
+    let openAlbum = () => history.push('/album/' + props.albumTitle.replace('/', '%2F'));
 
     return (
         <div className={Styles.albumCard}>

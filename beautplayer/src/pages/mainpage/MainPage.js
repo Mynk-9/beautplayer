@@ -4,13 +4,18 @@ import Navbar from '../../components/navbar/Navbar';
 import PlayerBar from './../../components/playerbar/PlayerBar';
 import AlbumCard from './../../components/albumcard/AlbumCard';
 import './../../components/commonstyles.scss';
+import PersistentStorage from './../persistentstorage';
 import Styles from './MainPage.module.scss';
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg';
 
 const MainPage = (props) => {
     const [acrylicColor, setAcrylicColor] = useState('--acrylic-color');
-    const [allAlbums, setAllAlbums] = useState([]);
+    const [allAlbums, setAllAlbums] = useState(
+        PersistentStorage.MainPageAllAlbumCards.length > 0
+            ? PersistentStorage.MainPageAllAlbumCards
+            : []
+    ); // pick from persistent storage if available
 
     // api endpoint -- same domain, port 5000
     let API = window.location.origin;
@@ -18,6 +23,10 @@ const MainPage = (props) => {
     API += ':5000';
 
     useEffect(() => {
+        // skip if persistent storage already present
+        if (PersistentStorage.MainPageAllAlbumCards.length > 0)
+            return;
+
         // fetch albums
         let localStorageData = localStorage.getItem('all-albums')
         if (localStorageData) {
@@ -34,6 +43,7 @@ const MainPage = (props) => {
                     />
                 );
             }
+            PersistentStorage.MainPageAllAlbumCards = albumCards;
             setAllAlbums(albumCards);
         }
         else
@@ -75,6 +85,7 @@ const MainPage = (props) => {
                             });
                         }
                         localStorage.setItem('all-albums', JSON.stringify(localStorageData));
+                        PersistentStorage.MainPageAllAlbumCards = albumCards;
                         setAllAlbums(albumCards);
                     } else {
                         console.log('Error:', resp);
