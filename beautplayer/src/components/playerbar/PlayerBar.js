@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import './../commonstyles.scss';
 import Styles from './PlayerBar.module.scss';
 
@@ -24,11 +24,43 @@ const PlayerBar = props => {
     else
         acrylicColorStyle = {};
 
+    // api endpoint -- same domain, port 5000
+    let API = window.location.origin;
+    API = API.substring(0, API.lastIndexOf(':'));
+    API += ':5000';
+
+    let togglePlay = () => {
+        let audioPlayer = document.querySelector('footer > audio');
+        if (play) {
+            audioPlayer.pause();
+            setPlay(false);
+        }
+        else {
+            audioPlayer.play();
+            setPlay(true);
+        }
+    };
+
+    useEffect(() => {
+
+        let audioSource = API + '/tracks/' + props.audioSrc + '/stream';
+        console.log(audioSource);
+        let audioPlayer = document.querySelector('footer > audio');
+        audioPlayer.src = audioSource;
+        
+        if (!play) audioPlayer.pause();
+        else audioPlayer.play();
+
+    }, [props.audioSrc]);
+
     return (
         <footer
             className={`${Styles.playerBar} acrylic`}
             style={acrylicColorStyle}
         >
+            {/* Audio Player */}
+            <audio />
+
             <div className={Styles.left}>
                 <div
                     className={Styles.albumArt}
@@ -72,16 +104,14 @@ const PlayerBar = props => {
                 </button>
                 <button
                     className={"cursor-pointer"}
-                    onClick={() => {
-                        setPlay(!play);
-                    }}
+                    onClick={togglePlay}
                 >
                     <img data-dark-mode-compatible
                         alt="Play"
                         src={
                             play
-                                ? PlayIcon
-                                : PauseIcon
+                                ? PauseIcon
+                                : PlayIcon
                         }
                     />
                 </button>

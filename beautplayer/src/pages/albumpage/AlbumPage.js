@@ -19,6 +19,7 @@ const AlbumPage = props => {
     const [albumYear, setAlbumYear] = useState(0);
     const [albumGenre, setAlbumGenre] = useState('');
     const [coverArt, setCoverArt] = useState(``);
+    const [playerAudioSrc, setPlayerAudioSrc] = useState('');
     let history = useHistory();
 
     // api endpoint -- same domain, port 5000
@@ -141,10 +142,10 @@ const AlbumPage = props => {
                     </table>
                 </div>
                 <div className={Styles.content}>
-                    <TrackList tracks={tracks} />
+                    <TrackList tracks={tracks} playStream={setPlayerAudioSrc} />
                 </div>
             </div>
-            <PlayerBar />
+            <PlayerBar audioSrc={playerAudioSrc} />
         </>
     );
     // }
