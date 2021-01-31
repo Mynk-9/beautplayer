@@ -16,7 +16,8 @@ router.get('/:trackId', (req, res, next) => {
                 .then(metadata => {
                     let imageData = metadata.common.picture[0].data;
                     res.status(200).json({
-                        coverArt: imageData
+                        coverArt: imageData,
+                        format: metadata.common.picture[0].format
                     });
                 })
                 .catch(e => {
@@ -52,7 +53,8 @@ router.get('/compressed/:trackId', (req, res, next) => {
                         'Cache-Control': 'max-age=86400' // seconds in a day
                     });
                     res.status(200).json({
-                        coverArt: compressedImage
+                        coverArt: compressedImage,
+                        format: metadata.common.picture[0].format
                     });
                 })
                 .catch(err => {

@@ -89,8 +89,9 @@ const AlbumPage = props => {
                 await axios.get(API + '/coverart/' + firstTrack._id)
                     .then(resp => {
                         const picture = resp.data.coverArt.data;
+                        const pictureFormat = resp.data.format;
                         let base64Data = base64.bytesToBase64(picture);
-                        let src = `data:${picture.format};base64,${base64Data}`;
+                        let src = `data:${pictureFormat};base64,${base64Data}`;
                         setCoverArt(src);
                     })
                     .catch(err => {

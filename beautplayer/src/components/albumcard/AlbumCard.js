@@ -22,8 +22,9 @@ const AlbumCard = props => {
                 axios.get(API + '/coverart/compressed/' + props.firstTrackId)
                     .then(resp => {
                         const picture = resp.data.coverArt.data;
+                        const pictureFormat = resp.data.format;
                         let base64Data = base64.bytesToBase64(picture);
-                        let albumArtSrc = `data:${picture.format};base64,${base64Data}`;
+                        let albumArtSrc = `data:${pictureFormat};base64,${base64Data}`;
                         setImgSource(albumArtSrc);
                     })
                     .catch(err => {
