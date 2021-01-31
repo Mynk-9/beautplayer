@@ -1,36 +1,34 @@
 import { React } from 'react';
 import { useHistory } from 'react-router-dom';
-// import axios from 'axios';
+import axios from 'axios';
 import Navbar from '../../components/navbar/Navbar';
 import PlayerBar from '../../components/playerbar/PlayerBar';
 import ColorModeSwitcher from '../../components/colormodeswitch/ColorModeSwitch';
 import Styles from './SettingsPage.module.scss';
 
+import PersistentStorage from './../persistentstorage';
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg'
 
 const AlbumPage = props => {
     let history = useHistory();
-
-    // window.history.pushState(null, null, document.URL);
-    // window.addEventListener('popstate', function () {
-    //     window.history.pushState(null, null, document.URL);
-    // });
-
 
     // api endpoint -- same domain, port 5000
     let API = window.location.origin;
     API = API.substring(0, API.lastIndexOf(':'));
     API += ':5000';
 
-    let loadingText = 'Loading';
+    let loadingText = 'Working';
 
     let refreshLibrary = e => {
-        console.log(e.target);
+        let messageLabel = e.target.parentNode.querySelector('label');
+        messageLabel.innerHTML = "Don't press back button or redirect the page!";
 
+        // to prevent the browser back button while library is being refreshed.
         let preventRedirect = () => window.history.pushState(null, null, document.URL);
         window.history.pushState(null, null, document.URL);
         window.addEventListener('popstate', preventRedirect);
 
+        // working... text on button
         let loadingTextIteration = setInterval(() => {
             e.target.innerHTML = loadingText;
             switch (loadingText.length - 7) {
@@ -40,26 +38,35 @@ const AlbumPage = props => {
                     loadingText += '.';
                     break;
                 case 3:
-                    loadingText = 'Loading';
+                    loadingText = 'Working';
                     break;
             }
         }, 1000);
-        // axios.post(API + '/refreshlibrary')
-        //     .then(result => {
-        //         setTimeout(() => {
-        //             clearInterval(loadingTextIteration);
-        //             e.target.innerHTML = 'Yet to be implemented';
-        //         }, 5000);
-        //     })
-        //     .catch(err => {
 
-        //     });
-        setTimeout(() => {
-            clearInterval(loadingTextIteration);
-            window.removeEventListener('popstate', preventRedirect);
-            window.history.back();
-            e.target.innerHTML = 'Yet to be implemented';
-        }, 10000);
+        // post request to refresh library
+        axios.post(API + '/refreshlibrary')
+            .then(result => {
+                localStorage.clear();
+                PersistentStorage.MainPageAllAlbumCards = [];
+
+                window.removeEventListener('popstate', preventRedirect);
+                window.history.back();
+                clearInterval(loadingTextIteration);
+                e.target.innerHTML = 'Refresh Media Library';
+
+                messageLabel.innerHTML = 'Done :)'
+            })
+            .catch(err => {
+                localStorage.clear();
+                PersistentStorage.MainPageAllAlbumCards = [];
+
+                window.removeEventListener('popstate', preventRedirect);
+                window.history.back();
+                clearInterval(loadingTextIteration);
+                e.target.innerHTML = 'Refresh Media Library';
+
+                messageLabel.innerHTML = 'Error :(';
+            });
     }
 
     return (
@@ -89,13 +96,16 @@ const AlbumPage = props => {
                                         className={Styles.refreshLibraryButton}
                                         onClick={refreshLibrary}
                                     >
-                                        Yet to be implemented
+                                        Refresh Media Library
                                     </button>
+                                    <br />
+                                    <br />
+                                    <label></label>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    {/* <hr /> */}
+                    <hr />
                     <h2 className={Styles.credits}>Made with ❤ by Mayank.</h2>
                 </div>
             </div>
