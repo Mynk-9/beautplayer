@@ -41,7 +41,9 @@ const Navbar = props => {
                 </span>
             </span>
             <span className={Styles.right}>
-                <span className={"cursor-pointer"}>Settings</span>
+            <span className={"cursor-pointer"}>
+                    <Link to={`/settings`}>Settings</Link>
+                </span>
             </span>
             <span className={Styles.right}>
                 <ColorModeSwitch />

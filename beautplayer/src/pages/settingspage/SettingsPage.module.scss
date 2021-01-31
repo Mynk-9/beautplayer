@@ -1,0 +1,77 @@
+.section {
+   padding-top: 6rem;
+   padding-bottom: 6.25rem;
+
+   .header {
+      padding: 3rem;
+
+      @media only screen and (max-width: 540px) {
+         padding: 1rem;
+      }
+
+      .back {
+         position: absolute;
+         height: 3rem;
+         width: 3rem;
+         margin-top: -1rem;
+         margin-left: -1rem;
+         cursor: pointer;
+
+         @media only screen and (max-width: 540px) {
+            position: relative;
+            margin: 0;
+         }
+      }
+
+      .heading {
+         display: inline-block;
+         position: relative;
+         left: 50%;
+         transform: translateX(-50%);
+
+         @media only screen and (max-width: 540px) {
+            position: initial;
+            margin: 0;
+            margin-right: -2rem;
+            float: right;
+            line-height: 1.5;
+         }
+      }
+   }
+
+   .content {
+      padding: 0 8rem 1.5rem 8rem;
+
+      @media only screen and (max-width: 540px) {
+         padding: 1rem;
+      }
+
+      table {
+         width: 100%;
+
+         @media only screen and (max-width: 540px) {
+            text-align: center;
+         }
+
+         tr {
+            td {
+               padding: 1rem;
+            }
+            td:first-child {
+               font-family: "Lato-LightItalic";
+            }
+         }
+      }
+
+      hr {
+         width: 50%;
+         margin-top: 5rem;
+         margin-bottom: 5rem;
+      }
+
+      .credits {
+         margin-top: 10rem;
+         text-align: center;
+      }
+   }
+}
