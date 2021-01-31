@@ -56,6 +56,17 @@
          tr {
             td {
                padding: 1rem;
+               width: 50%;
+
+               .refreshLibraryButton {
+                  outline: none;
+                  border: none;
+                  padding: 0.5rem;
+                  background-color: var(--tint-level2-color);
+                  border-radius: var(--border-radius);
+                  color: var(--primary-color);
+                  cursor: pointer;
+               }
             }
             td:first-child {
                font-family: "Lato-LightItalic";
