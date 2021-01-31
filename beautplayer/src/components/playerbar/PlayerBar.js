@@ -30,13 +30,13 @@ const PlayerBar = props => {
     API += ':5000';
 
     let togglePlay = () => {
-        let audioPlayer = document.querySelector('footer > audio');
+        // let audioPlayer = document.querySelector('footer > audio');
         if (play) {
-            audioPlayer.pause();
+            // audioPlayer.pause();
             setPlay(false);
         }
         else {
-            audioPlayer.play();
+            // audioPlayer.play();
             setPlay(true);
         }
     };

@@ -145,7 +145,7 @@ const AlbumPage = props => {
                     <TrackList tracks={tracks} playStream={setPlayerAudioSrc} />
                 </div>
             </div>
-            <PlayerBar audioSrc={playerAudioSrc} />
+            {/* <PlayerBar audioSrc={playerAudioSrc} /> */}
         </>
     );
     // }
