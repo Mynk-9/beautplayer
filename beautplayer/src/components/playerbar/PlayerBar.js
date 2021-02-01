@@ -1,6 +1,8 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import './../commonstyles.scss';
 import Styles from './PlayerBar.module.scss';
+
+import PlayerContext from './../playercontext';
 
 import BackIcon from './../../assets/buttonsvg/skip-back.svg';
 import PlayIcon from './../../assets/buttonsvg/play.svg';
@@ -14,8 +16,9 @@ import UpIcon from './../../assets/buttonsvg/chevron-up.svg';
 import DownIcon from './../../assets/buttonsvg/chevron-down.svg';
 
 const PlayerBar = props => {
+    const { playPause, albumArt, albumTitle, albumArtist, audioSrc, setPlayPause } = useContext(PlayerContext);
+
     const [volumeStatus, setVolumeStatus] = useState(false);
-    const [play, setPlay] = useState(false);
     const [mobileOpenAlbumDetails, setMobileOpenAlbumDetails] = useState(false);
 
     let acrylicColorStyle;
@@ -31,27 +34,34 @@ const PlayerBar = props => {
 
     let togglePlay = () => {
         // let audioPlayer = document.querySelector('footer > audio');
-        if (play) {
+        if (playPause === 'play') {
             // audioPlayer.pause();
-            setPlay(false);
+            setPlayPause('pause');
         }
         else {
             // audioPlayer.play();
-            setPlay(true);
+            setPlayPause('play');
         }
     };
 
     useEffect(() => {
 
-        let audioSource = API + '/tracks/' + props.audioSrc + '/stream';
-        console.log(audioSource);
+        let audioSource = API + '/tracks/' + audioSrc + '/stream';
         let audioPlayer = document.querySelector('footer > audio');
         audioPlayer.src = audioSource;
-        
-        if (!play) audioPlayer.pause();
+
+        if (playPause === 'pause') audioPlayer.pause();
         else audioPlayer.play();
 
-    }, [props.audioSrc]);
+    }, [audioSrc]);
+
+    useEffect(() => {
+        let audioPlayer = document.querySelector('footer > audio');
+        if (playPause === 'play')
+            audioPlayer.play();
+        else
+            audioPlayer.pause();
+    }, [playPause]);
 
     return (
         <footer
@@ -64,7 +74,7 @@ const PlayerBar = props => {
             <div className={Styles.left}>
                 <div
                     className={Styles.albumArt}
-                    style={{ backgroundImage: `url(${props.albumArt})` }}
+                    style={{ backgroundImage: albumArt }}
                     onClick={
                         () => setMobileOpenAlbumDetails(!mobileOpenAlbumDetails)
                     }
@@ -77,7 +87,7 @@ const PlayerBar = props => {
                                 : UpIcon
                         }
                         data-visible={
-                            props.albumArt
+                            albumArt
                                 ? 'true'
                                 : 'false'
                         }
@@ -86,15 +96,15 @@ const PlayerBar = props => {
                 <div
                     className={Styles.albumInfo}
                     data-visible={
-                        mobileOpenAlbumDetails && props.albumArt
+                        mobileOpenAlbumDetails && albumArt
                             ? 'true'
                             : 'false'
                     }
                 >
                     <span>
-                        <b>{props.AlbumTitle}</b>
+                        <b>{albumTitle}</b>
                         <br />
-                        <i>{props.albumArtist}</i>
+                        <i>{albumArtist}</i>
                     </span>
                 </div>
             </div>
@@ -109,7 +119,7 @@ const PlayerBar = props => {
                     <img data-dark-mode-compatible
                         alt="Play"
                         src={
-                            play
+                            playPause === 'play'
                                 ? PauseIcon
                                 : PlayIcon
                         }
