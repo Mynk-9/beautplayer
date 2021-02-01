@@ -74,7 +74,7 @@ const PlayerBar = props => {
             <div className={Styles.left}>
                 <div
                     className={Styles.albumArt}
-                    style={{ backgroundImage: albumArt }}
+                    style={{ backgroundImage: `url(${albumArt})` }}
                     onClick={
                         () => setMobileOpenAlbumDetails(!mobileOpenAlbumDetails)
                     }
