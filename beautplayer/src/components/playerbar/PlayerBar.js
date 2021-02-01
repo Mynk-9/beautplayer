@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useContext } from 'react';
+import { React, useState, useEffect, useContext, useRef } from 'react';
 import './../commonstyles.scss';
 import Styles from './PlayerBar.module.scss';
 
@@ -17,6 +17,7 @@ import DownIcon from './../../assets/buttonsvg/chevron-down.svg';
 
 const PlayerBar = props => {
     const { playPause, albumArt, albumTitle, albumArtist, audioSrc, setPlayPause } = useContext(PlayerContext);
+    let audioPlayerRef = useRef(null);
 
     const [volumeStatus, setVolumeStatus] = useState(false);
     const [mobileOpenAlbumDetails, setMobileOpenAlbumDetails] = useState(false);
@@ -33,13 +34,10 @@ const PlayerBar = props => {
     API += ':5000';
 
     let togglePlay = () => {
-        // let audioPlayer = document.querySelector('footer > audio');
         if (playPause === 'play') {
-            // audioPlayer.pause();
             setPlayPause('pause');
         }
         else {
-            // audioPlayer.play();
             setPlayPause('play');
         }
     };
@@ -47,20 +45,18 @@ const PlayerBar = props => {
     useEffect(() => {
 
         let audioSource = API + '/tracks/' + audioSrc + '/stream';
-        let audioPlayer = document.querySelector('footer > audio');
-        audioPlayer.src = audioSource;
+        audioPlayerRef.current.src = audioSource;
 
-        if (playPause === 'pause') audioPlayer.pause();
-        else audioPlayer.play();
+        if (playPause === 'pause') audioPlayerRef.current.pause();
+        else audioPlayerRef.current.play();
 
     }, [audioSrc]);
 
     useEffect(() => {
-        let audioPlayer = document.querySelector('footer > audio');
         if (playPause === 'play')
-            audioPlayer.play();
+            audioPlayerRef.current.play();
         else
-            audioPlayer.pause();
+            audioPlayerRef.current.pause();
     }, [playPause]);
 
     return (
@@ -69,7 +65,7 @@ const PlayerBar = props => {
             style={acrylicColorStyle}
         >
             {/* Audio Player */}
-            <audio />
+            <audio ref={audioPlayerRef} />
 
             <div className={Styles.left}>
                 <div
