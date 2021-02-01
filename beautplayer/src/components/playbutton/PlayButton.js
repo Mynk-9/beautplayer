@@ -34,6 +34,8 @@ const PlayButton = props => {
     useEffect(() => {
         if (audioSrc !== props.audioSrc)
             setPlayButtonState('play-button');
+        else
+            setPlayButtonState('pause-button');
     }, [audioSrc]);
 
     // sync with player bar play/pause button
