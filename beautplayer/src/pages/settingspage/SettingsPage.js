@@ -104,7 +104,10 @@ const AlbumPage = props => {
                         </tbody>
                     </table>
                     <hr />
-                    <h2 className={Styles.credits}>Made with ❤ by Mayank.</h2>
+                    <p className={Styles.credits}>
+                        Made with ❤ by Mayank.<br />
+                        See the source <a href="https://github.com/Mynk-9/beautplayer">here</a>.
+                    </p>
                 </div>
             </div>
             <PlayerBar />
