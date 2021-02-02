@@ -2,7 +2,6 @@ import { React, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import * as base64 from 'byte-base64';
-import Navbar from '../../components/navbar/Navbar';
 import TrackList from './../../components/tracklist/TrackList';
 import './../../components/commonstyles.scss';
 import Styles from './AlbumPage.module.scss';
@@ -101,7 +100,6 @@ const AlbumPage = props => {
 
     return (
         <>
-            <Navbar />
             <div className={Styles.section}>
                 <div className={Styles.header}>
                     <img data-dark-mode-compatible

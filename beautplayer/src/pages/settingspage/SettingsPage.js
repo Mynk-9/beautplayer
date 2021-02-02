@@ -1,7 +1,6 @@
 import { React } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import Navbar from '../../components/navbar/Navbar';
 import PlayerBar from '../../components/playerbar/PlayerBar';
 import ColorModeSwitcher from '../../components/colormodeswitch/ColorModeSwitch';
 import Styles from './SettingsPage.module.scss';
@@ -71,7 +70,6 @@ const AlbumPage = props => {
 
     return (
         <>
-            <Navbar />
             <div className={Styles.section}>
                 <div className={Styles.header}>
                     <img data-dark-mode-compatible

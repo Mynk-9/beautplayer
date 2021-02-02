@@ -4,12 +4,16 @@ import MainPage from './pages/mainpage/MainPage';
 import AlbumPage from './pages/albumpage/AlbumPage';
 import SettingsPage from './pages/settingspage/SettingsPage';
 
+import Navbar from './components/navbar/Navbar';
 import PlayerBar from './components/playerbar/PlayerBar';
 import AlbumArt from './assets/images/pexels-steve-johnson-1234853.jpg';
 
 import PlayerContext from './components/playercontext';
 
 function App() {
+
+  // navbar acrylic color state
+  const [acrylicColor, setAcrylicColor] = useState('--acrylic-color');
 
   // player context hooks {
   const [playPause, setPlayPause] = useState('pause');
@@ -28,6 +32,9 @@ function App() {
         }}
       >
         <BrowserRouter>
+          <Navbar
+            acrylicColor={acrylicColor}
+          />
           <Switch>
             <Route exact
               path="/"
