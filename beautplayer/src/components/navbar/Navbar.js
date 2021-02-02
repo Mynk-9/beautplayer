@@ -41,7 +41,7 @@ const Navbar = props => {
                 </span>
             </span>
             <span className={Styles.right}>
-            <span className={"cursor-pointer"}>
+                <span className={"cursor-pointer"}>
                     <Link to={`/settings`}>Settings</Link>
                 </span>
             </span>
