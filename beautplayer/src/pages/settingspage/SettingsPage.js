@@ -1,7 +1,6 @@
 import { React } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import PlayerBar from '../../components/playerbar/PlayerBar';
 import ColorModeSwitcher from '../../components/colormodeswitch/ColorModeSwitch';
 import Styles from './SettingsPage.module.scss';
 
@@ -110,7 +109,6 @@ const AlbumPage = props => {
                     </p>
                 </div>
             </div>
-            <PlayerBar />
         </>
     );
 }
