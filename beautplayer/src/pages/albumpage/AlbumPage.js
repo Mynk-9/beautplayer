@@ -89,12 +89,12 @@ const AlbumPage = props => {
                     })
                     .catch(err => {
                         console.log(err);
-                    });
+                    })
+                    .then(() => setTracks(tracksArray));
             })
             .catch(err => {
                 console.log(err);
-            })
-            .then(() => setTracks(tracksArray));
+            });
     }, []);
 
     return (
