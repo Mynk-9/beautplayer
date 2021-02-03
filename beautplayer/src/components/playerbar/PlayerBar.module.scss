@@ -55,7 +55,9 @@
          display: inline-table;
          height: 100%;
          // copied from .albumArt
-         max-width: calc(24px + 2 * 1rem + 2 * 1px + 2 * 0.3rem + 2 * 1rem);
+         // max-width: calc(24px + 2 * 1rem + 2 * 1px + 2 * 0.3rem + 2 * 1rem);
+         // this was removed as longer names are adjusting automatically and restriction
+         // on its width is only creating problems for UI.
 
          span {
             display: flex;
