@@ -86,8 +86,6 @@ const AlbumPage = props => {
                         let src = `data:${pictureFormat};base64,${base64Data}`;
                         setAlbumPageAlbumArt(src);
                         tracksArray.albumArt = src;
-
-                        setTracks(tracksArray);
                     })
                     .catch(err => {
                         console.log(err);
@@ -95,7 +93,8 @@ const AlbumPage = props => {
             })
             .catch(err => {
                 console.log(err);
-            });
+            })
+            .then(() => setTracks(tracksArray));
     }, []);
 
     return (
