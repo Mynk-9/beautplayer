@@ -58,7 +58,20 @@
                padding: 1rem;
                width: 50%;
 
-               .refreshLibraryButton {
+               label {
+                  display: block;
+                  margin-bottom: 0.5rem;
+               }
+               input[type="text"] {
+                  display: block;
+                  outline: none;
+                  border: 0;
+                  padding: 0.5rem 1rem;
+                  margin-bottom: 1rem;
+                  background-color: var(--same-tint-level1-color);
+                  border-radius: var(--border-radius);
+               }
+               button {
                   outline: none;
                   border: none;
                   padding: 0.5rem;

@@ -90,7 +90,7 @@ const AlbumPage = props => {
                                 <td>Refresh Library</td>
                                 <td>
                                     <button
-                                        className={Styles.refreshLibraryButton}
+                                        className={Styles.button}
                                         onClick={refreshLibrary}
                                     >
                                         Refresh Media Library
@@ -98,6 +98,39 @@ const AlbumPage = props => {
                                     <br />
                                     <br />
                                     <label></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                {/* 
+                                    TODO: Need to code for removing and adding
+                                          the label using react dom. Also needed
+                                          is the media locations refresh button.
+                                 */}
+                                <td>Media Locations:</td>
+                                <td>
+                                    <label>
+                                        <span>MUSIC_PATH_1</span>
+                                        <button>
+                                            ✕
+                                        </button>
+                                    </label>
+                                    <label>
+                                        <span>MUSIC_PATH_2</span>
+                                        <button>
+                                            ✕
+                                        </button>
+                                    </label>
+                                    <label>
+                                        <span>MUSIC_PATH_3</span>
+                                        <button>
+                                            ✕
+                                        </button>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        // onInput={ }
+                                    />
+                                    <button>Refresh</button>
                                 </td>
                             </tr>
                         </tbody>
