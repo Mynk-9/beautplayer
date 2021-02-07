@@ -40,6 +40,7 @@ router.post('/', async (req, res, next) => {
     if (res.headersSent)
         return;
 
+    // aggregate tracks into albums collection and add some info
     try {
         await mongoose.connection.db.collection('albums')
             .drop()
@@ -47,6 +48,7 @@ router.post('/', async (req, res, next) => {
         await mongoose.connection.db.createCollection('albums')
             .catch(e => console.log(e));
 
+        // aggregate
         Tracks
             .aggregate([
                 {
@@ -54,6 +56,15 @@ router.post('/', async (req, res, next) => {
                         _id: '$album',
                         tracks: {
                             $push: { _id: '$_id', title: '$title' }
+                        },
+                        albumArtist: {
+                            $addToSet: "$albumArtist"
+                        },
+                        year: {
+                            $addToSet: "$year"
+                        },
+                        genre: {
+                            $first: "$genre"
                         }
                     }
                 },
