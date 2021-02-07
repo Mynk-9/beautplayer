@@ -10,8 +10,9 @@ import PauseIcon from './../../assets/buttonsvg/pause.svg';
 import NextIcon from './../../assets/buttonsvg/skip-forward.svg';
 import PlusIcon from './../../assets/buttonsvg/plus.svg';
 import MinusIcon from './../../assets/buttonsvg/minus.svg';
-import VolumeHighIcon from './../../assets/buttonsvg/volume-1.svg';
-import VolumeLowIcon from './../../assets/buttonsvg/volume-2.svg';
+import VolumeHighIcon from './../../assets/buttonsvg/volume-2.svg';
+import VolumeNormalIcon from './../../assets/buttonsvg/volume-1.svg';
+import VolumeNoneIcon from './../../assets/buttonsvg/volume-0.svg';
 import UpIcon from './../../assets/buttonsvg/chevron-up.svg';
 import DownIcon from './../../assets/buttonsvg/chevron-down.svg';
 
@@ -19,7 +20,8 @@ const PlayerBar = props => {
     const { playPause, albumArt, albumTitle, albumArtist, audioSrc, setPlayPause } = useContext(PlayerContext);
     let audioPlayerRef = useRef(null);
 
-    const [volumeStatus, setVolumeStatus] = useState(false);
+    // volume states: high, normal, none, muted
+    const [volumeStatus, setVolumeStatus] = useState('high');
     const [mobileOpenAlbumDetails, setMobileOpenAlbumDetails] = useState(false);
 
     let acrylicColorStyle;
@@ -59,13 +61,42 @@ const PlayerBar = props => {
             audioPlayerRef.current.pause();
     }, [playPause]);
 
+    let reduceVolume = () => {
+        if (audioPlayerRef.current.volume > 0)
+            audioPlayerRef.current.volume =
+                parseFloat(audioPlayerRef.current.volume - 0.1).toFixed(2);
+
+        if (audioPlayerRef.current.volume === 1.0)
+            setVolumeStatus('high');
+        else if (audioPlayerRef.current.volume === 0.0)
+            setVolumeStatus('none');
+        else
+            setVolumeStatus('normal');
+    };
+    let increaseVolume = () => {
+        if (audioPlayerRef.current.volume < 1)
+            audioPlayerRef.current.volume =
+                parseFloat(audioPlayerRef.current.volume + 0.1).toFixed(2);
+
+        if (audioPlayerRef.current.volume === 1.0)
+            setVolumeStatus('high');
+        else if (audioPlayerRef.current.volume === 0.0)
+            setVolumeStatus('none');
+        else
+            setVolumeStatus('normal');
+    };
+
+
     return (
         <footer
             className={`${Styles.playerBar} acrylic`}
             style={acrylicColorStyle}
         >
             {/* Audio Player */}
-            <audio ref={audioPlayerRef} />
+            <audio
+                onEnded={() => setPlayPause('pause')}
+                ref={audioPlayerRef}
+            />
 
             <div className={Styles.left}>
                 <div
@@ -126,19 +157,23 @@ const PlayerBar = props => {
                 </button>
             </div>
             <div className={Styles.right}>
-                <button className={"cursor-pointer"}>
+                <button className={"cursor-pointer"} onClick={reduceVolume}>
                     <img data-dark-mode-compatible alt="VolDown" src={MinusIcon} />
                 </button>
                 <img data-dark-mode-compatible
                     alt="Volume Status"
                     src={
-                        volumeStatus
+                        volumeStatus === 'high'
                             ? VolumeHighIcon
-                            : VolumeLowIcon
+                            : volumeStatus === 'normal'
+                                ? VolumeNormalIcon
+                                : volumeStatus === 'none'
+                                    ? VolumeNoneIcon
+                                    : VolumeNormalIcon
                     }
                     className={Styles.volumeStatus}
                 />
-                <button className={"cursor-pointer"}>
+                <button className={"cursor-pointer"} onClick={increaseVolume}>
                     <img data-dark-mode-compatible alt="VolUp" src={PlusIcon} />
                 </button>
             </div>

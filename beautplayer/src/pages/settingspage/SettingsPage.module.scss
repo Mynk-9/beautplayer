@@ -81,8 +81,13 @@
       }
 
       .credits {
-         margin-top: 10rem;
-         text-align: center;
+         margin-top: 5rem;
+         padding-left: 1rem;
+         text-align: left;
+
+         a {
+            color: var(--primary-color);
+         }
       }
    }
 }
