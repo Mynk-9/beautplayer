@@ -1,7 +1,5 @@
 import { React, useEffect, useState } from 'react';
 import axios from 'axios';
-import Navbar from '../../components/navbar/Navbar';
-import PlayerBar from './../../components/playerbar/PlayerBar';
 import AlbumCard from './../../components/albumcard/AlbumCard';
 import './../../components/commonstyles.scss';
 import PersistentStorage from './../persistentstorage';
@@ -10,7 +8,6 @@ import Styles from './MainPage.module.scss';
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg';
 
 const MainPage = (props) => {
-    const [acrylicColor, setAcrylicColor] = useState('--acrylic-color');
     const [allAlbums, setAllAlbums] = useState(
         PersistentStorage.MainPageAllAlbumCards.length > 0
             ? PersistentStorage.MainPageAllAlbumCards
@@ -98,9 +95,6 @@ const MainPage = (props) => {
 
     return (
         <div>
-            <Navbar
-                acrylicColor={acrylicColor}
-            />
             <div className={Styles.mainBody}>
                 <div className={Styles.section}>
                     <div className={Styles.sectionHead}>Playlists</div>
@@ -119,12 +113,12 @@ const MainPage = (props) => {
                     </div>
                 </div>
             </div>
-            <PlayerBar
+            {/* <PlayerBar
                 acrylicColor={acrylicColor}
                 albumArt={AlbumArt}
                 AlbumTitle="Awesome Album"
                 albumArtist="Human"
-            />
+            /> */}
         </div>
     );
 }

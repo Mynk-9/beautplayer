@@ -12,7 +12,7 @@ const Navbar = props => {
     const [navOpen, setNavOpen] = useState(false);
 
     let acrylicColorStyle;
-    if (props.acrylicColor)
+    if (props.acrylicColor && props.acrylicColor !== '--acrylic-color')
         acrylicColorStyle = { '--acrylic-color': props.acrylicColor };
     else
         acrylicColorStyle = {};
@@ -41,7 +41,7 @@ const Navbar = props => {
                 </span>
             </span>
             <span className={Styles.right}>
-            <span className={"cursor-pointer"}>
+                <span className={"cursor-pointer"}>
                     <Link to={`/settings`}>Settings</Link>
                 </span>
             </span>

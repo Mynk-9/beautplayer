@@ -2,8 +2,6 @@ import { React, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import * as base64 from 'byte-base64';
-import Navbar from '../../components/navbar/Navbar';
-import PlayerBar from './../../components/playerbar/PlayerBar';
 import TrackList from './../../components/tracklist/TrackList';
 import './../../components/commonstyles.scss';
 import Styles from './AlbumPage.module.scss';
@@ -14,11 +12,14 @@ import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
 
 const AlbumPage = props => {
     // tracks has the format: [title, artist, duration, trackId]
-    const [tracks, setTracks] = useState([]);
-    const [albumArtist, setAlbumArtist] = useState('');
-    const [albumYear, setAlbumYear] = useState(0);
-    const [albumGenre, setAlbumGenre] = useState('');
-    const [coverArt, setCoverArt] = useState(``);
+    const [tracks, setTracks] = useState({
+        albumArt: '',
+        tracks: [],
+    });
+    const [albumPageAlbumYear, setAlbumPageAlbumYear] = useState(-1);
+    const [albumPageAlbumGenre, setAlbumPageAlbumGenre] = useState('');
+    const [albumPageAlbumArtist, setAlbumPageAlbumArtist] = useState('');
+    const [albumPageAlbumArt, setAlbumPageAlbumArt] = useState('');
     let history = useHistory();
 
     // api endpoint -- same domain, port 5000
@@ -26,10 +27,17 @@ const AlbumPage = props => {
     API = API.substring(0, API.lastIndexOf(':'));
     API += ':5000';
 
-    // get the tracks of the album
+
     const albumName = props.match.params.albumName;
+    let tracksArray = {
+        albumArt: '',
+        tracks: []
+    };
+
     useEffect(() => {
-        let tracksTemp = [];
+
+        // fetch the album data
+        // get the tracks of the album
         axios.get(API + '/albums/' + albumName)
             .then(async resp => {
                 const albumTracks = resp.data.Album.tracks;
@@ -44,7 +52,7 @@ const AlbumPage = props => {
                             const trackSecs = Math.round(trackInfo.length % 60);
                             const trackId = trackInfo._id;
 
-                            tracksTemp.push(
+                            tracksArray.tracks.push(
                                 [
                                     trackTitle,
                                     trackAlbumArtist,
@@ -52,51 +60,37 @@ const AlbumPage = props => {
                                     trackId
                                 ]
                             );
+
+                            if (albumPageAlbumYear === -1) {
+                                let genres = '';
+                                setAlbumPageAlbumYear(trackInfo.year);
+                                setAlbumPageAlbumArtist(trackInfo.albumArtist);
+                                for (const genre of trackInfo.genre)
+                                    genres += genre + ' ';
+                                setAlbumPageAlbumGenre(genres);
+                            }
                         })
                         .catch(err => {
                             console.log(err);
                         });
                 }
-                setTracks(tracksTemp);
             })
-            .catch(err => {
-                console.log(err);
-            });
-    }, []);
-
-    // load the header album info and cover art from the first track of album
-    useEffect(() => {
-        axios.get(API + '/albums/' + albumName)
-            .then(async resp => {
-                const firstTrack = resp.data.Album.tracks[0];
-
-                // get album info
-                await axios.get(API + '/tracks/' + firstTrack._id)
-                    .then(resp => {
-                        const trackInfo = resp.data.Track;
-                        let genres = '';
-                        setAlbumYear(trackInfo.year);
-                        setAlbumArtist(trackInfo.albumArtist);
-                        for (const genre of trackInfo.genre)
-                            genres += genre + ' ';
-                        setAlbumGenre(genres);
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    });
-
+            .then(() => {
                 // get album cover art
-                await axios.get(API + '/coverart/' + firstTrack._id)
+                const firstTrackId = tracksArray.tracks[0][3];
+                axios.get(API + '/coverart/' + firstTrackId)
                     .then(resp => {
                         const picture = resp.data.coverArt.data;
                         const pictureFormat = resp.data.format;
                         let base64Data = base64.bytesToBase64(picture);
                         let src = `data:${pictureFormat};base64,${base64Data}`;
-                        setCoverArt(src);
+                        setAlbumPageAlbumArt(src);
+                        tracksArray.albumArt = src;
                     })
                     .catch(err => {
                         console.log(err);
-                    });
+                    })
+                    .then(() => setTracks(tracksArray));
             })
             .catch(err => {
                 console.log(err);
@@ -105,7 +99,6 @@ const AlbumPage = props => {
 
     return (
         <>
-            <Navbar />
             <div className={Styles.section}>
                 <div className={Styles.header}>
                     <img data-dark-mode-compatible
@@ -117,7 +110,7 @@ const AlbumPage = props => {
                     <img
                         alt="Album Art"
                         className={Styles.albumArt}
-                        src={coverArt || AlbumArt}
+                        src={albumPageAlbumArt || AlbumArt}
                     />
                     <table>
                         <tbody>
@@ -127,15 +120,15 @@ const AlbumPage = props => {
                             </tr>
                             <tr>
                                 <td>Artist</td>
-                                <td>{albumArtist}</td>
+                                <td>{albumPageAlbumArtist}</td>
                             </tr>
                             <tr>
                                 <td>Year</td>
-                                <td>{albumYear}</td>
+                                <td>{albumPageAlbumYear}</td>
                             </tr>
                             <tr>
                                 <td>Genre</td>
-                                <td>{albumGenre}</td>
+                                <td>{albumPageAlbumGenre}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -144,10 +137,8 @@ const AlbumPage = props => {
                     <TrackList tracks={tracks} />
                 </div>
             </div>
-            <PlayerBar />
         </>
     );
-    // }
 }
 
 export default AlbumPage;

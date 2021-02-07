@@ -1,8 +1,6 @@
 import { React } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import Navbar from '../../components/navbar/Navbar';
-import PlayerBar from '../../components/playerbar/PlayerBar';
 import ColorModeSwitcher from '../../components/colormodeswitch/ColorModeSwitch';
 import Styles from './SettingsPage.module.scss';
 
@@ -71,7 +69,6 @@ const AlbumPage = props => {
 
     return (
         <>
-            <Navbar />
             <div className={Styles.section}>
                 <div className={Styles.header}>
                     <img data-dark-mode-compatible
@@ -106,10 +103,12 @@ const AlbumPage = props => {
                         </tbody>
                     </table>
                     <hr />
-                    <h2 className={Styles.credits}>Made with ❤ by Mayank.</h2>
+                    <p className={Styles.credits}>
+                        Made with ❤ by Mayank.<br />
+                        See the source <a href="https://github.com/Mynk-9/beautplayer">here</a>.
+                    </p>
                 </div>
             </div>
-            <PlayerBar />
         </>
     );
 }
