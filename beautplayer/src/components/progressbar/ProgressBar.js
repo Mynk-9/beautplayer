@@ -9,6 +9,32 @@ const ProgressBar = props => {
     const [progressInterval, setProgressInterval] = useState();
     const [currentProgress, setCurrentProgress] = useState('');
 
+    const convertSecondsToMinsSecs = (secs) => {
+        if (isNaN(secs))
+            return '-/-';
+
+        if (secs > 60)
+            return (
+                parseInt(secs / 60).toString(10) + ':'
+                + (secs % 60).toString(10)
+            );
+        else
+            return (
+                '0:' + secs.toString(10)
+            );
+    };
+    const convertSecondsToMinsSecsWithSuffixes = (secs) => {
+        if (secs > 60)
+            return (
+                parseInt(secs / 60).toString(10) + 'm '
+                + (secs % 60).toString(10) + 's'
+            );
+        else
+            return (
+                secs.toString(10) + 's'
+            );
+    };
+
     useEffect(() => {
         setProgressVal(props.currentTime);
     }, [props.currentTime]);
@@ -22,15 +48,6 @@ const ProgressBar = props => {
             setProgressInterval(
                 setInterval(() => {
                     const currentTime = parseInt(props.playerRef.current.currentTime);
-                    if (currentTime > 60)
-                        setCurrentProgress(
-                            parseInt(currentTime / 60).toString(10) + 'm '
-                            + (currentTime % 60).toString(10) + 's'
-                        );
-                    else
-                        setCurrentProgress(
-                            currentTime.toString(10) + 's'
-                        );
                     setProgressVal(currentTime);
                 }, 1000)
             );
@@ -41,13 +58,19 @@ const ProgressBar = props => {
 
     return (
         <>
+            <span className={Styles.time}>
+                {convertSecondsToMinsSecs(progressVal)}
+            </span>
             <div className={Styles.progressBar}>
                 <span
                     className={Styles.progressValue}
-                    data-value={currentProgress}
-                    style={{ width: ((progressVal / audioDuration) * 10) + 'em' }}
+                    data-value={convertSecondsToMinsSecsWithSuffixes(progressVal)}
+                    style={{ width: ((progressVal / audioDuration) * 100) + '%' }}
                 />
             </div>
+            <span className={Styles.time}>
+                {convertSecondsToMinsSecs(parseInt(audioDuration))}
+            </span>
         </>
     );
 };
