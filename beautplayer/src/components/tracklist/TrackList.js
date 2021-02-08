@@ -16,6 +16,7 @@ const TrackList = props => {
                 <td>
                     <PlayButton
                         audioSrc={data[3]}
+                        audioDuration={data[2]}
                         albumArt={props.tracks.albumArt}
                         albumTitle={data[0]}
                         albumArtist={data[1]}
