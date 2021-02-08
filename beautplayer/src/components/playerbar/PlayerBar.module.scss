@@ -130,4 +130,17 @@
       vertical-align: middle;
       padding: 1rem;
    }
+   .volumeStatusWrapper {
+      position: relative;
+   }
+   .volumeStatusWrapper:hover:after {
+      content: attr(data-value) "%";
+      font-size: small;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--tint-level2-color);
+      padding: 0.2rem;
+      border-radius: var(--border-radius);
+   }
 }

@@ -23,6 +23,7 @@ const PlayerBar = props => {
 
     // volume states: high, normal, none, muted
     const [volumeStatus, setVolumeStatus] = useState('high');
+    const [volumeDisplay, setVolumeDisplay] = useState(100);
     const [mobileOpenAlbumDetails, setMobileOpenAlbumDetails] = useState(false);
 
     let acrylicColorStyle;
@@ -73,6 +74,8 @@ const PlayerBar = props => {
             setVolumeStatus('none');
         else
             setVolumeStatus('normal');
+
+        setVolumeDisplay(audioPlayerRef.current.volume * 100);
     };
     let increaseVolume = () => {
         if (audioPlayerRef.current.volume < 1)
@@ -85,6 +88,8 @@ const PlayerBar = props => {
             setVolumeStatus('none');
         else
             setVolumeStatus('normal');
+
+        setVolumeDisplay(audioPlayerRef.current.volume * 100);
     };
 
 
@@ -164,19 +169,24 @@ const PlayerBar = props => {
                 <button className={"cursor-pointer"} onClick={reduceVolume}>
                     <img data-dark-mode-compatible alt="VolDown" src={MinusIcon} />
                 </button>
-                <img data-dark-mode-compatible
-                    alt="Volume Status"
-                    src={
-                        volumeStatus === 'high'
-                            ? VolumeHighIcon
-                            : volumeStatus === 'normal'
-                                ? VolumeNormalIcon
-                                : volumeStatus === 'none'
-                                    ? VolumeNoneIcon
-                                    : VolumeNormalIcon
-                    }
-                    className={Styles.volumeStatus}
-                />
+                <span
+                    className={Styles.volumeStatusWrapper}
+                    data-value={volumeDisplay}
+                >
+                    <img data-dark-mode-compatible
+                        alt="Volume Status"
+                        src={
+                            volumeStatus === 'high'
+                                ? VolumeHighIcon
+                                : volumeStatus === 'normal'
+                                    ? VolumeNormalIcon
+                                    : volumeStatus === 'none'
+                                        ? VolumeNoneIcon
+                                        : VolumeNormalIcon
+                        }
+                        className={Styles.volumeStatus}
+                    />
+                </span>
                 <button className={"cursor-pointer"} onClick={increaseVolume}>
                     <img data-dark-mode-compatible alt="VolUp" src={PlusIcon} />
                 </button>
