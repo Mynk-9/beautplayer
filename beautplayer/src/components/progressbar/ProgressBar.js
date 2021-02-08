@@ -47,12 +47,16 @@ const ProgressBar = props => {
         if (playPause === 'play') {
             setProgressInterval(
                 setInterval(() => {
-                    const currentTime = parseInt(props.playerRef.current.currentTime);
-                    setProgressVal(currentTime);
+                    setProgressVal(
+                        parseInt(props.playerRef.current.currentTime)
+                    );
                 }, 1000)
             );
         } else {
             clearInterval(progressInterval);
+            setProgressVal(
+                Math.round(props.playerRef.current.currentTime)
+            );
         }
     }, [playPause]);
 
