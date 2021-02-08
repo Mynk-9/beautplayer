@@ -26,6 +26,7 @@ function App() {
   const [albumTitle, setAlbumTitle] = useState('Awesome Album');
   const [albumArtist, setAlbumArtist] = useState('Human');
   const [audioSrc, setAudioSrc] = useState('');
+  const [audioDuration, setAudioDuration] = useState('');
   // }
 
   return (
@@ -33,8 +34,8 @@ function App() {
       <ThemeContext.Provider value={{ colorConfig, setColorConfig }}>
         <PlayerContext.Provider
           value={{
-            playPause, albumArt, albumTitle, albumArtist, audioSrc,
-            setPlayPause, setAlbumArt, setAlbumTitle, setAlbumArtist, setAudioSrc
+            playPause, albumArt, albumTitle, albumArtist, audioSrc, audioDuration,
+            setPlayPause, setAlbumArt, setAlbumTitle, setAlbumArtist, setAudioSrc, setAudioDuration
           }}
         >
           <BrowserRouter>
