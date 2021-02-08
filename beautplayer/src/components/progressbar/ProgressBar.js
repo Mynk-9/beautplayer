@@ -18,9 +18,13 @@ const ProgressBar = props => {
                 parseInt(secs / 60).toString(10) + ':'
                 + (secs % 60).toString(10)
             );
-        else
+        else if (secs > 9)
             return (
                 '0:' + secs.toString(10)
+            );
+        else
+            return (
+                '0:0' + secs.toString(10)
             );
     };
     const convertSecondsToMinsSecsWithSuffixes = (secs) => {
