@@ -1,4 +1,5 @@
 import { React, useState, useEffect, useContext, useRef } from 'react';
+import ProgressBar from './../progressbar/ProgressBar';
 import './../commonstyles.scss';
 import Styles from './PlayerBar.module.scss';
 
@@ -136,25 +137,28 @@ const PlayerBar = props => {
                 </div>
             </div>
             <div className={Styles.center}>
-                <button className={"cursor-pointer"}>
-                    <img data-dark-mode-compatible alt="Back" src={BackIcon} />
-                </button>
-                <button
-                    className={"cursor-pointer"}
-                    onClick={togglePlay}
-                >
-                    <img data-dark-mode-compatible
-                        alt="Play"
-                        src={
-                            playPause === 'play'
-                                ? PauseIcon
-                                : PlayIcon
-                        }
-                    />
-                </button>
-                <button className={"cursor-pointer"}>
-                    <img data-dark-mode-compatible alt="Next" src={NextIcon} />
-                </button>
+                <div>
+                    <button className={"cursor-pointer"}>
+                        <img data-dark-mode-compatible alt="Back" src={BackIcon} />
+                    </button>
+                    <button
+                        className={"cursor-pointer"}
+                        onClick={togglePlay}
+                    >
+                        <img data-dark-mode-compatible
+                            alt="Play"
+                            src={
+                                playPause === 'play'
+                                    ? PauseIcon
+                                    : PlayIcon
+                            }
+                        />
+                    </button>
+                    <button className={"cursor-pointer"}>
+                        <img data-dark-mode-compatible alt="Next" src={NextIcon} />
+                    </button>
+                </div>
+                <ProgressBar playerRef={audioPlayerRef} />
             </div>
             <div className={Styles.right}>
                 <button className={"cursor-pointer"} onClick={reduceVolume}>

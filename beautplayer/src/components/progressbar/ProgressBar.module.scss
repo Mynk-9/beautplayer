@@ -1,0 +1,41 @@
+.progressBar {
+   position: relative;
+   display: inline-block;
+
+   width: 10em;
+   height: 0.3rem;
+   margin: 0.7rem 0rem 0.3rem 0rem;
+   vertical-align: baseline;
+
+   background-color: var(--acrylic-color);
+   border-radius: var(--border-radius);
+
+   .progressValue {
+      position: absolute;
+      left: 0;
+      height: 100%;
+      width: 50%;
+
+      background-color: var(--primary-color);
+      border-radius: var(--border-radius);
+   }
+   .progressValue:hover::after {
+      content: attr(data-value);
+      font-size: small;
+      position: absolute;
+      right: 0;
+      top: -300%;    
+   }
+}
+
+.time {
+   display: inline-block;
+   // position: absolute;
+   margin-right: 1rem;
+   // margin-top: 1rem;
+   font-size: small;
+}
+.progressBar + .time {
+   margin-right: 0;
+   margin-left: 1rem;
+}
