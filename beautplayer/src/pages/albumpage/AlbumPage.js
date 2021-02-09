@@ -28,12 +28,16 @@ const AlbumPage = props => {
     API += ':5000';
 
 
-    const albumName = props.match.params.albumName;
+    let albumName = props.match.params.albumName;
     let tracksArray = {
         album: '',
         albumArt: '',
         tracks: []
     };
+
+    useEffect(() => {
+        albumName = props.match.params.albumName;
+    });
 
     useEffect(() => {
 
@@ -103,7 +107,7 @@ const AlbumPage = props => {
             .catch(err => {
                 console.log(err);
             });
-    }, []);
+    }, [albumName]);
 
     return (
         <>
