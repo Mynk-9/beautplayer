@@ -22,9 +22,9 @@ function App() {
 
   // player context hooks {
   const [playPause, setPlayPause] = useState('pause');
-  const [albumArt, setAlbumArt] = useState(AlbumArt);
-  const [albumTitle, setAlbumTitle] = useState('Awesome Album');
-  const [albumArtist, setAlbumArtist] = useState('Human');
+  const [albumArt, setAlbumArt] = useState();           // AlbumArt           ---|
+  const [albumTitle, setAlbumTitle] = useState('');     // Awesome Album      ---| these were the original testing values uwu
+  const [albumArtist, setAlbumArtist] = useState('');   // Human              ---|
   const [audioSrc, setAudioSrc] = useState('');
   const [audioDuration, setAudioDuration] = useState('');
   // }
