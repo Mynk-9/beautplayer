@@ -53,7 +53,7 @@ const MainPage = (props) => {
                         for (const album of albumList) {
                             // console.log(album);
                             const name = album._id;
-                            const track0Id = album.tracks[0]._id;
+                            const track0Id = album.tracks[0];
                             let albumArtist = album.albumArtist.join(", ");
 
                             albumCards.push(
