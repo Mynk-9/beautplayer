@@ -30,6 +30,7 @@ const AlbumPage = props => {
 
     const albumName = props.match.params.albumName;
     let tracksArray = {
+        album: '',
         albumArt: '',
         tracks: []
     };
@@ -42,7 +43,7 @@ const AlbumPage = props => {
             .then(async resp => {
                 const album = resp.data.Album;
                 const albumTracks = album.tracks;
-                
+
                 setAlbumPageAlbumYear(album.year.join(", "));
                 setAlbumPageAlbumArtist(album.albumArtist.join(", "));
                 setAlbumPageAlbumGenre(album.genre.join(", "));
@@ -96,6 +97,7 @@ const AlbumPage = props => {
                     .catch(err => {
                         console.log(err);
                     })
+                    .then(() => tracksArray.album = albumName)
                     .then(() => setTracks(tracksArray));
             })
             .catch(err => {

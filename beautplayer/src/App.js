@@ -25,6 +25,7 @@ function App() {
   const [albumArt, setAlbumArt] = useState();           // AlbumArt           ---|
   const [albumTitle, setAlbumTitle] = useState('');     // Awesome Album      ---| these were the original testing values uwu
   const [albumArtist, setAlbumArtist] = useState('');   // Human              ---|
+  const [currentTrack, setCurrentTrack] = useState('');
   const [audioSrc, setAudioSrc] = useState('');
   const [audioDuration, setAudioDuration] = useState('');
   // }
@@ -34,8 +35,8 @@ function App() {
       <ThemeContext.Provider value={{ colorConfig, setColorConfig }}>
         <PlayerContext.Provider
           value={{
-            playPause, albumArt, albumTitle, albumArtist, audioSrc, audioDuration,
-            setPlayPause, setAlbumArt, setAlbumTitle, setAlbumArtist, setAudioSrc, setAudioDuration
+            playPause, albumArt, albumTitle, albumArtist, currentTrack, audioSrc, audioDuration,
+            setPlayPause, setAlbumArt, setAlbumTitle, setAlbumArtist, setCurrentTrack, setAudioSrc, setAudioDuration
           }}
         >
           <BrowserRouter>
