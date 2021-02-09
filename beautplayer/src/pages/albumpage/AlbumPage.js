@@ -53,37 +53,22 @@ const AlbumPage = props => {
                 setAlbumPageAlbumGenre(album.genre.join(", "));
 
                 for (const track of albumTracks) {
-                    await axios.get(API + '/tracks/' + track._id)
-                        .then(resp => {
-                            const trackInfo = resp.data.Track;
+                    const trackInfo = track;
 
-                            const trackTitle = trackInfo.title;
-                            const trackAlbumArtist = trackInfo.albumArtist;
-                            const trackMins = Math.floor(trackInfo.length / 60);
-                            const trackSecs = Math.round(trackInfo.length % 60);
-                            const trackId = trackInfo._id;
+                    const trackTitle = trackInfo.title;
+                    const trackAlbumArtist = trackInfo.albumArtist;
+                    const trackMins = Math.floor(trackInfo.length / 60);
+                    const trackSecs = Math.round(trackInfo.length % 60);
+                    const trackId = trackInfo._id;
 
-                            tracksArray.tracks.push(
-                                [
-                                    trackTitle,
-                                    trackAlbumArtist,
-                                    trackMins + ':' + (trackSecs < 10 ? '0' : '') + trackSecs,
-                                    trackId
-                                ]
-                            );
-
-                            // if (albumPageAlbumYear === -1) {
-                            //     let genres = '';
-                            //     setAlbumPageAlbumYear(trackInfo.year);
-                            //     setAlbumPageAlbumArtist(trackInfo.albumArtist);
-                            //     for (const genre of trackInfo.genre)
-                            //         genres += genre + ' ';
-                            //     setAlbumPageAlbumGenre(genres);
-                            // }
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        });
+                    tracksArray.tracks.push(
+                        [
+                            trackTitle,
+                            trackAlbumArtist,
+                            trackMins + ':' + (trackSecs < 10 ? '0' : '') + trackSecs,
+                            trackId
+                        ]
+                    );
                 }
             })
             .then(() => {
