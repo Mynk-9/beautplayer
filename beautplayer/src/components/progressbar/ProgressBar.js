@@ -40,10 +40,6 @@ const ProgressBar = props => {
     };
 
     useEffect(() => {
-        setProgressVal(props.currentTime);
-    }, [props.currentTime]);
-
-    useEffect(() => {
         setProgressVal(0);
     }, [audioDuration]);
 
