@@ -8,7 +8,14 @@ router.get('/', (req, res, next) => {
         .exec()
         .then(albums => {
             res.status(200).json({
-                AlbumsList: albums
+                AlbumsList: albums.map(album => {
+                    return {
+                        albumArtist: album.albumArtist,
+                        year: album.year,
+                        genre: album.genre,
+                        _id: album._id
+                    };
+                })
             });
         })
         .catch(e => {
@@ -21,7 +28,9 @@ router.get('/', (req, res, next) => {
 
 router.get('/:albumName', (req, res, next) => {
     const id = req.params.albumName;
-    Albums.findById(id)
+    Albums.findOne({_id: id})
+        .populate('tracks')
+        .exec()
         .then(album => {
             res.status(200).json({
                 Album: album
