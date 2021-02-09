@@ -8,14 +8,7 @@ router.get('/', (req, res, next) => {
         .exec()
         .then(albums => {
             res.status(200).json({
-                AlbumsList: albums.map(album => {
-                    return {
-                        albumArtist: album.albumArtist,
-                        year: album.year,
-                        genre: album.genre,
-                        _id: album._id
-                    };
-                })
+                AlbumsList: albums
             });
         })
         .catch(e => {
