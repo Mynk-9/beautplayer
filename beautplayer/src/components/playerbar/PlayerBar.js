@@ -1,4 +1,5 @@
 import { React, useState, useEffect, useContext, useRef } from 'react';
+import { useHistory } from 'react-router-dom'
 import ProgressBar from './../progressbar/ProgressBar';
 import './../commonstyles.scss';
 import Styles from './PlayerBar.module.scss';
@@ -18,8 +19,9 @@ import UpIcon from './../../assets/buttonsvg/chevron-up.svg';
 import DownIcon from './../../assets/buttonsvg/chevron-down.svg';
 
 const PlayerBar = props => {
-    const { playPause, albumArt, albumTitle, albumArtist, audioSrc, audioDuration, setPlayPause } = useContext(PlayerContext);
+    const { playPause, albumArt, currentTrack, albumTitle, albumArtist, audioSrc, audioDuration, setPlayPause } = useContext(PlayerContext);
     let audioPlayerRef = useRef(null);
+    let history = useHistory();
 
     // volume states: high, normal, none, muted
     const [volumeStatus, setVolumeStatus] = useState('high');
@@ -135,7 +137,14 @@ const PlayerBar = props => {
                     }
                 >
                     <span>
-                        <b>{albumTitle}</b>
+                        <b
+                            className={Styles.albumLinker}
+                            onClick={() => {
+                                history.push(`/album/${albumTitle}`);
+                            }}
+                        >
+                            {currentTrack}
+                        </b>
                         <br />
                         <i>{albumArtist}</i>
                     </span>
