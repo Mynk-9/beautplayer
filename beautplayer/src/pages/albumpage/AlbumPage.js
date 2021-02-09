@@ -28,11 +28,16 @@ const AlbumPage = props => {
     API += ':5000';
 
 
-    const albumName = props.match.params.albumName;
+    let albumName = props.match.params.albumName;
     let tracksArray = {
+        album: '',
         albumArt: '',
         tracks: []
     };
+
+    useEffect(() => {
+        albumName = props.match.params.albumName;
+    });
 
     useEffect(() => {
 
@@ -42,7 +47,7 @@ const AlbumPage = props => {
             .then(async resp => {
                 const album = resp.data.Album;
                 const albumTracks = album.tracks;
-                
+
                 setAlbumPageAlbumYear(album.year.join(", "));
                 setAlbumPageAlbumArtist(album.albumArtist.join(", "));
                 setAlbumPageAlbumGenre(album.genre.join(", "));
@@ -96,12 +101,13 @@ const AlbumPage = props => {
                     .catch(err => {
                         console.log(err);
                     })
+                    .then(() => tracksArray.album = albumName)
                     .then(() => setTracks(tracksArray));
             })
             .catch(err => {
                 console.log(err);
             });
-    }, []);
+    }, [albumName]);
 
     return (
         <>

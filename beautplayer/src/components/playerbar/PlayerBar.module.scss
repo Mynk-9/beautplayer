@@ -52,6 +52,10 @@
          }
       }
       .albumInfo {
+         position: relative;
+         top: 50%;
+         transform: translateY(-50%);
+
          display: inline-table;
          height: 100%;
          // copied from .albumArt
@@ -79,10 +83,25 @@
             display: none;
          }
       }
+
+      .albumLinker {
+         cursor: pointer;
+      }
+   }
+   .left:hover {
+      background-color: var(--tint-level2-color);
+
+      @media only screen and (max-width: 540px) {
+         background-color: initial;
+      }
    }
    .right {
       flex: 1;
       text-align: right;
+
+      // thanks: https://stackoverflow.com/a/17967969/6262571
+      transform: translate3D(0, 0, 0);
+
       @media only screen and (max-width: 540px) {
          display: none;
       }
@@ -90,6 +109,8 @@
    .center {
       flex: 1;
       text-align: center;
+      padding-top: 0.3rem;
+      padding-bottom: 0.3rem;
 
       min-width: calc(
          3 * (24px + (2 * 1rem) + (2 * 1px) + (2 * 0.3rem)) + 2 * (1rem)
@@ -127,5 +148,25 @@
    .volumeStatus {
       vertical-align: middle;
       padding: 1rem;
+   }
+   .volumeStatusWrapper {
+      position: relative;
+   }
+   .volumeStatusWrapper::after {
+      content: attr(data-value) "%";
+      font-size: small;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      background-color: var(--tint-level2-color);
+      padding: 0.2rem;
+      border-radius: var(--border-radius);
+
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      opacity: 0;
+   }
+   .volumeStatusWrapper:hover::after {
+      opacity: 1;
+      transform: translateX(-50%);
    }
 }

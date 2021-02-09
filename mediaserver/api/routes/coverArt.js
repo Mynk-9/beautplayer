@@ -15,6 +15,9 @@ router.get('/:trackId', (req, res, next) => {
             mm.parseFile(filePath)
                 .then(metadata => {
                     let imageData = metadata.common.picture[0].data;
+                    res.set({
+                        'Cache-Control': 'max-age=86400' // seconds in a day
+                    });
                     res.status(200).json({
                         coverArt: imageData,
                         format: metadata.common.picture[0].format
