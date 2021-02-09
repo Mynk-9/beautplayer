@@ -7,7 +7,7 @@ import PlayIcon from './../../assets/buttonsvg/play.svg';
 import PauseIcon from './../../assets/buttonsvg/pause.svg';
 
 const PlayButton = props => {
-    const { playPause, setPlayPause, setAlbumTitle, setAlbumArtist,
+    const { playPause, setPlayPause, setCurrentTrack, setAlbumTitle, setAlbumArtist,
         setAlbumArt, audioSrc, setAudioSrc, setAudioDuration } = useContext(PlayerContext);
 
     const [playButtonState, setPlayButtonState] = useState('play-button');
@@ -27,6 +27,7 @@ const PlayButton = props => {
 
             setAlbumArt(props.albumArt);
             setAlbumArtist(props.albumArtist);
+            setCurrentTrack(props.track)
             setAlbumTitle(props.albumTitle);
 
             setPlayPause('play');
