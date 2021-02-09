@@ -53,18 +53,8 @@ const MainPage = (props) => {
                         for (const album of albumList) {
                             // console.log(album);
                             const name = album._id;
-                            const track0Id = album.tracks[0]._id;
-                            let albumArtist;
-
-                            // get album artist
-                            await axios.get(API + '/tracks/' + track0Id)
-                                .then(resp => {
-                                    const trackInfo = resp.data.Track;
-                                    albumArtist = trackInfo.albumArtist;
-                                })
-                                .catch(err => {
-                                    console.log(err);
-                                });
+                            const track0Id = album.tracks[0];
+                            let albumArtist = album.albumArtist.join(", ");
 
                             albumCards.push(
                                 <AlbumCard
