@@ -1,4 +1,4 @@
-import { React, useEffect, useState, useContext } from 'react';
+import { React, useEffect, useState, useContext, useRef } from 'react';
 import Styles from './ProgressBar.module.scss';
 
 import PlayerContext from './../playercontext';
@@ -7,7 +7,7 @@ const ProgressBar = props => {
     const { audioDuration, playPause } = useContext(PlayerContext);
     const [progressVal, setProgressVal] = useState(0);
     const [progressInterval, setProgressInterval] = useState();
-    const [currentProgress, setCurrentProgress] = useState('');
+    const progressBarRef = useRef();
 
     const convertSecondsToMinsSecs = (secs) => {
         if (isNaN(secs))
@@ -64,12 +64,27 @@ const ProgressBar = props => {
         }
     }, [playPause]);
 
+    const handleProgressBarInterrupt = (e) => {
+        const cursorPosX = parseInt(e.clientX);
+        const progressBarRect = progressBarRef.current.getBoundingClientRect();
+        let totalWidth = parseInt(progressBarRect.width);
+        let offsetPosX = cursorPosX - parseInt(progressBarRect.x);
+        const newTimeStamp = parseInt((offsetPosX / totalWidth) * audioDuration);
+
+        props.playerRef.current.currentTime = newTimeStamp;
+        // console.log(newTimeStamp);
+    };
+
     return (
         <>
             <span className={Styles.time}>
                 {convertSecondsToMinsSecs(progressVal)}
             </span>
-            <div className={Styles.progressBar}>
+            <div
+                className={Styles.progressBar}
+                onMouseDown={handleProgressBarInterrupt}
+                ref={progressBarRef}
+            >
                 <span
                     className={Styles.progressValue}
                     data-value={convertSecondsToMinsSecsWithSuffixes(progressVal)}
