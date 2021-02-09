@@ -56,8 +56,8 @@ function App() {
                 render={props => <SettingsPage />}
               />
             </Switch>
+            <PlayerBar />
           </BrowserRouter>
-          <PlayerBar />
         </PlayerContext.Provider>
       </ThemeContext.Provider>
     </>
