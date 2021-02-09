@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose')
 const router = express.Router();
 const Playlists = require('../models/playlists');
 
@@ -30,6 +29,27 @@ router.get('/:playlistName', (req, res, next) => {
         .then(playlist => {
             res.status(200).json({
                 Playlist: playlist
+            });
+        })
+        .catch(e => {
+            console.log(e);
+            res.status(500).json({
+                error: e
+            });
+        });
+});
+
+// handle GET to /playlists/:playlistName/:trackId
+router.get('/:playlistName/:trackId', (req, res, next) => {
+    const plName = req.params.playlistName;
+    const trackId = req.params.trackId;
+    Playlists
+        .count(
+            { _id: plName, tracks: { $in: [trackId] } }
+        )
+        .then(count => {
+            res.status(200).json({
+                found: (count > 0 ? true : false)
             });
         })
         .catch(e => {
