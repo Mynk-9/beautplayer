@@ -52,6 +52,10 @@
          }
       }
       .albumInfo {
+         position: relative;
+         top: 50%;
+         transform: translateY(-50%);
+
          display: inline-table;
          height: 100%;
          // copied from .albumArt
