@@ -83,6 +83,10 @@
    .right {
       flex: 1;
       text-align: right;
+
+      // thanks: https://stackoverflow.com/a/17967969/6262571
+      transform: translate3D(0, 0, 0);
+
       @media only screen and (max-width: 540px) {
          display: none;
       }
