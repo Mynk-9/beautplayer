@@ -22,10 +22,12 @@ function App() {
 
   // player context hooks {
   const [playPause, setPlayPause] = useState('pause');
-  const [albumArt, setAlbumArt] = useState(AlbumArt);
-  const [albumTitle, setAlbumTitle] = useState('Awesome Album');
-  const [albumArtist, setAlbumArtist] = useState('Human');
+  const [albumArt, setAlbumArt] = useState();           // AlbumArt           ---|
+  const [albumTitle, setAlbumTitle] = useState('');     // Awesome Album      ---| these were the original testing values uwu
+  const [albumArtist, setAlbumArtist] = useState('');   // Human              ---|
+  const [currentTrack, setCurrentTrack] = useState('');
   const [audioSrc, setAudioSrc] = useState('');
+  const [audioDuration, setAudioDuration] = useState('');
   // }
 
   return (
@@ -33,8 +35,8 @@ function App() {
       <ThemeContext.Provider value={{ colorConfig, setColorConfig }}>
         <PlayerContext.Provider
           value={{
-            playPause, albumArt, albumTitle, albumArtist, audioSrc,
-            setPlayPause, setAlbumArt, setAlbumTitle, setAlbumArtist, setAudioSrc
+            playPause, albumArt, albumTitle, albumArtist, currentTrack, audioSrc, audioDuration,
+            setPlayPause, setAlbumArt, setAlbumTitle, setAlbumArtist, setCurrentTrack, setAudioSrc, setAudioDuration
           }}
         >
           <BrowserRouter>
@@ -55,8 +57,8 @@ function App() {
                 render={props => <SettingsPage />}
               />
             </Switch>
+            <PlayerBar />
           </BrowserRouter>
-          <PlayerBar />
         </PlayerContext.Provider>
       </ThemeContext.Provider>
     </>

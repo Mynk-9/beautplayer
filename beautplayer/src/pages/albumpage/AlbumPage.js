@@ -16,7 +16,7 @@ const AlbumPage = props => {
         albumArt: '',
         tracks: [],
     });
-    const [albumPageAlbumYear, setAlbumPageAlbumYear] = useState(-1);
+    const [albumPageAlbumYear, setAlbumPageAlbumYear] = useState('');
     const [albumPageAlbumGenre, setAlbumPageAlbumGenre] = useState('');
     const [albumPageAlbumArtist, setAlbumPageAlbumArtist] = useState('');
     const [albumPageAlbumArt, setAlbumPageAlbumArt] = useState('');
@@ -28,11 +28,16 @@ const AlbumPage = props => {
     API += ':5000';
 
 
-    const albumName = props.match.params.albumName;
+    let albumName = props.match.params.albumName;
     let tracksArray = {
+        album: '',
         albumArt: '',
         tracks: []
     };
+
+    useEffect(() => {
+        albumName = props.match.params.albumName;
+    });
 
     useEffect(() => {
 
@@ -40,39 +45,30 @@ const AlbumPage = props => {
         // get the tracks of the album
         axios.get(API + '/albums/' + albumName)
             .then(async resp => {
-                const albumTracks = resp.data.Album.tracks;
+                const album = resp.data.Album;
+                const albumTracks = album.tracks;
+
+                setAlbumPageAlbumYear(album.year.join(", "));
+                setAlbumPageAlbumArtist(album.albumArtist.join(", "));
+                setAlbumPageAlbumGenre(album.genre.join(", "));
+
                 for (const track of albumTracks) {
-                    await axios.get(API + '/tracks/' + track._id)
-                        .then(resp => {
-                            const trackInfo = resp.data.Track;
+                    const trackInfo = track;
 
-                            const trackTitle = trackInfo.title;
-                            const trackAlbumArtist = trackInfo.albumArtist;
-                            const trackMins = Math.floor(trackInfo.length / 60);
-                            const trackSecs = Math.round(trackInfo.length % 60);
-                            const trackId = trackInfo._id;
+                    const trackTitle = trackInfo.title;
+                    const trackAlbumArtist = trackInfo.albumArtist;
+                    const trackMins = Math.floor(trackInfo.length / 60);
+                    const trackSecs = Math.round(trackInfo.length % 60);
+                    const trackId = trackInfo._id;
 
-                            tracksArray.tracks.push(
-                                [
-                                    trackTitle,
-                                    trackAlbumArtist,
-                                    trackMins + ':' + (trackSecs < 10 ? '0' : '') + trackSecs,
-                                    trackId
-                                ]
-                            );
-
-                            if (albumPageAlbumYear === -1) {
-                                let genres = '';
-                                setAlbumPageAlbumYear(trackInfo.year);
-                                setAlbumPageAlbumArtist(trackInfo.albumArtist);
-                                for (const genre of trackInfo.genre)
-                                    genres += genre + ' ';
-                                setAlbumPageAlbumGenre(genres);
-                            }
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        });
+                    tracksArray.tracks.push(
+                        [
+                            trackTitle,
+                            trackAlbumArtist,
+                            trackMins + ':' + (trackSecs < 10 ? '0' : '') + trackSecs,
+                            trackId
+                        ]
+                    );
                 }
             })
             .then(() => {
@@ -90,12 +86,13 @@ const AlbumPage = props => {
                     .catch(err => {
                         console.log(err);
                     })
+                    .then(() => tracksArray.album = albumName)
                     .then(() => setTracks(tracksArray));
             })
             .catch(err => {
                 console.log(err);
             });
-    }, []);
+    }, [albumName]);
 
     return (
         <>

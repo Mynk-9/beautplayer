@@ -20,6 +20,28 @@
             text-align: right;
         }
     }
+    .trackEntry:first-child {
+        border-top-left-radius: var(--border-radius);
+        border-top-right-radius: var(--border-radius);
+
+        td:first-child {
+            border-top-left-radius: var(--border-radius);
+        }
+        td:last-child {
+            border-top-right-radius: var(--border-radius);
+        }
+    }
+    .trackEntry:last-child {
+        border-bottom-left-radius: var(--border-radius);
+        border-bottom-right-radius: var(--border-radius);
+
+        td:first-child {
+            border-bottom-left-radius: var(--border-radius);
+        }
+        td:last-child {
+            border-bottom-right-radius: var(--border-radius);
+        }
+    }
     .trackEntry:hover {
         background-color: var(--tint-level2-color);
 
