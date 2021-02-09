@@ -6,12 +6,14 @@ const PlayerContext = createContext({
     albumTitle: '',
     albumArtist: '',
     audioSrc: '',
+    audioDuration: 0,
 
     setPlayPause: () => { },
     setAlbumArt: () => { },
     setAlbumTitle: () => { },
     setAlbumArtist: () => { },
     setAudioSrc: () => { },
+    setAudioDuration: () => { },
 });
 
 export default PlayerContext;

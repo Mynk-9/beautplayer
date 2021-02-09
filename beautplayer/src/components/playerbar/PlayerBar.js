@@ -1,4 +1,6 @@
 import { React, useState, useEffect, useContext, useRef } from 'react';
+import { useHistory } from 'react-router-dom'
+import ProgressBar from './../progressbar/ProgressBar';
 import './../commonstyles.scss';
 import Styles from './PlayerBar.module.scss';
 
@@ -17,11 +19,13 @@ import UpIcon from './../../assets/buttonsvg/chevron-up.svg';
 import DownIcon from './../../assets/buttonsvg/chevron-down.svg';
 
 const PlayerBar = props => {
-    const { playPause, albumArt, albumTitle, albumArtist, audioSrc, setPlayPause } = useContext(PlayerContext);
+    const { playPause, albumArt, albumTitle, albumArtist, audioSrc, audioDuration, setPlayPause } = useContext(PlayerContext);
     let audioPlayerRef = useRef(null);
+    let history = useHistory();
 
     // volume states: high, normal, none, muted
     const [volumeStatus, setVolumeStatus] = useState('high');
+    const [volumeDisplay, setVolumeDisplay] = useState(100);
     const [mobileOpenAlbumDetails, setMobileOpenAlbumDetails] = useState(false);
 
     let acrylicColorStyle;
@@ -72,6 +76,8 @@ const PlayerBar = props => {
             setVolumeStatus('none');
         else
             setVolumeStatus('normal');
+
+        setVolumeDisplay(audioPlayerRef.current.volume * 100);
     };
     let increaseVolume = () => {
         if (audioPlayerRef.current.volume < 1)
@@ -84,6 +90,8 @@ const PlayerBar = props => {
             setVolumeStatus('none');
         else
             setVolumeStatus('normal');
+
+        setVolumeDisplay(audioPlayerRef.current.volume * 100);
     };
 
 
@@ -129,50 +137,65 @@ const PlayerBar = props => {
                     }
                 >
                     <span>
-                        <b>{albumTitle}</b>
+                        <b
+                            className={Styles.albumLinker}
+                            onClick={() => {
+                                history.push(`/album/${albumTitle}`);
+                            }}
+                        >
+                            {albumTitle}
+                        </b>
                         <br />
                         <i>{albumArtist}</i>
                     </span>
                 </div>
             </div>
             <div className={Styles.center}>
-                <button className={"cursor-pointer"}>
-                    <img data-dark-mode-compatible alt="Back" src={BackIcon} />
-                </button>
-                <button
-                    className={"cursor-pointer"}
-                    onClick={togglePlay}
-                >
-                    <img data-dark-mode-compatible
-                        alt="Play"
-                        src={
-                            playPause === 'play'
-                                ? PauseIcon
-                                : PlayIcon
-                        }
-                    />
-                </button>
-                <button className={"cursor-pointer"}>
-                    <img data-dark-mode-compatible alt="Next" src={NextIcon} />
-                </button>
+                <div>
+                    <button className={"cursor-pointer"}>
+                        <img data-dark-mode-compatible alt="Back" src={BackIcon} />
+                    </button>
+                    <button
+                        className={"cursor-pointer"}
+                        onClick={togglePlay}
+                    >
+                        <img data-dark-mode-compatible
+                            alt="Play"
+                            src={
+                                playPause === 'play'
+                                    ? PauseIcon
+                                    : PlayIcon
+                            }
+                        />
+                    </button>
+                    <button className={"cursor-pointer"}>
+                        <img data-dark-mode-compatible alt="Next" src={NextIcon} />
+                    </button>
+                </div>
+                <ProgressBar playerRef={audioPlayerRef} />
             </div>
             <div className={Styles.right}>
                 <button className={"cursor-pointer"} onClick={reduceVolume}>
                     <img data-dark-mode-compatible alt="VolDown" src={MinusIcon} />
                 </button>
-                <img data-dark-mode-compatible
-                    alt="Volume Status"
-                    src={
-                        volumeStatus === 'high'
-                            ? VolumeHighIcon
-                            : volumeStatus === 'normal'
-                                ? VolumeNormalIcon
-                                : volumeStatus === 'none'
-                                    ? VolumeNoneIcon
-                                    : VolumeNormalIcon
-                    }
-                    className={Styles.volumeStatus}
-                />
+                <span
+                    className={Styles.volumeStatusWrapper}
+                    data-value={volumeDisplay}
+                >
+                    <img data-dark-mode-compatible
+                        alt="Volume Status"
+                        src={
+                            volumeStatus === 'high'
+                                ? VolumeHighIcon
+                                : volumeStatus === 'normal'
+                                    ? VolumeNormalIcon
+                                    : volumeStatus === 'none'
+                                        ? VolumeNoneIcon
+                                        : VolumeNormalIcon
+                        }
+                        className={Styles.volumeStatus}
+                    />
+                </span>
                 <button className={"cursor-pointer"} onClick={increaseVolume}>
                     <img data-dark-mode-compatible alt="VolUp" src={PlusIcon} />
                 </button>
