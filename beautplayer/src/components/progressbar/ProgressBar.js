@@ -71,8 +71,8 @@ const ProgressBar = props => {
         let offsetPosX = cursorPosX - parseInt(progressBarRect.x);
         const newTimeStamp = parseInt((offsetPosX / totalWidth) * audioDuration);
 
+        setProgressVal(newTimeStamp);
         props.playerRef.current.currentTime = newTimeStamp;
-        // console.log(newTimeStamp);
     };
 
     return (
