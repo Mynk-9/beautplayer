@@ -27,7 +27,11 @@
       font-size: small;
       position: absolute;
       right: 0;
-      top: -300%;    
+      top: -300%;
+
+      @media only screen and (max-width: 540px) {
+         display: none;
+      }
    }
 }
 
