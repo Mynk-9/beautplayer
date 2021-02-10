@@ -30,7 +30,11 @@ const AlbumCard = props => {
     }, []);
 
     let history = useHistory();
-    let openAlbum = () => history.push('/album/' + props.albumTitle.replace('/', '%2F'));
+    let openAlbum;
+    if (props.isPlaylist)
+        openAlbum = () => history.push('/playlist/' + props.albumTitle.replace('/', '%2F'));
+    else
+        openAlbum = () => history.push('/album/' + props.albumTitle.replace('/', '%2F'));
 
     return (
         <div className={Styles.albumCard}>
