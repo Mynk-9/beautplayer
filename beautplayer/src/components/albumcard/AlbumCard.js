@@ -8,18 +8,13 @@ import Styles from './AlbumCard.module.scss';
 const AlbumCard = props => {
     const [imgSource, setImgSource] = useState();
 
-    // api endpoint -- same domain, port 5000
-    let API = window.location.origin;
-    API = API.substring(0, API.lastIndexOf(':'));
-    API += ':5000';
-
     useEffect(() => {
         async function fetchAlbumArt() {
 
-            // check if props.firstTrackId is present
-            if (props.firstTrackId)
+            // check if props.coverArtAPI is present
+            if (props.coverArtAPI)
                 // get album cover art
-                axios.get(API + '/coverart/compressed/' + props.firstTrackId)
+                axios.get(props.coverArtAPI)
                     .then(resp => {
                         const picture = resp.data.coverArt.data;
                         const pictureFormat = resp.data.format;
