@@ -23,6 +23,11 @@ const TrackList = props => {
                             props.tracks.isPlaylist ? data[4] : props.tracks.album
                         }
                         albumArtist={data[1]}
+                        isPlaylist={
+                            props.tracks.isPlaylist
+                                ? true
+                                : false
+                        }
                     />
                 </td>
                 <td>{data[0]}</td>
