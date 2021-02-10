@@ -14,6 +14,12 @@ const MainPage = (props) => {
             : []
     ); // pick from persistent storage if available
 
+    const [allPlaylists, setAllPlaylists] = useState(
+        PersistentStorage.MainPagePlaylistCards.length > 0
+            ? PersistentStorage.MainPagePlaylistCards
+            : []
+    );
+
     // api endpoint -- same domain, port 5000
     let API = window.location.origin;
     API = API.substring(0, API.lastIndexOf(':'));
@@ -84,17 +90,67 @@ const MainPage = (props) => {
                 });
     }, []);
 
+    // for playlists
+    useEffect(() => {
+        // skip if persistent storage already present
+        if (PersistentStorage.MainPagePlaylistCards.length > 0)
+            return;
+
+        // fetch albums
+        let localStorageData = localStorage.getItem('all-playlists')
+        if (localStorageData) {
+            localStorageData = JSON.parse(localStorageData);
+            let playlistCards = [];
+            for (const info of localStorageData) {
+                playlistCards.push(
+                    <AlbumCard
+                        key={info.name}
+                        albumArt={AlbumArt}
+                        albumTitle={info.name}
+                    />
+                );
+            }
+            PersistentStorage.MainPagePlaylistCards = playlistCards;
+            setAllPlaylists(playlistCards);
+        }
+        else
+            axios.get(API + '/playlists')
+                .then(async resp => {
+                    if (resp.status === 200) {
+                        const playlists = resp.data.Playlists;
+                        let playlistCards = [];
+                        let localStorageData = [];
+
+                        for (const playlist of playlists) {
+                            playlistCards.push(
+                                <AlbumCard
+                                    key={playlist._id}
+                                    albumArt={AlbumArt}
+                                    albumTitle={playlist._id}
+                                />
+                            );
+                            localStorageData.push(playlist._id);
+                        }
+
+                        localStorage.setItem('all-playlists', JSON.stringify(localStorageData));
+                        PersistentStorage.MainPagePlaylistCards = playlistCards;
+                        setAllPlaylists(playlistCards);
+                    } else {
+                        console.log('Error:', resp);
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+    }, []);
+
     return (
         <div>
             <div className={Styles.mainBody}>
                 <div className={Styles.section}>
                     <div className={Styles.sectionHead}>Playlists</div>
                     <div className={Styles.sectionBody}>
-                        <AlbumCard albumArt={AlbumArt} albumTitle={"Awesome Album"} albumArtist={"Human"} />
-                        <AlbumCard albumArt={AlbumArt} albumTitle={"Awesome Album"} albumArtist={"Human"} />
-                        <AlbumCard albumArt={AlbumArt} albumTitle={"Awesome Album"} albumArtist={"Human"} />
-                        <AlbumCard albumArt={AlbumArt} albumTitle={"Awesome Album"} albumArtist={"Human"} />
-                        <AlbumCard albumArt={AlbumArt} albumTitle={"Awesome Album"} albumArtist={"Human"} />
+                        {allPlaylists}
                     </div>
                 </div>
                 <div className={Styles.section}>
