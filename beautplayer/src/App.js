@@ -5,6 +5,8 @@ import AlbumPage from './pages/albumpage/AlbumPage';
 import PlaylistPage from './pages/playlistpage/PlaylistPage';
 import SettingsPage from './pages/settingspage/SettingsPage';
 
+import { AnimatedSwitch } from 'react-router-transition';
+
 import Navbar from './components/navbar/Navbar';
 import PlayerBar from './components/playerbar/PlayerBar';
 import AlbumArt from './assets/images/pexels-steve-johnson-1234853.jpg';
@@ -44,7 +46,13 @@ function App() {
             <Navbar
               acrylicColor={acrylicColor}
             />
-            <Switch>
+            <AnimatedSwitch
+              atEnter={{ opacity: 0 }}
+              atLeave={{ opacity: 0 }}
+              atActive={{ opacity: 1 }}
+              className="switch-wrapper"
+              runOnMount={true}
+            >
               <Route exact
                 path="/"
                 render={props => <MainPage />}
@@ -61,7 +69,7 @@ function App() {
                 path="/settings"
                 render={props => <SettingsPage />}
               />
-            </Switch>
+            </AnimatedSwitch>
             <PlayerBar />
           </BrowserRouter>
         </PlayerContext.Provider>
