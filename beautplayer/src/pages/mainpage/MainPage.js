@@ -104,9 +104,9 @@ const MainPage = (props) => {
             for (const info of localStorageData) {
                 playlistCards.push(
                     <AlbumCard
-                        key={info.name}
+                        key={info}
                         albumArt={AlbumArt}
-                        albumTitle={info.name}
+                        albumTitle={info}
                     />
                 );
             }
