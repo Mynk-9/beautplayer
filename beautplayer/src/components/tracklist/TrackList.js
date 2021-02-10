@@ -19,7 +19,9 @@ const TrackList = props => {
                         audioDuration={data[2]}
                         track={data[0]}
                         albumArt={props.tracks.albumArt}
-                        albumTitle={props.tracks.album}
+                        albumTitle={
+                            props.tracks.isPlaylist ? data[4] : props.tracks.album
+                        }
                         albumArtist={data[1]}
                     />
                 </td>

@@ -27,7 +27,7 @@ const PlayButton = props => {
 
             setAlbumArt(props.albumArt);
             setAlbumArtist(props.albumArtist);
-            setCurrentTrack(props.track)
+            setCurrentTrack(props.track);
             setAlbumTitle(props.albumTitle);
 
             setPlayPause('play');
