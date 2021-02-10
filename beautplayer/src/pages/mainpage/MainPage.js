@@ -19,6 +19,7 @@ const MainPage = (props) => {
     API = API.substring(0, API.lastIndexOf(':'));
     API += ':5000';
 
+    // for all album cards
     useEffect(() => {
         // skip if persistent storage already present
         if (PersistentStorage.MainPageAllAlbumCards.length > 0)
@@ -36,7 +37,7 @@ const MainPage = (props) => {
                         albumArt={AlbumArt}
                         albumTitle={info.name}
                         albumArtist={info.albumArtist}
-                        firstTrackId={info.track0Id}
+                        coverArtAPI={API + '/coverart/compressed/' + info.track0Id}
                     />
                 );
             }
@@ -62,7 +63,7 @@ const MainPage = (props) => {
                                     albumArt={AlbumArt}
                                     albumTitle={name}
                                     albumArtist={albumArtist}
-                                    firstTrackId={track0Id}
+                                    coverArtAPI={API + '/coverart/compressed/' + track0Id}
                                 />
                             );
                             localStorageData.push({
