@@ -107,6 +107,7 @@ const MainPage = (props) => {
                         key={info}
                         albumArt={AlbumArt}
                         albumTitle={info}
+                        isPlaylist={true}
                     />
                 );
             }
@@ -127,6 +128,7 @@ const MainPage = (props) => {
                                     key={playlist._id}
                                     albumArt={AlbumArt}
                                     albumTitle={playlist._id}
+                                    isPlaylist={true}
                                 />
                             );
                             localStorageData.push(playlist._id);

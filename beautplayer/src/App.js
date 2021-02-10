@@ -2,6 +2,7 @@ import { React, useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import MainPage from './pages/mainpage/MainPage';
 import AlbumPage from './pages/albumpage/AlbumPage';
+import PlaylistPage from './pages/playlistpage/PlaylistPage';
 import SettingsPage from './pages/settingspage/SettingsPage';
 
 import Navbar from './components/navbar/Navbar';
@@ -51,6 +52,10 @@ function App() {
               <Route
                 path="/album/:albumName"
                 render={props => <AlbumPage {...props} />}
+              />
+              <Route
+                path="/playlist/:playlistName"
+                render={props => <PlaylistPage {...props} />}
               />
               <Route
                 path="/settings"
