@@ -9,6 +9,7 @@ import Styles from './AlbumPage.module.scss';
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg'
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
+import { albumArt } from '../../components/albumArtAPI';
 
 const AlbumPage = props => {
     // tracks has the format: [title, artist, duration, trackId]
@@ -41,6 +42,11 @@ const AlbumPage = props => {
 
     useEffect(() => {
 
+        // set album cover art
+        const src = albumArt(albumName.replace('%2F', '/'));
+        setAlbumPageAlbumArt(src);
+        tracksArray.albumArt = src;
+
         // fetch the album data
         // get the tracks of the album
         axios.get(API + '/albums/' + albumName)
@@ -71,24 +77,8 @@ const AlbumPage = props => {
                     );
                 }
             })
-            .then(() => {
-                // get album cover art
-                const firstTrackId = tracksArray.tracks[0][3];
-                axios.get(API + '/coverart/' + firstTrackId)
-                    .then(resp => {
-                        const picture = resp.data.coverArt.data;
-                        const pictureFormat = resp.data.format;
-                        let base64Data = base64.bytesToBase64(picture);
-                        let src = `data:${pictureFormat};base64,${base64Data}`;
-                        setAlbumPageAlbumArt(src);
-                        tracksArray.albumArt = src;
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
-                    .then(() => tracksArray.album = albumName)
-                    .then(() => setTracks(tracksArray));
-            })
+            .then(() => tracksArray.album = albumName)
+            .then(() => setTracks(tracksArray))
             .catch(err => {
                 console.log(err);
             });
@@ -107,6 +97,9 @@ const AlbumPage = props => {
                     <img
                         alt="Album Art"
                         className={Styles.albumArt}
+                        onError={(img) => {
+                            img.target.src = AlbumArt;
+                        }}
                         src={albumPageAlbumArt || AlbumArt}
                     />
                     <table>
