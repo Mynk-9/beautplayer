@@ -13,19 +13,17 @@ const ProgressBar = props => {
         if (isNaN(secs))
             return '-/-';
 
-        if (secs > 60)
-            return (
-                parseInt(secs / 60).toString(10) + ':'
-                + (secs % 60).toString(10)
-            );
-        else if (secs > 9)
-            return (
-                '0:' + secs.toString(10)
-            );
-        else
-            return (
-                '0:0' + secs.toString(10)
-            );
+        let mins = parseInt(secs / 60);
+        let mins_str = mins.toString(10);
+        if (mins < 10)
+            mins_str = '0' + mins_str;
+
+        secs = parseInt(secs % 60);
+        let secs_str = secs.toString(10);
+        if (secs < 10)
+            secs_str = '0' + secs_str
+
+        return (mins_str + ':' + secs_str);
     };
     const convertSecondsToMinsSecsWithSuffixes = (secs) => {
         if (secs > 60)

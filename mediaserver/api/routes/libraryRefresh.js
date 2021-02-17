@@ -5,6 +5,7 @@ const router = express.Router();
 const Tracks = require('./../models/tracks');
 const mediaScanner = require('../subroutines/mediaScanner');
 const metaDataScanner = require('../subroutines/metaDataScanner');
+const albumArtGenerator = require('../subroutines/albumArtGenerator');
 
 router.post('/', async (req, res, next) => {
 
@@ -49,7 +50,7 @@ router.post('/', async (req, res, next) => {
             .catch(e => console.log(e));
 
         // aggregate
-        Tracks
+        await Tracks
             .aggregate([
                 {
                     $group: {
@@ -73,6 +74,20 @@ router.post('/', async (req, res, next) => {
                 if (c)
                     console.log(c);
             });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({
+            error: e
+        });
+    }
+
+    // return if headers already sent
+    if (res.headersSent)
+        return;
+
+    // get the album arts
+    try {
+        albumArtGenerator();
     } catch (e) {
         console.log(e);
         res.status(500).json({
