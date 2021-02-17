@@ -55,7 +55,8 @@ app.use((req, res, next) => {
 app.use('/tracks', tracksRoutes);
 app.use('/refreshlibrary', libraryRefreshRoute);
 app.use('/albums', albumsRoutes);
-app.use('/coverart', coverArtRoute);
+app.use('/legacy/coverart', coverArtRoute);
+app.use('/coverArt', express.static('./public/coverArt'));
 app.use('/playlists', playlists);
 
 // error handling

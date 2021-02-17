@@ -30,13 +30,21 @@ module.exports = async (files) => {
                     metaData.common.musicbrainz_trackid;
 
                 if (metaData.common.title && metaData.format.duration)  // got both
+                {
+                    if (!metaData.common.album)
+                        file['album'] = file['title'];
                     finalList.push(file);
+                }
                 else if (metaData.format.duration) {    // got length
                     file['title'] = basename(path, extname(path));
+                    if (!metaData.common.album)
+                        file['album'] = file['title'];
                     finalList.push(file);
                 }
                 else if (metaData.common.title) { // got title
                     file['length'] = -1;
+                    if (!metaData.common.album)
+                        file['album'] = file['title'];
                     finalList.push(file);
                 }
                 else
