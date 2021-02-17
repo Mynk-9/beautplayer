@@ -7,6 +7,8 @@ import Styles from './MainPage.module.scss';
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg';
 
+import { albumArtCompressed } from './../../components/albumArtAPI';
+
 const MainPage = (props) => {
     const [allAlbums, setAllAlbums] = useState(
         PersistentStorage.MainPageAllAlbumCards.length > 0
@@ -43,7 +45,7 @@ const MainPage = (props) => {
                         albumArt={AlbumArt}
                         albumTitle={info.name}
                         albumArtist={info.albumArtist}
-                        coverArtAPI={API + '/coverart/compressed/' + info.track0Id}
+                        coverArtAPI={albumArtCompressed(info.name)}
                     />
                 );
             }
@@ -69,7 +71,7 @@ const MainPage = (props) => {
                                     albumArt={AlbumArt}
                                     albumTitle={name}
                                     albumArtist={albumArtist}
-                                    coverArtAPI={API + '/coverart/compressed/' + track0Id}
+                                    coverArtAPI={albumArtCompressed(name)}
                                 />
                             );
                             localStorageData.push({
