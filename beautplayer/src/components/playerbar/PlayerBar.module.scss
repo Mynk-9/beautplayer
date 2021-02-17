@@ -83,6 +83,17 @@
             display: none;
          }
       }
+
+      .albumLinker {
+         cursor: pointer;
+      }
+   }
+   .left:hover {
+      background-color: var(--tint-level2-color);
+
+      @media only screen and (max-width: 540px) {
+         background-color: initial;
+      }
    }
    .right {
       flex: 1;

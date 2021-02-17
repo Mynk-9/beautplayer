@@ -55,7 +55,7 @@ router.post('/', async (req, res, next) => {
                     $group: {
                         _id: '$album',
                         tracks: {
-                            $push: { _id: '$_id', title: '$title' }
+                            $push: '$_id'
                         },
                         albumArtist: {
                             $addToSet: "$albumArtist"

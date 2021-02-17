@@ -2,6 +2,7 @@ import { React, useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import MainPage from './pages/mainpage/MainPage';
 import AlbumPage from './pages/albumpage/AlbumPage';
+import PlaylistPage from './pages/playlistpage/PlaylistPage';
 import SettingsPage from './pages/settingspage/SettingsPage';
 
 import Navbar from './components/navbar/Navbar';
@@ -25,6 +26,7 @@ function App() {
   const [albumArt, setAlbumArt] = useState();           // AlbumArt           ---|
   const [albumTitle, setAlbumTitle] = useState('');     // Awesome Album      ---| these were the original testing values uwu
   const [albumArtist, setAlbumArtist] = useState('');   // Human              ---|
+  const [currentTrack, setCurrentTrack] = useState('');
   const [audioSrc, setAudioSrc] = useState('');
   const [audioDuration, setAudioDuration] = useState('');
   // }
@@ -34,8 +36,8 @@ function App() {
       <ThemeContext.Provider value={{ colorConfig, setColorConfig }}>
         <PlayerContext.Provider
           value={{
-            playPause, albumArt, albumTitle, albumArtist, audioSrc, audioDuration,
-            setPlayPause, setAlbumArt, setAlbumTitle, setAlbumArtist, setAudioSrc, setAudioDuration
+            playPause, albumArt, albumTitle, albumArtist, currentTrack, audioSrc, audioDuration,
+            setPlayPause, setAlbumArt, setAlbumTitle, setAlbumArtist, setCurrentTrack, setAudioSrc, setAudioDuration
           }}
         >
           <BrowserRouter>
@@ -52,12 +54,16 @@ function App() {
                 render={props => <AlbumPage {...props} />}
               />
               <Route
+                path="/playlist/:playlistName"
+                render={props => <PlaylistPage {...props} />}
+              />
+              <Route
                 path="/settings"
                 render={props => <SettingsPage />}
               />
             </Switch>
+            <PlayerBar />
           </BrowserRouter>
-          <PlayerBar />
         </PlayerContext.Provider>
       </ThemeContext.Provider>
     </>
