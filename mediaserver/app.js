@@ -12,7 +12,7 @@ const tracksRoutes = require('./api/routes/tracks');
 const albumsRoutes = require('./api/routes/albums');
 const libraryRefreshRoute = require('./api/routes/libraryRefresh');
 const coverArtRoute = require('./api/routes/coverArt');
-const playlistTracksRoute = require('./api/routes/playlistTracks');
+const playlists = require('./api/routes/playlists');
 
 mongoose
     .connect('mongodb://localhost:27017/player', {
@@ -56,7 +56,7 @@ app.use('/tracks', tracksRoutes);
 app.use('/refreshlibrary', libraryRefreshRoute);
 app.use('/albums', albumsRoutes);
 app.use('/coverart', coverArtRoute);
-app.use('/playlists', playlistTracksRoute);
+app.use('/playlists', playlists);
 
 // error handling
 app.use((req, res, next) => {
