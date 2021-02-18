@@ -55,6 +55,8 @@ const AlbumPage = props => {
         setAlbumPageAlbumArt(src);
         tracksArray.albumArt = src;
 
+        tracksArray.tracks = [];
+
         // fetch the album data
         // get the tracks of the album
         axios.get(API + '/albums/' + albumName)

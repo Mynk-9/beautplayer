@@ -20,11 +20,13 @@ const TrackLiker = (props) => {
             .then(resp => {
                 if (resp.status === 200 && resp.data.found === true)
                     setLiked(true);
+                else
+                    setLiked(false);
             })
             .catch(err => {
                 console.log(err);
             });
-    }, []);
+    }, [props.trackId]);
 
     let updateLikeStatus = async (newState) => {
         if (newState)
