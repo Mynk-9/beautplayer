@@ -5,6 +5,7 @@ import './../commonstyles.scss';
 import Styles from './PlayerBar.module.scss';
 
 import PlayerContext from './../playercontext';
+import ThemeContext from './../themecontext';
 
 import BackIcon from './../../assets/buttonsvg/skip-back.svg';
 import PlayIcon from './../../assets/buttonsvg/play.svg';
@@ -28,11 +29,19 @@ const PlayerBar = props => {
     const [volumeDisplay, setVolumeDisplay] = useState(100);
     const [mobileOpenAlbumDetails, setMobileOpenAlbumDetails] = useState(false);
 
-    let acrylicColorStyle;
-    if (props.acrylicColor)
-        acrylicColorStyle = { '--acrylic-color': props.acrylicColor };
-    else
-        acrylicColorStyle = {};
+    // acrylic color management
+    const [acrylicColorStyle, setAcrylicColorStyle] = useState({});
+    const { acrylicColor, letAcrylicTints } = useContext(ThemeContext);
+    useEffect(() => {
+        if (!letAcrylicTints)
+            setAcrylicColorStyle({});
+        else {
+            if (acrylicColor && acrylicColor !== '--acrylic-color' && acrylicColor !== '')
+                setAcrylicColorStyle({ '--acrylic-color': acrylicColor })
+            else
+                setAcrylicColorStyle({});
+        }
+    }, [acrylicColor, letAcrylicTints]);
 
     // api endpoint -- same domain, port 5000
     let API = window.location.origin;

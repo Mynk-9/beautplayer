@@ -16,6 +16,8 @@ function App() {
 
   // navbar acrylic color state
   const [acrylicColor, setAcrylicColor] = useState('--acrylic-color');
+  const [letAcrylicTints, setLetAcrylicTints] = useState(true);
+  const [artContext, setArtContext] = useState(null);
 
   // theme context hooks {
   const [colorConfig, setColorConfig] = useState('dark');
@@ -33,7 +35,10 @@ function App() {
 
   return (
     <>
-      <ThemeContext.Provider value={{ colorConfig, setColorConfig }}>
+      <ThemeContext.Provider value={{
+        colorConfig, setColorConfig, acrylicColor, setAcrylicColor,
+        letAcrylicTints, setLetAcrylicTints, artContext, setArtContext
+      }}>
         <PlayerContext.Provider
           value={{
             playPause, albumArt, albumTitle, albumArtist, currentTrack, audioSrc, audioDuration,
@@ -41,9 +46,7 @@ function App() {
           }}
         >
           <BrowserRouter>
-            <Navbar
-              acrylicColor={acrylicColor}
-            />
+            <Navbar />
             <Switch>
               <Route exact
                 path="/"
