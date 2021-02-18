@@ -6,7 +6,7 @@ const ThemeContext = createContext({
 
     acrylicColor: '',
     setAcrylicColor: () => { },
-    letAcrylicTints: true,
+    letAcrylicTints: false,
     setLetAcrylicTints: () => { },
     artContext: null,
     setArtContext: () => { }

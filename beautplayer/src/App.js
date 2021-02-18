@@ -16,7 +16,7 @@ function App() {
 
   // navbar acrylic color state
   const [acrylicColor, setAcrylicColor] = useState('--acrylic-color');
-  const [letAcrylicTints, setLetAcrylicTints] = useState(true);
+  const [letAcrylicTints, setLetAcrylicTints] = useState(false);
   const [artContext, setArtContext] = useState(null);
 
   // theme context hooks {
