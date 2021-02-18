@@ -77,8 +77,7 @@ const PlayButton = props => {
             setCurrentTrack(props.track);
             setAlbumTitle(props.albumTitle);
 
-            if (letAcrylicTints)
-                getDominantColorAlbumArt();
+            getDominantColorAlbumArt();
 
             setPlayPause('play');
         }
