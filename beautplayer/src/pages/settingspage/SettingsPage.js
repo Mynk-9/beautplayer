@@ -1,13 +1,17 @@
-import { React } from 'react';
+import { React, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import ColorModeSwitcher from '../../components/colormodeswitch/ColorModeSwitch';
 import Styles from './SettingsPage.module.scss';
 
+import ThemeContext from './../../components/themecontext';
+
 import PersistentStorage from './../persistentstorage';
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg'
 
 const AlbumPage = props => {
+    const { letAcrylicTints, setLetAcrylicTints } = useContext(ThemeContext);
+
     let history = useHistory();
 
     // api endpoint -- same domain, port 5000
@@ -83,14 +87,32 @@ const AlbumPage = props => {
                     <table>
                         <tbody>
                             <tr>
-                                <td>Color Mode</td>
+                                <td><b>Color Mode</b></td>
                                 <td><ColorModeSwitcher /></td>
                             </tr>
                             <tr>
-                                <td>Refresh Library</td>
+                                <td>
+                                    <b>Enable Acrylic Color Tint</b><br />
+                                    <i>The tint which top and bottom bars get according to current playing track</i>
+                                </td>
                                 <td>
                                     <button
-                                        className={Styles.refreshLibraryButton}
+                                        onClick={() => setLetAcrylicTints(!letAcrylicTints)}
+                                        className={Styles.button}
+                                    >
+                                        {
+                                            letAcrylicTints
+                                                ? "Yes"
+                                                : "No"
+                                        }
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Refresh Library</b></td>
+                                <td>
+                                    <button
+                                        className={Styles.button}
                                         onClick={refreshLibrary}
                                     >
                                         Refresh Media Library
