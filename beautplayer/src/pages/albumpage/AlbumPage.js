@@ -1,10 +1,12 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useContext, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import * as base64 from 'byte-base64';
 import TrackList from './../../components/tracklist/TrackList';
 import './../../components/commonstyles.scss';
 import Styles from './AlbumPage.module.scss';
+
+import ThemeContext from '../../components/themecontext';
 
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg'
 
@@ -23,6 +25,10 @@ const AlbumPage = props => {
     const [albumPageAlbumArt, setAlbumPageAlbumArt] = useState('');
     let history = useHistory();
 
+    // context of album art image
+    const { setArtContext } = useContext(ThemeContext);
+    const imgRef = useRef(null);
+
     // api endpoint -- same domain, port 5000
     let API = window.location.origin;
     API = API.substring(0, API.lastIndexOf(':'));
@@ -38,6 +44,8 @@ const AlbumPage = props => {
 
     useEffect(() => {
         albumName = props.match.params.albumName;
+        setArtContext(imgRef);
+        imgRef.current.crossOrigin = 'Anonymous'; // fix for: "canvas has been tainted by cross-origin data" security error
     });
 
     useEffect(() => {
@@ -101,6 +109,7 @@ const AlbumPage = props => {
                             img.target.src = AlbumArt;
                         }}
                         src={albumPageAlbumArt || AlbumArt}
+                        ref={imgRef}
                     />
                     <table>
                         <tbody>
