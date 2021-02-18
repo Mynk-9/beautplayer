@@ -9,6 +9,7 @@ import Styles from './PlaylistPage.module.scss';
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg'
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
+import { parse } from 'ipaddr.js';
 
 const PlaylistPage = props => {
     // tracks has the format: [title, artist, duration, trackId]
@@ -39,7 +40,7 @@ const PlaylistPage = props => {
     });
 
     useEffect(() => {
-        
+
         // fetch the album data
         // get the tracks of the album
         axios.get(API + '/playlists/' + playlistName)
@@ -47,9 +48,18 @@ const PlaylistPage = props => {
                 const playlist = resp.data.Playlist;
                 const playlistTracks = playlist.tracks;
 
-                // setAlbumPageAlbumYear(playlist.year.join(", "));
-                // setAlbumPageAlbumArtist(playlist.albumArtist.join(", "));
-                // setAlbumPageAlbumGenre(playlist.genre.join(", "));
+                const playlistYears = new Set();
+                const playlistGenres = new Set();
+
+                for (const track of playlistTracks) {
+                    playlistYears.add(track.year);
+                    for (const genre of track.genre) {
+                        playlistGenres.add(genre);
+                    }
+                }
+
+                setAlbumPageAlbumYear(Array.from(playlistYears).join(", "));
+                setAlbumPageAlbumGenre(Array.from(playlistGenres).join(", "));
 
                 for (const track of playlistTracks) {
                     const trackInfo = track;
@@ -74,24 +84,6 @@ const PlaylistPage = props => {
 
                 setTracks(tracksArray);
             })
-            // .then(() => {
-            //     // get playlist cover art
-            //     const firstTrackId = tracksArray.tracks[0][3];
-            //     axios.get(API + '/coverart/' + firstTrackId)
-            //         .then(resp => {
-            //             const picture = resp.data.coverArt.data;
-            //             const pictureFormat = resp.data.format;
-            //             let base64Data = base64.bytesToBase64(picture);
-            //             let src = `data:${pictureFormat};base64,${base64Data}`;
-            //             setAlbumPageAlbumArt(src);
-            //             tracksArray.albumArt = src;
-            //         })
-            //         .catch(err => {
-            //             console.log(err);
-            //         })
-            //         .then(() => tracksArray.album = playlistName)
-            //         .then(() => setTracks(tracksArray));
-            // })
             .catch(err => {
                 console.log(err);
             });
@@ -117,10 +109,6 @@ const PlaylistPage = props => {
                             <tr>
                                 <td>Playlist</td>
                                 <td>{playlistName.replace('%2F', '/')}</td>
-                            </tr>
-                            <tr>
-                                <td>Artists</td>
-                                <td>{albumPageAlbumArtist}</td>
                             </tr>
                             <tr>
                                 <td>Years</td>
