@@ -49,7 +49,6 @@ const PlayButton = props => {
 
     // to get the acrylic color tint
     const getDominantColorAlbumArt = async () => {
-        const uri = albumArt(props.albumArt);
         let colorThief = new ColorThief();
         let rgb = colorThief.getColor(artContext.current);
         setAcrylicColor(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.6)`);
