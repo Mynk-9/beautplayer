@@ -66,14 +66,17 @@
          // this was removed as longer names are adjusting automatically and restriction
          // on its width is only creating problems for UI.
 
-         span {
+         > span {
             display: flex;
             height: auto;
             flex-direction: column;
             justify-content: center;
 
+            padding-left: 1rem;
+
             @media only screen and (max-width: 540px) {
                display: block;
+               padding-left: 0.5rem;
             }
          }
 
@@ -92,7 +95,7 @@
          font-weight: bold;
       }
       .albumArtistInfo {
-         font-size: smaller;
+         font-size: small;
          font-style: italic;
       }
    }
