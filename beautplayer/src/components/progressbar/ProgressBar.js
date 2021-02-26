@@ -70,7 +70,7 @@ const ProgressBar = props => {
     };
 
     return (
-        <>
+        <div className={Styles.progressBarContainer}>
             <span className={Styles.time}>
                 {convertSecondsToMinsSecs(progressVal)}
             </span>
@@ -88,7 +88,7 @@ const ProgressBar = props => {
             <span className={Styles.time}>
                 {convertSecondsToMinsSecs(parseInt(audioDuration))}
             </span>
-        </>
+        </div>
     );
 };
 

@@ -146,16 +146,18 @@ const PlayerBar = props => {
                     }
                 >
                     <span>
-                        <b
+                        <span
                             className={Styles.albumLinker}
                             onClick={() => {
                                 history.push(`/album/${albumTitle}`);
                             }}
                         >
                             {currentTrack}
-                        </b>
+                        </span>
                         <br />
-                        <i>{albumArtist}</i>
+                        <span className={Styles.albumArtistInfo}>
+                            {albumArtist}
+                        </span>
                     </span>
                 </div>
             </div>

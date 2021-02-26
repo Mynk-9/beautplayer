@@ -13,15 +13,22 @@
    > * {
       display: block;
       padding: 1rem;
+
+      width: calc(100% / 3);
+   }
+
+   audio {
+      display: revert;
    }
 
    .left {
       display: inline-table;
-      flex: 1;
+      // flex: 1;
       padding: 0;
 
       @media only screen and (max-width: 540px) {
          display: block;
+         flex: 1;
       }
 
       .albumArt {
@@ -52,25 +59,26 @@
          }
       }
       .albumInfo {
-         position: relative;
-         top: 50%;
-         transform: translateY(-50%);
-
-         display: inline-table;
+         display: table-cell;
+         vertical-align: middle;
+         
          height: 100%;
          // copied from .albumArt
          // max-width: calc(24px + 2 * 1rem + 2 * 1px + 2 * 0.3rem + 2 * 1rem);
          // this was removed as longer names are adjusting automatically and restriction
          // on its width is only creating problems for UI.
 
-         span {
+         > span {
             display: flex;
-            height: 100%;
+            height: auto;
             flex-direction: column;
             justify-content: center;
 
+            padding-left: 1rem;
+
             @media only screen and (max-width: 540px) {
                display: block;
+               padding-left: 0.5rem;
             }
          }
 
@@ -86,6 +94,11 @@
 
       .albumLinker {
          cursor: pointer;
+         font-weight: bold;
+      }
+      .albumArtistInfo {
+         font-size: small;
+         font-style: italic;
       }
    }
    .left:hover {
@@ -107,7 +120,7 @@
       }
    }
    .center {
-      flex: 1;
+      // flex: 1;
       text-align: center;
       padding-top: 0.3rem;
       padding-bottom: 0.3rem;
@@ -117,6 +130,10 @@
       );
       // 3 x play-button + 2 x padding
       // play-button = width + 2 x padding + 2 x border + 2 x margin
+
+      @media only screen and (max-width: 540px) {
+         flex: 1;
+      }
    }
 
    button {
