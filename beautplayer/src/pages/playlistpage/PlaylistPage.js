@@ -16,6 +16,7 @@ const PlaylistPage = props => {
     // tracks has the format: [title, artist, duration, trackId]
     const [tracks, setTracks] = useState({
         isPlaylist: true,
+        playlistName: '',
         tracks: [],
     });
     const [playlistPageYear, setPlaylistPageYear] = useState('');
@@ -37,6 +38,7 @@ const PlaylistPage = props => {
     let playlistName = props.match.params.playlistName;
     let tracksArray = {
         isPlaylist: true,
+        playlistTitle: '',
         tracks: []
     };
 
@@ -93,6 +95,7 @@ const PlaylistPage = props => {
                     );
                 }
 
+                tracksArray.playlistTitle = playlistName;
                 setTracks(tracksArray);
             })
             .catch(err => {

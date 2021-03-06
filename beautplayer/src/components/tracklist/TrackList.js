@@ -7,8 +7,6 @@ import Styles from './TrackList.module.scss';
 import { albumArt } from '../coverArtAPI';
 
 const TrackList = props => {
-    let nowPlaying = -1;
-
     let key = 0;
     let trackList = props.tracks.tracks.map((data) => {
         ++key;
@@ -30,10 +28,11 @@ const TrackList = props => {
                         }
                         albumArtist={data[1]}
                         isPlaylist={
-                            props.tracks.isPlaylist
-                                ? true
-                                : false
+                            props.tracks.isPlaylist     // this is done to make
+                                ? true                  // sure undefined is 
+                                : false                 // not passed further
                         }
+                        playlistTitle={props.tracks.playlistTitle}
                     />
                 </td>
                 <td>{data[0]}</td>

@@ -20,7 +20,8 @@ import UpIcon from './../../assets/buttonsvg/chevron-up.svg';
 import DownIcon from './../../assets/buttonsvg/chevron-down.svg';
 
 const PlayerBar = props => {
-    const { playPause, albumArt, currentTrack, albumTitle, albumArtist, audioSrc, audioDuration, setPlayPause } = useContext(PlayerContext);
+    const { playPause, albumArt, currentTrack, albumTitle, albumArtist,
+        audioSrc, audioDuration, linkBack, setPlayPause } = useContext(PlayerContext);
     let audioPlayerRef = useRef(null);
     let history = useHistory();
 
@@ -149,7 +150,7 @@ const PlayerBar = props => {
                         <span
                             className={Styles.albumLinker}
                             onClick={() => {
-                                history.push(`/album/${albumTitle}`);
+                                history.push(linkBack);
                             }}
                         >
                             {currentTrack}

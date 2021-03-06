@@ -13,7 +13,7 @@ import PauseIcon from './../../assets/buttonsvg/pause.svg';
 const ColorThief = require('color-thief');
 
 const PlayButton = props => {
-    const { playPause, setPlayPause, setCurrentTrack, setAlbumTitle, setAlbumArtist,
+    const { playPause, setPlayPause, setCurrentTrack, setAlbumTitle, setAlbumArtist, setLinkBack,
         setAlbumArt, audioSrc, setAudioSrc, setAudioDuration } = useContext(PlayerContext);
 
     const { setAcrylicColor, letAcrylicTints, artContext } = useContext(ThemeContext);
@@ -47,6 +47,11 @@ const PlayButton = props => {
             setAlbumTitle(props.albumTitle);
 
             getDominantColorAlbumArt();
+
+            if (props.isPlaylist)
+                setLinkBack(`/playlist/${props.playlistTitle}`);
+            else
+                setLinkBack(`/album/${props.albumTitle}`);
 
             setPlayPause('play');
         }
