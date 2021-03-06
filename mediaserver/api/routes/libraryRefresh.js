@@ -67,7 +67,7 @@ router.post('/', async (req, res, next) => {
         .catch(e => console.log(e));
     await mongoose.connection.db.createCollection('tracks')
         .catch(e => console.log(e));
-    await Tracks.insertMany(finalList)
+    await Tracks.insertMany(files)
         .catch(e => {
             console.log(e);
             throw e;
