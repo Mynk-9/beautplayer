@@ -11,7 +11,7 @@ import ThemeContext from '../../components/themecontext';
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg'
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
-import { albumArt } from '../../components/albumArtAPI';
+import { albumArt } from '../../components/coverArtAPI';
 
 const AlbumPage = props => {
     // tracks has the format: [title, artist, duration, trackId]

@@ -9,7 +9,6 @@ import ThemeContext from '../themecontext';
 
 import PlayIcon from './../../assets/buttonsvg/play.svg';
 import PauseIcon from './../../assets/buttonsvg/pause.svg';
-import { albumArt } from '../albumArtAPI';
 
 const ColorThief = require('color-thief');
 
