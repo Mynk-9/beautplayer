@@ -2,7 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 
+const Files = require('../models/files');
 const Tracks = require('./../models/tracks');
+
 const mediaScanner = require('../subroutines/mediaScanner');
 const metaDataScanner = require('../subroutines/metaDataScanner');
 const albumArtGenerator = require('../subroutines/albumArtGenerator');
@@ -11,7 +13,11 @@ router.post('/', async (req, res, next) => {
 
     let files = [];
 
-    // re-scan the library and refresh the files collection
+    ////////////////////////////////////////
+    //////////////// STEP 1 ////////////////
+    ////////////////////////////////////////
+
+    // scan the library
     await mediaScanner()
         .then(result => files = result)
         .catch(e => {
@@ -21,9 +27,27 @@ router.post('/', async (req, res, next) => {
             });
         });
 
+    // refresh the files collection
+    await mongoose.connection.db.dropCollection('files')
+        .then(() => {
+            Files.insertMany(files)
+                .catch(e => {
+                    console.log(e);
+                    throw e;
+                });
+        })
+        .catch(e => {
+            console.log(e);
+            throw e;
+        });
+
     // return if headers already sent
     if (res.headersSent)
         return;
+
+    ////////////////////////////////////////
+    //////////////// STEP 2 ////////////////
+    ////////////////////////////////////////
 
     // add meta data to the files
     await metaDataScanner(files)
@@ -37,11 +61,27 @@ router.post('/', async (req, res, next) => {
             });
         });
 
+    // refresh the files collection
+    await mongoose.connection.db.collection('tracks')
+        .drop()
+        .catch(e => console.log(e));
+    await mongoose.connection.db.createCollection('tracks')
+        .catch(e => console.log(e));
+    await Tracks.insertMany(finalList)
+        .catch(e => {
+            console.log(e);
+            throw e;
+        });
+
     // return if headers already sent
     if (res.headersSent)
         return;
 
-    // aggregate tracks into albums collection and add some info
+    ////////////////////////////////////////
+    //////////////// STEP 3 ////////////////
+    ////////////////////////////////////////
+
+    // aggregate tracks into albums collection and add info
     try {
         await mongoose.connection.db.collection('albums')
             .drop()
@@ -84,6 +124,10 @@ router.post('/', async (req, res, next) => {
     // return if headers already sent
     if (res.headersSent)
         return;
+
+    ////////////////////////////////////////
+    //////////////// STEP 4 ////////////////
+    ////////////////////////////////////////
 
     // get the album arts
     try {
