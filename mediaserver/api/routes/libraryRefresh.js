@@ -182,6 +182,25 @@ router.post('/', async (req, res, next) => {
     if (res.headersSent)
         return;
 
+    ////////////////////////////////////////
+    //////////////// STEP 5 ////////////////
+    ////////////////////////////////////////
+
+    // get playlist arts
+    try {
+        for (const pl in playlistsData)
+            playlistArtGenerator(pl);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    }
+
+    // return if headers already sent
+    if (res.headersSent)
+        return;
+
     res.status(201).json({
         files: files
     });
