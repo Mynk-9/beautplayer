@@ -31,6 +31,7 @@ function App() {
   const [currentTrack, setCurrentTrack] = useState('');
   const [audioSrc, setAudioSrc] = useState('');
   const [audioDuration, setAudioDuration] = useState('');
+  const [linkBack, setLinkBack] = useState('');
   // }
 
   return (
@@ -41,8 +42,10 @@ function App() {
       }}>
         <PlayerContext.Provider
           value={{
-            playPause, albumArt, albumTitle, albumArtist, currentTrack, audioSrc, audioDuration,
-            setPlayPause, setAlbumArt, setAlbumTitle, setAlbumArtist, setCurrentTrack, setAudioSrc, setAudioDuration
+            playPause, albumArt, albumTitle, albumArtist, currentTrack,
+            audioSrc, audioDuration, linkBack,
+            setPlayPause, setAlbumArt, setAlbumTitle, setAlbumArtist,
+            setCurrentTrack, setAudioSrc, setAudioDuration, setLinkBack
           }}
         >
           <BrowserRouter>
