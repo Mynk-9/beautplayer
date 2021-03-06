@@ -8,10 +8,26 @@ const Tracks = require('./../models/tracks');
 const mediaScanner = require('../subroutines/mediaScanner');
 const metaDataScanner = require('../subroutines/metaDataScanner');
 const albumArtGenerator = require('../subroutines/albumArtGenerator');
+const handlePlaylists = require('../subroutines/handlePlaylists');
+const playlistArtGenerator = require('../subroutines/playlistArtGenerator');
 
 router.post('/', async (req, res, next) => {
 
     let files = [];
+    let playlistsData = {};
+
+    ////////////////////////////////////////
+    //////////////// STEP 0.1 //////////////
+    ////////////////////////////////////////
+
+    // store playlists data to restore later
+    playlistsData = await handlePlaylists.getPlaylists()
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        })
 
     ////////////////////////////////////////
     //////////////// STEP 1 ////////////////
@@ -33,12 +49,16 @@ router.post('/', async (req, res, next) => {
             Files.insertMany(files)
                 .catch(e => {
                     console.log(e);
-                    throw e;
+                    res.status(500).json({
+                        error: e
+                    });
                 });
         })
         .catch(e => {
             console.log(e);
-            throw e;
+            res.status(500).json({
+                error: e
+            });
         });
 
     // return if headers already sent
@@ -61,7 +81,7 @@ router.post('/', async (req, res, next) => {
             });
         });
 
-    // refresh the files collection
+    // refresh the tracks collection
     await mongoose.connection.db.collection('tracks')
         .drop()
         .catch(e => console.log(e));
@@ -70,7 +90,26 @@ router.post('/', async (req, res, next) => {
     await Tracks.insertMany(files)
         .catch(e => {
             console.log(e);
-            throw e;
+            res.status(500).json({
+                error: e
+            });
+        });
+
+    // return if headers already sent
+    if (res.headersSent)
+        return;
+
+    ////////////////////////////////////////
+    //////////////// STEP 0.2 //////////////
+    ////////////////////////////////////////
+
+    // restore playlists
+    await handlePlaylists.save(playlistsData)
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
         });
 
     // return if headers already sent
