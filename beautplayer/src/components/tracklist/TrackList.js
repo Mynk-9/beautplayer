@@ -4,6 +4,8 @@ import PlayButton from '../playbutton/PlayButton';
 import './../commonstyles.scss';
 import Styles from './TrackList.module.scss';
 
+import { albumArt } from '../coverArtAPI';
+
 const TrackList = props => {
     let nowPlaying = -1;
 
@@ -18,7 +20,11 @@ const TrackList = props => {
                         audioSrc={data[3]}
                         audioDuration={data[2]}
                         track={data[0]}
-                        albumArt={props.tracks.albumArt}
+                        albumArt={
+                            props.tracks.isPlaylist
+                                ? albumArt(data[4].replace('%2F', '/'))
+                                : props.tracks.albumArt
+                        }
                         albumTitle={
                             props.tracks.isPlaylist ? data[4] : props.tracks.album
                         }
