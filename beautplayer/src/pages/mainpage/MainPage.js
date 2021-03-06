@@ -62,7 +62,6 @@ const MainPage = (props) => {
                         for (const album of albumList) {
                             // console.log(album);
                             const name = album._id;
-                            const track0Id = album.tracks[0];
                             let albumArtist = album.albumArtist.join(", ");
 
                             albumCards.push(
@@ -76,8 +75,7 @@ const MainPage = (props) => {
                             );
                             localStorageData.push({
                                 name: name,
-                                albumArtist: albumArtist,
-                                track0Id: track0Id
+                                albumArtist: albumArtist
                             });
                         }
                         localStorage.setItem('all-albums', JSON.stringify(localStorageData));
