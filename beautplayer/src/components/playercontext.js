@@ -8,6 +8,7 @@ const PlayerContext = createContext({
     currentTrack: '',
     audioSrc: '',
     audioDuration: 0,
+    linkBack: '',
 
     setPlayPause: () => { },
     setAlbumArt: () => { },
@@ -16,6 +17,7 @@ const PlayerContext = createContext({
     setCurrentTrack: () => { },
     setAudioSrc: () => { },
     setAudioDuration: () => { },
+    setLinkBack: () => { }
 });
 
 export default PlayerContext;
