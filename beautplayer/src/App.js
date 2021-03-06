@@ -2,6 +2,7 @@ import { React, useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import MainPage from './pages/mainpage/MainPage';
 import AlbumPage from './pages/albumpage/AlbumPage';
+import PlaylistPage from './pages/playlistpage/PlaylistPage';
 import SettingsPage from './pages/settingspage/SettingsPage';
 
 import Navbar from './components/navbar/Navbar';
@@ -15,6 +16,8 @@ function App() {
 
   // navbar acrylic color state
   const [acrylicColor, setAcrylicColor] = useState('--acrylic-color');
+  const [letAcrylicTints, setLetAcrylicTints] = useState(false);
+  const [artContext, setArtContext] = useState(null);
 
   // theme context hooks {
   const [colorConfig, setColorConfig] = useState('dark');
@@ -32,7 +35,10 @@ function App() {
 
   return (
     <>
-      <ThemeContext.Provider value={{ colorConfig, setColorConfig }}>
+      <ThemeContext.Provider value={{
+        colorConfig, setColorConfig, acrylicColor, setAcrylicColor,
+        letAcrylicTints, setLetAcrylicTints, artContext, setArtContext
+      }}>
         <PlayerContext.Provider
           value={{
             playPause, albumArt, albumTitle, albumArtist, currentTrack, audioSrc, audioDuration,
@@ -40,9 +46,7 @@ function App() {
           }}
         >
           <BrowserRouter>
-            <Navbar
-              acrylicColor={acrylicColor}
-            />
+            <Navbar />
             <Switch>
               <Route exact
                 path="/"
@@ -51,6 +55,10 @@ function App() {
               <Route
                 path="/album/:albumName"
                 render={props => <AlbumPage {...props} />}
+              />
+              <Route
+                path="/playlist/:playlistName"
+                render={props => <PlaylistPage {...props} />}
               />
               <Route
                 path="/settings"

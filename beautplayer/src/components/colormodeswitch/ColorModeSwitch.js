@@ -12,7 +12,6 @@ const ColorModeSwitch = props => {
 
     let getColorMode = () => document.body.classList.contains('light-mode');
     let setColorMode = e => {
-        console.log(getColorMode(), e);
         if (e) {
             document.body.classList.add('light-mode');
             setColorConfig('light');

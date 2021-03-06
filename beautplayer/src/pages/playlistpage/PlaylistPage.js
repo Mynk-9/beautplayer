@@ -4,19 +4,19 @@ import axios from 'axios';
 import * as base64 from 'byte-base64';
 import TrackList from './../../components/tracklist/TrackList';
 import './../../components/commonstyles.scss';
-import Styles from './AlbumPage.module.scss';
+import Styles from './PlaylistPage.module.scss';
 
-import ThemeContext from '../../components/themecontext';
+import ThemeContext from './../../components/themecontext';
 
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg'
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
-import { albumArt } from '../../components/albumArtAPI';
+import { parse } from 'ipaddr.js';
 
-const AlbumPage = props => {
+const PlaylistPage = props => {
     // tracks has the format: [title, artist, duration, trackId]
     const [tracks, setTracks] = useState({
-        albumArt: '',
+        isPlaylist: true,
         tracks: [],
     });
     const [albumPageAlbumYear, setAlbumPageAlbumYear] = useState('');
@@ -35,43 +35,45 @@ const AlbumPage = props => {
     API += ':5000';
 
 
-    let albumName = props.match.params.albumName;
+    let playlistName = props.match.params.playlistName;
     let tracksArray = {
-        album: '',
-        albumArt: '',
+        isPlaylist: true,
         tracks: []
     };
 
     useEffect(() => {
-        albumName = props.match.params.albumName;
+        playlistName = props.match.params.playlistName;
         setArtContext(imgRef);
         imgRef.current.crossOrigin = 'Anonymous'; // fix for: "canvas has been tainted by cross-origin data" security error
     });
 
     useEffect(() => {
 
-        // set album cover art
-        const src = albumArt(albumName.replace('%2F', '/'));
-        setAlbumPageAlbumArt(src);
-        tracksArray.albumArt = src;
-
-        tracksArray.tracks = [];
-
         // fetch the album data
         // get the tracks of the album
-        axios.get(API + '/albums/' + albumName)
+        axios.get(API + '/playlists/' + playlistName)
             .then(async resp => {
-                const album = resp.data.Album;
-                const albumTracks = album.tracks;
+                const playlist = resp.data.Playlist;
+                const playlistTracks = playlist.tracks;
 
-                setAlbumPageAlbumYear(album.year.join(", "));
-                setAlbumPageAlbumArtist(album.albumArtist.join(", "));
-                setAlbumPageAlbumGenre(album.genre.join(", "));
+                const playlistYears = new Set();
+                const playlistGenres = new Set();
 
-                for (const track of albumTracks) {
+                for (const track of playlistTracks) {
+                    playlistYears.add(track.year);
+                    for (const genre of track.genre) {
+                        playlistGenres.add(genre);
+                    }
+                }
+
+                setAlbumPageAlbumYear(Array.from(playlistYears).join(", "));
+                setAlbumPageAlbumGenre(Array.from(playlistGenres).join(", "));
+
+                for (const track of playlistTracks) {
                     const trackInfo = track;
 
                     const trackTitle = trackInfo.title;
+                    const trackAlbum = trackInfo.album;
                     const trackAlbumArtist = trackInfo.albumArtist;
                     const trackMins = Math.floor(trackInfo.length / 60);
                     const trackSecs = Math.round(trackInfo.length % 60);
@@ -82,17 +84,18 @@ const AlbumPage = props => {
                             trackTitle,
                             trackAlbumArtist,
                             trackMins + ':' + (trackSecs < 10 ? '0' : '') + trackSecs,
-                            trackId
+                            trackId,
+                            trackAlbum,
                         ]
                     );
                 }
+
+                setTracks(tracksArray);
             })
-            .then(() => tracksArray.album = albumName)
-            .then(() => setTracks(tracksArray))
             .catch(err => {
                 console.log(err);
             });
-    }, [albumName]);
+    }, [playlistName]);
 
     return (
         <>
@@ -107,28 +110,21 @@ const AlbumPage = props => {
                     <img
                         alt="Album Art"
                         className={Styles.albumArt}
-                        onError={(img) => {
-                            img.target.src = AlbumArt;
-                        }}
                         src={albumPageAlbumArt || AlbumArt}
                         ref={imgRef}
                     />
                     <table>
                         <tbody>
                             <tr>
-                                <td>Album</td>
-                                <td>{albumName.replace('%2F', '/')}</td>
+                                <td>Playlist</td>
+                                <td>{playlistName.replace('%2F', '/')}</td>
                             </tr>
                             <tr>
-                                <td>Artist</td>
-                                <td>{albumPageAlbumArtist}</td>
-                            </tr>
-                            <tr>
-                                <td>Year</td>
+                                <td>Years</td>
                                 <td>{albumPageAlbumYear}</td>
                             </tr>
                             <tr>
-                                <td>Genre</td>
+                                <td>Genres</td>
                                 <td>{albumPageAlbumGenre}</td>
                             </tr>
                         </tbody>
@@ -142,4 +138,4 @@ const AlbumPage = props => {
     );
 }
 
-export default AlbumPage;
+export default PlaylistPage;

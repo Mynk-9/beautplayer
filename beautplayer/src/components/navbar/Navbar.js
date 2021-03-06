@@ -1,21 +1,30 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import SearchBox from './../searchbox/SearchBox';
 import ColorModeSwitch from './../../components/colormodeswitch/ColorModeSwitch';
 import './../commonstyles.scss';
 import Styles from './Navbar.module.scss';
 
+import ThemeContext from './../themecontext';
+
 import UpArrowIcon from './../../assets/buttonsvg/chevron-up.svg';
 import DownArrowIcon from './../../assets/buttonsvg/chevron-down.svg';
 
 const Navbar = props => {
     const [navOpen, setNavOpen] = useState(false);
+    const [acrylicColorStyle, setAcrylicColorStyle] = useState({});
+    const { acrylicColor, letAcrylicTints } = useContext(ThemeContext);
 
-    let acrylicColorStyle;
-    if (props.acrylicColor && props.acrylicColor !== '--acrylic-color')
-        acrylicColorStyle = { '--acrylic-color': props.acrylicColor };
-    else
-        acrylicColorStyle = {};
+    useEffect(() => {
+        if (!letAcrylicTints)
+            setAcrylicColorStyle({});
+        else {
+            if (acrylicColor && acrylicColor !== '--acrylic-color' && acrylicColor !== '')
+                setAcrylicColorStyle({ '--acrylic-color': acrylicColor })
+            else
+                setAcrylicColorStyle({});
+        }
+    }, [acrylicColor, letAcrylicTints]);
 
     return (
         <nav
