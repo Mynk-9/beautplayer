@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import MainPage from './pages/mainpage/MainPage';
 import AlbumPage from './pages/albumpage/AlbumPage';
@@ -7,12 +7,9 @@ import SettingsPage from './pages/settingspage/SettingsPage';
 
 import Navbar from './components/navbar/Navbar';
 import PlayerBar from './components/playerbar/PlayerBar';
-import AlbumArt from './assets/images/pexels-steve-johnson-1234853.jpg';
 
 import ThemeContext from './components/themecontext';
 import PlayerContext from './components/playercontext';
-
-import ConfigurationManager from './components/configurationManager';
 
 function App() {
 
@@ -37,6 +34,43 @@ function App() {
   const [linkBack, setLinkBack] = useState('');
   // }
 
+  /////////////////////////////////////////////////////////////////////////////
+  // configurations load {
+
+  // load the configurations as the app loads
+  useEffect(() => {
+    const lat = (localStorage.getItem('config-letAcrylicTints') === 'true');
+    const cc = localStorage.getItem('config-colorConfig');
+    const av = parseFloat(localStorage.getItem('config-audioVolume')) || 1.0;
+
+    if (cc === 'light')
+      document.body.classList.add('light-mode');
+    else
+      document.body.classList.remove('light-mode');
+
+    setLetAcrylicTints(lat);
+    setColorConfig(cc);
+    setAudioVolume(av);
+  }, []);
+
+  // save audioVolume
+  useEffect(() => {
+    localStorage.setItem('config-audioVolume', String(audioVolume));
+  }, [audioVolume]);
+
+  // save letAcrylicTints
+  useEffect(() => {
+    localStorage.setItem('config-letAcrylicTints', letAcrylicTints);
+  }, [letAcrylicTints]);
+
+  // save colorConfig
+  useEffect(() => {
+    localStorage.setItem('config-colorConfig', colorConfig);
+  }, [colorConfig]);
+
+  // }
+  /////////////////////////////////////////////////////////////////////////////
+
   return (
     <>
       <ThemeContext.Provider value={{
@@ -53,7 +87,6 @@ function App() {
           }}
         >
           <BrowserRouter>
-            <ConfigurationManager />
             <Navbar />
             <Switch>
               <Route exact

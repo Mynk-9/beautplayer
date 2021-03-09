@@ -47,12 +47,22 @@
          height: var(--albumArtHeight);
          padding-left: 2rem;
 
+         // width = 100% width of parent element 
+         //          - width of album art
+         //          - left margin of album art
+         width: calc(100% - var(--albumArtHeight) - 5rem);
+
          tr {
             height: calc(var(--albumArtHeight) / 4);
 
             td:first-child {
                font-family: "Lato-LightItalic";
             }
+         }
+
+         @media only screen and (max-width: 540px) {
+            padding-right: 2rem; // same as left padding
+            width: auto;
          }
       }
    }
