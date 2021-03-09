@@ -1,10 +1,15 @@
+.progressBarContainer {
+   display: flex;
+}
+
 .progressBar {
    position: relative;
    display: inline-block;
+   flex: 1;
 
-   width: 10em;
+   // width: 10em;
    height: 0.3rem;
-   margin: 0.7rem 0rem 0.3rem 0rem;
+   margin: 0.7rem 1rem 0.3rem 1rem;
    vertical-align: baseline;
 
    background-color: var(--acrylic-color);
@@ -36,13 +41,6 @@
 }
 
 .time {
-   display: inline-block;
-   margin-right: 1rem;
+   display: contents;
    font-size: small;
-   transform: translateY(-25%);
-}
-.progressBar + .time {
-   display: inline-block;
-   margin-right: 0;
-   margin-left: 1rem;
 }

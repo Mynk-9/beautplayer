@@ -21,7 +21,9 @@ router.get('/', (req, res, next) => {
 
 router.get('/:albumName', (req, res, next) => {
     const id = req.params.albumName;
-    Albums.findById(id)
+    Albums.findOne({_id: id})
+        .populate('tracks')
+        .exec()
         .then(album => {
             res.status(200).json({
                 Album: album

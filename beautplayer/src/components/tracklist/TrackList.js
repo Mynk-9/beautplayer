@@ -4,9 +4,9 @@ import PlayButton from '../playbutton/PlayButton';
 import './../commonstyles.scss';
 import Styles from './TrackList.module.scss';
 
-const TrackList = props => {
-    let nowPlaying = -1;
+import { albumArt } from '../coverArtAPI';
 
+const TrackList = props => {
     let key = 0;
     let trackList = props.tracks.tracks.map((data) => {
         ++key;
@@ -18,9 +18,21 @@ const TrackList = props => {
                         audioSrc={data[3]}
                         audioDuration={data[2]}
                         track={data[0]}
-                        albumArt={props.tracks.albumArt}
-                        albumTitle={props.tracks.album}
+                        albumArt={
+                            props.tracks.isPlaylist
+                                ? albumArt(data[4].replace('%2F', '/'))
+                                : props.tracks.albumArt
+                        }
+                        albumTitle={
+                            props.tracks.isPlaylist ? data[4] : props.tracks.album
+                        }
                         albumArtist={data[1]}
+                        isPlaylist={
+                            props.tracks.isPlaylist     // this is done to make
+                                ? true                  // sure undefined is 
+                                : false                 // not passed further
+                        }
+                        playlistTitle={props.tracks.playlistTitle}
                     />
                 </td>
                 <td>{data[0]}</td>

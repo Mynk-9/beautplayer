@@ -5,6 +5,7 @@ import './../commonstyles.scss';
 import Styles from './PlayerBar.module.scss';
 
 import PlayerContext from './../playercontext';
+import ThemeContext from './../themecontext';
 
 import BackIcon from './../../assets/buttonsvg/skip-back.svg';
 import PlayIcon from './../../assets/buttonsvg/play.svg';
@@ -19,7 +20,8 @@ import UpIcon from './../../assets/buttonsvg/chevron-up.svg';
 import DownIcon from './../../assets/buttonsvg/chevron-down.svg';
 
 const PlayerBar = props => {
-    const { playPause, albumArt, currentTrack, albumTitle, albumArtist, audioSrc, audioDuration, setPlayPause } = useContext(PlayerContext);
+    const { playPause, albumArt, currentTrack, albumTitle, albumArtist, audioVolume,
+        audioSrc, audioDuration, linkBack, setPlayPause, setAudioVolume } = useContext(PlayerContext);
     let audioPlayerRef = useRef(null);
     let history = useHistory();
 
@@ -28,11 +30,19 @@ const PlayerBar = props => {
     const [volumeDisplay, setVolumeDisplay] = useState(100);
     const [mobileOpenAlbumDetails, setMobileOpenAlbumDetails] = useState(false);
 
-    let acrylicColorStyle;
-    if (props.acrylicColor)
-        acrylicColorStyle = { '--acrylic-color': props.acrylicColor };
-    else
-        acrylicColorStyle = {};
+    // acrylic color management
+    const [acrylicColorStyle, setAcrylicColorStyle] = useState({});
+    const { acrylicColor, letAcrylicTints } = useContext(ThemeContext);
+    useEffect(() => {
+        if (!letAcrylicTints)
+            setAcrylicColorStyle({});
+        else {
+            if (acrylicColor && acrylicColor !== '--acrylic-color' && acrylicColor !== '')
+                setAcrylicColorStyle({ '--acrylic-color': acrylicColor })
+            else
+                setAcrylicColorStyle({});
+        }
+    }, [acrylicColor, letAcrylicTints]);
 
     // api endpoint -- same domain, port 5000
     let API = window.location.origin;
@@ -65,33 +75,28 @@ const PlayerBar = props => {
             audioPlayerRef.current.pause();
     }, [playPause]);
 
-    let reduceVolume = () => {
-        if (audioPlayerRef.current.volume > 0)
-            audioPlayerRef.current.volume =
-                parseFloat(audioPlayerRef.current.volume - 0.1).toFixed(2);
+    useEffect(() => {
+        audioPlayerRef.current.volume = audioVolume;
 
-        if (audioPlayerRef.current.volume === 1.0)
+        if (audioVolume === 1.0)
             setVolumeStatus('high');
-        else if (audioPlayerRef.current.volume === 0.0)
+        else if (audioVolume === 0.0)
             setVolumeStatus('none');
         else
             setVolumeStatus('normal');
+            
+        setVolumeDisplay(audioVolume * 100);
+    }, [audioVolume]);
 
-        setVolumeDisplay(audioPlayerRef.current.volume * 100);
+    let reduceVolume = () => {
+        if (audioVolume > 0)
+            setAudioVolume(
+                parseFloat(audioPlayerRef.current.volume - 0.1).toFixed(2));
     };
     let increaseVolume = () => {
-        if (audioPlayerRef.current.volume < 1)
-            audioPlayerRef.current.volume =
-                parseFloat(audioPlayerRef.current.volume + 0.1).toFixed(2);
-
-        if (audioPlayerRef.current.volume === 1.0)
-            setVolumeStatus('high');
-        else if (audioPlayerRef.current.volume === 0.0)
-            setVolumeStatus('none');
-        else
-            setVolumeStatus('normal');
-
-        setVolumeDisplay(audioPlayerRef.current.volume * 100);
+        if (audioVolume < 1)
+            setAudioVolume(
+                parseFloat(audioPlayerRef.current.volume + 0.1).toFixed(2));
     };
 
 
@@ -137,16 +142,18 @@ const PlayerBar = props => {
                     }
                 >
                     <span>
-                        <b
+                        <span
                             className={Styles.albumLinker}
                             onClick={() => {
-                                history.push(`/album/${albumTitle}`);
+                                history.push(linkBack);
                             }}
                         >
                             {currentTrack}
-                        </b>
+                        </span>
                         <br />
-                        <i>{albumArtist}</i>
+                        <span className={Styles.albumArtistInfo}>
+                            {albumArtist}
+                        </span>
                     </span>
                 </div>
             </div>

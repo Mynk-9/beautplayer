@@ -18,13 +18,15 @@ const TrackLiker = (props) => {
         // fetch like status
         axios.get(API + '/playlists/liked/' + props.trackId)
             .then(resp => {
-                if (resp.status === 200)
+                if (resp.status === 200 && resp.data.found === true)
                     setLiked(true);
+                else
+                    setLiked(false);
             })
             .catch(err => {
                 console.log(err);
             });
-    }, []);
+    }, [props.trackId]);
 
     let updateLikeStatus = async (newState) => {
         if (newState)

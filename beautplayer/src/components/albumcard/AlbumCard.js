@@ -6,40 +6,25 @@ import './../commonstyles.scss';
 import Styles from './AlbumCard.module.scss';
 
 const AlbumCard = props => {
-    const [imgSource, setImgSource] = useState();
-
-    // api endpoint -- same domain, port 5000
-    let API = window.location.origin;
-    API = API.substring(0, API.lastIndexOf(':'));
-    API += ':5000';
-
-    useEffect(() => {
-        async function fetchAlbumArt() {
-
-            // check if props.firstTrackId is present
-            if (props.firstTrackId)
-                // get album cover art
-                axios.get(API + '/coverart/compressed/' + props.firstTrackId)
-                    .then(resp => {
-                        const picture = resp.data.coverArt.data;
-                        const pictureFormat = resp.data.format;
-                        let base64Data = base64.bytesToBase64(picture);
-                        let albumArtSrc = `data:${pictureFormat};base64,${base64Data}`;
-                        setImgSource(albumArtSrc);
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    });
-        }
-        fetchAlbumArt();
-    }, []);
-
     let history = useHistory();
-    let openAlbum = () => history.push('/album/' + props.albumTitle.replace('/', '%2F'));
+    let openAlbum;
+    if (props.isPlaylist)
+        openAlbum = () => history.push('/playlist/' + props.albumTitle.replace('/', '%2F'));
+    else
+        openAlbum = () => history.push('/album/' + props.albumTitle.replace('/', '%2F'));
+    
+    const setDefaultAlbumArt = (img) => {
+        img.target.src = props.albumArt;
+    };
 
     return (
         <div className={Styles.albumCard}>
-            <img alt="Album Art" src={imgSource || props.albumArt} onClick={openAlbum} />
+            <img
+                alt="Album Art"
+                onError={setDefaultAlbumArt}
+                onClick={openAlbum}
+                src={props.coverArtAPI || props.albumArt}
+            />
             <span onClick={openAlbum}>
                 <b>{props.albumTitle}</b>
             </span>
