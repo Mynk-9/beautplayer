@@ -20,7 +20,8 @@ import UpIcon from './../../assets/buttonsvg/chevron-up.svg';
 import DownIcon from './../../assets/buttonsvg/chevron-down.svg';
 
 const PlayerBar = props => {
-    const { playPause, albumArt, currentTrack, albumTitle, albumArtist, audioSrc, audioDuration, setPlayPause } = useContext(PlayerContext);
+    const { playPause, albumArt, currentTrack, albumTitle, albumArtist, audioVolume,
+        audioSrc, audioDuration, linkBack, setPlayPause, setAudioVolume } = useContext(PlayerContext);
     let audioPlayerRef = useRef(null);
     let history = useHistory();
 
@@ -74,33 +75,28 @@ const PlayerBar = props => {
             audioPlayerRef.current.pause();
     }, [playPause]);
 
-    let reduceVolume = () => {
-        if (audioPlayerRef.current.volume > 0)
-            audioPlayerRef.current.volume =
-                parseFloat(audioPlayerRef.current.volume - 0.1).toFixed(2);
+    useEffect(() => {
+        audioPlayerRef.current.volume = audioVolume;
 
-        if (audioPlayerRef.current.volume === 1.0)
+        if (audioVolume === 1.0)
             setVolumeStatus('high');
-        else if (audioPlayerRef.current.volume === 0.0)
+        else if (audioVolume === 0.0)
             setVolumeStatus('none');
         else
             setVolumeStatus('normal');
+            
+        setVolumeDisplay(audioVolume * 100);
+    }, [audioVolume]);
 
-        setVolumeDisplay(audioPlayerRef.current.volume * 100);
+    let reduceVolume = () => {
+        if (audioVolume > 0)
+            setAudioVolume(
+                parseFloat(audioPlayerRef.current.volume - 0.1).toFixed(2));
     };
     let increaseVolume = () => {
-        if (audioPlayerRef.current.volume < 1)
-            audioPlayerRef.current.volume =
-                parseFloat(audioPlayerRef.current.volume + 0.1).toFixed(2);
-
-        if (audioPlayerRef.current.volume === 1.0)
-            setVolumeStatus('high');
-        else if (audioPlayerRef.current.volume === 0.0)
-            setVolumeStatus('none');
-        else
-            setVolumeStatus('normal');
-
-        setVolumeDisplay(audioPlayerRef.current.volume * 100);
+        if (audioVolume < 1)
+            setAudioVolume(
+                parseFloat(audioPlayerRef.current.volume + 0.1).toFixed(2));
     };
 
 
@@ -149,7 +145,7 @@ const PlayerBar = props => {
                         <span
                             className={Styles.albumLinker}
                             onClick={() => {
-                                history.push(`/album/${albumTitle}`);
+                                history.push(linkBack);
                             }}
                         >
                             {currentTrack}

@@ -7,7 +7,7 @@ import Styles from './MainPage.module.scss';
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg';
 
-import { albumArtCompressed } from './../../components/albumArtAPI';
+import { albumArtCompressed, playlistArtCompressed } from '../../components/coverArtAPI';
 
 const MainPage = (props) => {
     const [allAlbums, setAllAlbums] = useState(
@@ -34,7 +34,7 @@ const MainPage = (props) => {
             return;
 
         // fetch albums
-        let localStorageData = localStorage.getItem('all-albums')
+        let localStorageData = localStorage.getItem('all-albums');
         if (localStorageData) {
             localStorageData = JSON.parse(localStorageData);
             let albumCards = [];
@@ -62,7 +62,6 @@ const MainPage = (props) => {
                         for (const album of albumList) {
                             // console.log(album);
                             const name = album._id;
-                            const track0Id = album.tracks[0];
                             let albumArtist = album.albumArtist.join(", ");
 
                             albumCards.push(
@@ -76,8 +75,7 @@ const MainPage = (props) => {
                             );
                             localStorageData.push({
                                 name: name,
-                                albumArtist: albumArtist,
-                                track0Id: track0Id
+                                albumArtist: albumArtist
                             });
                         }
                         localStorage.setItem('all-albums', JSON.stringify(localStorageData));
@@ -98,8 +96,8 @@ const MainPage = (props) => {
         if (PersistentStorage.MainPagePlaylistCards.length > 0)
             return;
 
-        // fetch albums
-        let localStorageData = localStorage.getItem('all-playlists')
+        // fetch playlists
+        let localStorageData = localStorage.getItem('all-playlists');
         if (localStorageData) {
             localStorageData = JSON.parse(localStorageData);
             let playlistCards = [];
@@ -110,6 +108,7 @@ const MainPage = (props) => {
                         albumArt={AlbumArt}
                         albumTitle={info}
                         isPlaylist={true}
+                        coverArtAPI={playlistArtCompressed(info)}
                     />
                 );
             }
@@ -131,6 +130,7 @@ const MainPage = (props) => {
                                     albumArt={AlbumArt}
                                     albumTitle={playlist._id}
                                     isPlaylist={true}
+                                    coverArtAPI={playlistArtCompressed(playlist._id)}
                                 />
                             );
                             localStorageData.push(playlist._id);

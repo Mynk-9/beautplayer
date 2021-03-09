@@ -12,6 +12,8 @@ import AlbumArt from './assets/images/pexels-steve-johnson-1234853.jpg';
 import ThemeContext from './components/themecontext';
 import PlayerContext from './components/playercontext';
 
+import ConfigurationManager from './components/configurationManager';
+
 function App() {
 
   // navbar acrylic color state
@@ -31,6 +33,8 @@ function App() {
   const [currentTrack, setCurrentTrack] = useState('');
   const [audioSrc, setAudioSrc] = useState('');
   const [audioDuration, setAudioDuration] = useState('');
+  const [audioVolume, setAudioVolume] = useState(1.0);
+  const [linkBack, setLinkBack] = useState('');
   // }
 
   return (
@@ -41,11 +45,15 @@ function App() {
       }}>
         <PlayerContext.Provider
           value={{
-            playPause, albumArt, albumTitle, albumArtist, currentTrack, audioSrc, audioDuration,
-            setPlayPause, setAlbumArt, setAlbumTitle, setAlbumArtist, setCurrentTrack, setAudioSrc, setAudioDuration
+            playPause, albumArt, albumTitle, albumArtist, currentTrack,
+            audioSrc, audioDuration, audioVolume, linkBack,
+            setPlayPause, setAlbumArt, setAlbumTitle, setAlbumArtist,
+            setCurrentTrack, setAudioSrc, setAudioDuration, setAudioVolume,
+            setLinkBack
           }}
         >
           <BrowserRouter>
+            <ConfigurationManager />
             <Navbar />
             <Switch>
               <Route exact
