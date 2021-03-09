@@ -1,3 +1,8 @@
-@import './../albumpage/AlbumPage.module.scss';
+@import "./../albumpage/AlbumPage.module.scss";
 
 // simply import album page styles, no need to rewrite
+
+// overloads:
+.section .header table tr {
+   height: calc(var(--albumArtHeight) / 3);
+}
