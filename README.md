@@ -1,7 +1,11 @@
 
+
 # beautplayer
 
 A beautifully designed streaming music player built on MERN stack for local networks.
+It has two components:
+1. Beautplayer: frontend; made using react.js; fully responsive
+2. Mediaserver: backend; made using express.js to serve the REST API which frontend consumes; manages the mongodb database of all the tracks, albums, playlists and metadata
 
 ## Getting Started
 
