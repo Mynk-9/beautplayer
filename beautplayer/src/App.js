@@ -4,6 +4,7 @@ import MainPage from './pages/mainpage/MainPage';
 import AlbumPage from './pages/albumpage/AlbumPage';
 import PlaylistPage from './pages/playlistpage/PlaylistPage';
 import SettingsPage from './pages/settingspage/SettingsPage';
+import PlayerQueue from './pages/playerqueue/PlayerQueue';
 
 import Navbar from './components/navbar/Navbar';
 import PlayerBar from './components/playerbar/PlayerBar';
@@ -32,6 +33,7 @@ function App() {
   const [audioDuration, setAudioDuration] = useState('');
   const [audioVolume, setAudioVolume] = useState(1.0);
   const [linkBack, setLinkBack] = useState('');
+  const [playerQueue, setPlayerQueue] = useState('');
   // }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -80,10 +82,10 @@ function App() {
         <PlayerContext.Provider
           value={{
             playPause, albumArt, albumTitle, albumArtist, currentTrack,
-            audioSrc, audioDuration, audioVolume, linkBack,
+            audioSrc, audioDuration, audioVolume, linkBack, playerQueue,
             setPlayPause, setAlbumArt, setAlbumTitle, setAlbumArtist,
             setCurrentTrack, setAudioSrc, setAudioDuration, setAudioVolume,
-            setLinkBack
+            setLinkBack, setPlayerQueue
           }}
         >
           <BrowserRouter>
@@ -104,6 +106,10 @@ function App() {
               <Route
                 path="/settings"
                 render={props => <SettingsPage />}
+              />
+              <Route
+                path="/queue"
+                render={props => <PlayerQueue />}
               />
             </Switch>
             <PlayerBar />
