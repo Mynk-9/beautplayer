@@ -69,22 +69,7 @@ const PlayerBar = props => {
     // copied from PlayButton.js under
     // minor modifications, don't forget to sync
     // major changes in both the files
-    let nextTrack = () => {
-        setPlayPause('pause');      // temporary pause
-
-        let trackId = audioSrc;     // both are same
-
-        let i = 0;
-        for (; i < playerQueue.length; ++i) {
-            if (playerQueue[i].trackId === trackId) {
-                ++i;
-                break;
-            }
-        }
-
-        if (i >= playerQueue.length)
-            return;                 // queue ended
-
+    let setTheTrack = (i) => {
         //////// copied from play button {
 
         const getDominantColorAlbumArt = async (thisAlbumArt) => {
@@ -122,9 +107,50 @@ const PlayerBar = props => {
         else
             setLinkBack(`/album/${data.albumTitle}`);
 
-        setPlayPause('play');
-
         //////// } copied from play button 
+    };
+    let nextTrack = () => {
+        setPlayPause('pause');      // temporary pause
+
+        let trackId = audioSrc;     // both are same
+
+        let i = 0;
+        for (; i < playerQueue.length; ++i) {
+            if (playerQueue[i].trackId === trackId) {
+                ++i;
+                break;
+            }
+        }
+
+        if (i >= playerQueue.length)
+            return;                 // queue ended
+
+        setTheTrack(i);
+
+        setPlayPause('play');
+    };
+    let prevTrack = () => {
+        if (audioPlayerRef.current.currentTime < 5) {
+            setPlayPause('pause');      // temporary pause
+            let trackId = audioSrc;     // both are same
+
+            let i = 0;
+            for (; i < playerQueue.length; ++i) {
+                if (playerQueue[i].trackId === trackId) {
+                    --i;
+                    break;
+                }
+            }
+
+            if (i < 0 || i >= playerQueue.length)
+                return;                 // nothing further back
+
+            setTheTrack(i);
+
+            setPlayPause('play');
+        } else {
+            audioPlayerRef.current.currentTime = 0;
+        }
     };
 
     useEffect(() => {
@@ -228,7 +254,7 @@ const PlayerBar = props => {
             </div>
             <div className={Styles.center}>
                 <div>
-                    <button className={"cursor-pointer"}>
+                    <button className={"cursor-pointer"} onClick={prevTrack}>
                         <img data-dark-mode-compatible alt="Back" src={BackIcon} />
                     </button>
                     <button
@@ -244,7 +270,7 @@ const PlayerBar = props => {
                             }
                         />
                     </button>
-                    <button className={"cursor-pointer"}>
+                    <button className={"cursor-pointer"} onClick={nextTrack}>
                         <img data-dark-mode-compatible alt="Next" src={NextIcon} />
                     </button>
                 </div>

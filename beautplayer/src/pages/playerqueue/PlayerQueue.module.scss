@@ -7,7 +7,8 @@
 
    .trackEntry {
       td:nth-child(1),
-      td:nth-child(2) {
+      td:nth-child(2),
+      td:last-child {
          width: 1%;
          white-space: nowrap;
       }
@@ -15,6 +16,9 @@
 }
 // {
 
+.section[data-animate-gradient="true"] {
+   animation: animated-gradient 10s ease infinite;
+}
 .section {
    padding-top: 6rem;
    padding-bottom: 6.25rem;
@@ -26,8 +30,6 @@
       var(--acrylic-color),
       transparent
    );
-   animation: animated-gradient 10s ease infinite;
-
 
    .header {
       padding: 3rem;
