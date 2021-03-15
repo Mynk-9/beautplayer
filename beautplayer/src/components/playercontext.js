@@ -11,7 +11,7 @@ const PlayerContext = createContext({
     audioVolume: 1.0,
     linkBack: '',
 
-    playerQueue: [],
+    playerQueue: {},
 
     setPlayPause: () => { },
     setAlbumArt: () => { },

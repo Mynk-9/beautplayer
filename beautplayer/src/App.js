@@ -33,7 +33,7 @@ function App() {
   const [audioDuration, setAudioDuration] = useState('');
   const [audioVolume, setAudioVolume] = useState(1.0);
   const [linkBack, setLinkBack] = useState('');
-  const [playerQueue, setPlayerQueue] = useState('');
+  const [playerQueue, setPlayerQueue] = useState({});
   // }
 
   /////////////////////////////////////////////////////////////////////////////
