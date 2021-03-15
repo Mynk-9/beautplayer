@@ -19,9 +19,16 @@ import VolumeNoneIcon from './../../assets/buttonsvg/volume-0.svg';
 import UpIcon from './../../assets/buttonsvg/chevron-up.svg';
 import DownIcon from './../../assets/buttonsvg/chevron-down.svg';
 
+import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
+
+const ColorThief = require('color-thief');
+
 const PlayerBar = props => {
-    const { playPause, albumArt, currentTrack, albumTitle, albumArtist, audioVolume,
-        audioSrc, audioDuration, linkBack, setPlayPause, setAudioVolume } = useContext(PlayerContext);
+    const { playPause, albumArt, currentTrack, albumTitle, albumArtist,
+        audioVolume, audioSrc, audioDuration, linkBack, playerQueue,
+        setCurrentTrack, setAlbumTitle, setAlbumArtist, setLinkBack,
+        setAlbumArt, setAudioSrc, setAudioDuration,
+        setPlayPause, setAudioVolume } = useContext(PlayerContext);
     let audioPlayerRef = useRef(null);
     let history = useHistory();
 
@@ -32,7 +39,7 @@ const PlayerBar = props => {
 
     // acrylic color management
     const [acrylicColorStyle, setAcrylicColorStyle] = useState({});
-    const { acrylicColor, letAcrylicTints } = useContext(ThemeContext);
+    const { acrylicColor, setAcrylicColor, letAcrylicTints } = useContext(ThemeContext);
     useEffect(() => {
         if (!letAcrylicTints)
             setAcrylicColorStyle({});
@@ -56,6 +63,68 @@ const PlayerBar = props => {
         else {
             setPlayPause('play');
         }
+    };
+
+    // advance on the playlist
+    // copied from PlayButton.js under
+    // minor modifications, don't forget to sync
+    // major changes in both the files
+    let nextTrack = () => {
+        setPlayPause('pause');      // temporary pause
+
+        let trackId = audioSrc;     // both are same
+
+        let i = 0;
+        for (; i < playerQueue.length; ++i) {
+            if (playerQueue[i].trackId === trackId) {
+                ++i;
+                break;
+            }
+        }
+
+        if (i >= playerQueue.length)
+            return;                 // queue ended
+
+        //////// copied from play button {
+
+        const getDominantColorAlbumArt = async (thisAlbumArt) => {
+            let imgEle = document.createElement('img');
+
+            imgEle.onerror = () => imgEle.src = AlbumArt;
+            imgEle.onload = () => {
+                let colorThief = new ColorThief();
+                let rgb = colorThief.getColor(imgEle, 1);
+                setAcrylicColor(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.6)`);
+            };
+
+
+            imgEle.crossOrigin = "Anonymous";
+            imgEle.src = thisAlbumArt;
+        };
+
+        const data = playerQueue[i];
+
+        setAudioSrc(data.audioSrc);
+
+        let duration = data.audioDuration.split(":");
+        setAudioDuration(parseFloat(duration[0]) * 60 + parseFloat(duration[1]));
+
+        setAlbumArt(data.albumArt);
+
+        setAlbumArtist(data.albumArtist);
+        setCurrentTrack(data.track);
+        setAlbumTitle(data.albumTitle);
+
+        getDominantColorAlbumArt(data.albumArt);
+
+        if (data.isPlaylist)
+            setLinkBack(`/playlist/${data.playlistTitle}`);
+        else
+            setLinkBack(`/album/${data.albumTitle}`);
+
+        setPlayPause('play');
+
+        //////// } copied from play button 
     };
 
     useEffect(() => {
@@ -84,7 +153,7 @@ const PlayerBar = props => {
             setVolumeStatus('none');
         else
             setVolumeStatus('normal');
-            
+
         setVolumeDisplay(audioVolume * 100);
     }, [audioVolume]);
 
@@ -107,7 +176,7 @@ const PlayerBar = props => {
         >
             {/* Audio Player */}
             <audio
-                onEnded={() => setPlayPause('pause')}
+                onEnded={() => nextTrack()}
                 ref={audioPlayerRef}
             />
 

@@ -20,6 +20,10 @@ const PlayButton = props => {
 
     const [playButtonState, setPlayButtonState] = useState('play-button');
 
+    // INFO:
+    // following code is also copied to PlayerBar.js under minor modifications
+    // in function nextTrack, don't forget to reflect any major changes there too
+
     // to get the acrylic color tint
     const getDominantColorAlbumArt = async () => {
         let colorThief = new ColorThief();
