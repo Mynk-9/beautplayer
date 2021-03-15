@@ -20,6 +20,10 @@ const PlayButton = props => {
 
     const [playButtonState, setPlayButtonState] = useState('play-button');
 
+    // INFO:
+    // following code is also copied to PlayerBar.js under minor modifications
+    // in function nextTrack, don't forget to reflect any major changes there too
+
     // to get the acrylic color tint
     const getDominantColorAlbumArt = async () => {
         let colorThief = new ColorThief();
@@ -52,6 +56,23 @@ const PlayButton = props => {
                 setLinkBack(`/playlist/${props.playlistTitle}`);
             else
                 setLinkBack(`/album/${props.albumTitle}`);
+
+            props.addToQueue(
+                {
+                    'trackId': props.audioSrc,
+                    'audioSrc': props.audioSrc,
+                    'audioDuration': props.audioDuration,
+                    'track': props.track,
+                    'albumArt': props.albumArt,
+                    'albumTitle': props.albumTitle,
+                    'albumArtist': props.albumArtist,
+                    'isPlaylist': props.isPlaylist,
+                    'playlistTitle': props.playlistTitle,
+                    'linkBack': (props.isPlaylist
+                        ? `/playlist/${props.playlistTitle}`
+                        : `/album/${props.albumTitle}`)
+                }
+            );
 
             setPlayPause('play');
         }

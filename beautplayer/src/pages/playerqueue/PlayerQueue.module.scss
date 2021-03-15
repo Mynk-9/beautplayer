@@ -1,0 +1,88 @@
+@import "./../../components/tracklist/TrackList.module.scss";
+// import the track list styles
+
+// overloads to track list {
+.trackList {
+   background-color: var(--acrylic-color);
+
+   .trackEntry {
+      td:nth-child(1),
+      td:nth-child(2) {
+         width: 1%;
+         white-space: nowrap;
+      }
+   }
+}
+// {
+
+.section {
+   padding-top: 6rem;
+   padding-bottom: 6.25rem;
+   min-height: calc(100vh - 12.25rem); // 100vh - 6rem - 6.25rem
+
+   background-size: 150% 150%;
+   background-image: linear-gradient(
+      to bottom,
+      var(--acrylic-color),
+      transparent
+   );
+   animation: animated-gradient 10s ease infinite;
+
+
+   .header {
+      padding: 3rem;
+
+      @media only screen and (max-width: 540px) {
+         padding: 1rem;
+      }
+
+      .back {
+         position: absolute;
+         height: 3rem;
+         width: 3rem;
+         margin-top: -1rem;
+         margin-left: -1rem;
+         cursor: pointer;
+
+         @media only screen and (max-width: 540px) {
+            position: relative;
+            margin: 0;
+         }
+      }
+
+      .heading {
+         display: inline-block;
+         position: relative;
+         left: 50%;
+         transform: translateX(-50%);
+
+         @media only screen and (max-width: 540px) {
+            position: initial;
+            margin: 0;
+            margin-right: -2rem;
+            float: right;
+            line-height: 1.5;
+         }
+      }
+   }
+
+   .content {
+      padding: 0 8rem 1.5rem 8rem;
+
+      @media only screen and (max-width: 540px) {
+         padding: 1rem;
+      }
+   }
+}
+
+@keyframes animated-gradient {
+   0% {
+      background-position: 0 0;
+   }
+   50% {
+      background-position: 0 50%;
+   }
+   100% {
+      background-position: 0 0;
+   }
+}
