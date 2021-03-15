@@ -10,6 +10,8 @@ import ThemeContext from '../themecontext';
 import PlayIcon from './../../assets/buttonsvg/play.svg';
 import PauseIcon from './../../assets/buttonsvg/pause.svg';
 
+import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
+
 const ColorThief = require('color-thief');
 
 const PlayButton = props => {
@@ -26,9 +28,23 @@ const PlayButton = props => {
 
     // to get the acrylic color tint
     const getDominantColorAlbumArt = async () => {
-        let colorThief = new ColorThief();
-        let rgb = colorThief.getColor(artContext.current);
-        setAcrylicColor(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.6)`);
+        let imgEle = document.createElement('img');
+        // imgEle.loading = 'lazy';
+
+        imgEle.onerror = () => imgEle.src = AlbumArt;
+        imgEle.onload = () => {
+            let colorThief = new ColorThief();
+            let rgb = colorThief.getColor(imgEle, 1);
+            setAcrylicColor(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.6)`);
+        };
+
+
+        imgEle.crossOrigin = "Anonymous";
+        imgEle.src = props.albumArt;
+
+        // let colorThief = new ColorThief();
+        // let rgb = colorThief.getColor(artContext.current);
+        // setAcrylicColor(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.6)`);
     };
 
     // play/pause toggle
