@@ -55,6 +55,11 @@ const Navbar = props => {
                 </span>
             </span>
             <span className={Styles.right}>
+                <span className={"cursor-pointer"}>
+                    <Link to={`/queue`}>Queue</Link>
+                </span>
+            </span>
+            <span className={Styles.right}>
                 <ColorModeSwitch />
             </span>
             <button
