@@ -16,6 +16,9 @@
 }
 // {
 
+.section[data-animate-gradient="true"] {
+   animation: animated-gradient 10s ease infinite;
+}
 .section {
    padding-top: 6rem;
    padding-bottom: 6.25rem;
@@ -27,8 +30,6 @@
       var(--acrylic-color),
       transparent
    );
-   animation: animated-gradient 10s ease infinite;
-
 
    .header {
       padding: 3rem;
