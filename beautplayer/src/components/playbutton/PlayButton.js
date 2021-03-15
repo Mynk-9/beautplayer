@@ -53,6 +53,23 @@ const PlayButton = props => {
             else
                 setLinkBack(`/album/${props.albumTitle}`);
 
+            props.addToQueue(
+                {
+                    'trackId': props.audioSrc,
+                    'audioSrc': props.audioSrc,
+                    'audioDuration': props.audioDuration,
+                    'track': props.track,
+                    'albumArt': props.albumArt,
+                    'albumTitle': props.albumTitle,
+                    'albumArtist': props.albumArtist,
+                    'isPlaylist': props.isPlaylist,
+                    'playlistTitle': props.playlistTitle,
+                    'linkBack': (props.isPlaylist
+                        ? `/playlist/${props.playlistTitle}`
+                        : `/album/${props.albumTitle}`)
+                }
+            );
+
             setPlayPause('play');
         }
     };
