@@ -26,7 +26,6 @@ const PlayerQueue = () => {
         else {
             if (acrylicColor && acrylicColor !== '--acrylic-color' && acrylicColor !== '') {
                 setAcrylicColorStyle({ '--acrylic-color': acrylicColor });
-                console.log(String(acrylicColor.slice(0, acrylicColor.length - 6) + ', 1.0);'));
                 setTableAcrylicColorStyle({ '--acrylic-color': String(acrylicColor.slice(0, acrylicColor.length - 6) + ', 0.3)') });
             }
             else {
