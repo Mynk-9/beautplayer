@@ -39,17 +39,7 @@ const PlayerQueue = () => {
 
     let history = useHistory();
 
-    let removeItem = (trackId) => {
-        let queue = playerQueue;
-        let i = 0;
-        for (; i < playerQueue.length; ++i)
-            if (trackId === queue[i].trackId)
-                break;
-        queue.splice(i, 1);
-        setPlayerQueue(queue);
-    };
-
-    useEffect(() => {
+    let buildQueue = () => {
         let key = 0;
         let _trackList = playerQueue.map((data) => {
             ++key;
@@ -89,11 +79,26 @@ const PlayerQueue = () => {
         _trackList.reverse();
 
         setTrackList(_trackList);
-    });
+    };
+
+    let removeItem = (trackId) => {
+        let queue = playerQueue;
+        let i = 0;
+        for (; i < playerQueue.length; ++i)
+            if (trackId === queue[i].trackId)
+                break;
+        if (i >= playerQueue.length)
+            return;
+        queue.splice(i, 1);
+        setPlayerQueue(queue);
+        buildQueue();
+    };
+
+    useEffect(() => buildQueue(), []);
 
     return (
         <>
-            <div className={Styles.section} style={acrylicColorStyle}>
+            <div className={Styles.section} style={acrylicColorStyle} data-animate-gradient={letAcrylicTints}>
                 <div className={Styles.header}>
                     <img data-dark-mode-compatible
                         alt="Go Back"
