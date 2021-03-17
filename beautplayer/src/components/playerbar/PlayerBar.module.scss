@@ -61,7 +61,7 @@
       .albumInfo {
          display: table-cell;
          vertical-align: middle;
-         
+
          height: 100%;
          // copied from .albumArt
          // max-width: calc(24px + 2 * 1rem + 2 * 1px + 2 * 0.3rem + 2 * 1rem);
@@ -167,6 +167,9 @@
       @media only screen and (max-width: 540px) {
          display: none;
       }
+   }
+   .buttonSmall[data-active="true"] {
+      background-color: var(--tint-level3-color);
    }
    button:hover {
       background-color: var(--tint-level2-color);

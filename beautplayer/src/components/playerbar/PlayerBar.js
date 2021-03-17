@@ -38,6 +38,9 @@ const PlayerBar = props => {
     const [volumeDisplay, setVolumeDisplay] = useState(100);
     const [mobileOpenAlbumDetails, setMobileOpenAlbumDetails] = useState(false);
 
+    // repeat and shuffle
+    const [loopTrack, setLoopTrack] = useState(false);
+
     // acrylic color management
     const [acrylicColorStyle, setAcrylicColorStyle] = useState({});
     const { acrylicColor, setAcrylicColor, letAcrylicTints } = useContext(ThemeContext);
@@ -184,6 +187,10 @@ const PlayerBar = props => {
         setVolumeDisplay(audioVolume * 100);
     }, [audioVolume]);
 
+    useEffect(() => {
+        audioPlayerRef.current.loop = loopTrack;
+    }, [loopTrack]);
+
     let reduceVolume = () => {
         if (audioVolume > 0)
             setAudioVolume(
@@ -195,6 +202,11 @@ const PlayerBar = props => {
                 parseFloat(audioPlayerRef.current.volume + 0.1).toFixed(2));
     };
 
+    let audioPlayerOnEndedHandler = () => {
+        if (!loopTrack)
+            nextTrack();
+    }
+
 
     return (
         <footer
@@ -203,7 +215,7 @@ const PlayerBar = props => {
         >
             {/* Audio Player */}
             <audio
-                onEnded={() => nextTrack()}
+                onEnded={audioPlayerOnEndedHandler}
                 ref={audioPlayerRef}
             />
 
@@ -274,7 +286,14 @@ const PlayerBar = props => {
                     <button className={"cursor-pointer"} onClick={nextTrack}>
                         <img data-dark-mode-compatible alt="Next" src={NextIcon} />
                     </button>
-                    <button className={`${Styles.buttonSmall} cursor-pointer`} data-visible={mobileOpenAlbumDetails}>
+                    <button
+                        className={`${Styles.buttonSmall} cursor-pointer`}
+                        data-visible={mobileOpenAlbumDetails}
+                        data-active={loopTrack}
+                        onClick={
+                            () => setLoopTrack(!loopTrack)
+                        }
+                    >
                         <img data-dark-mode-compatible alt="Repeat" src={RepeatIcon} />
                     </button>
                 </div>
