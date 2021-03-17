@@ -18,6 +18,7 @@ import VolumeNormalIcon from './../../assets/buttonsvg/volume-1.svg';
 import VolumeNoneIcon from './../../assets/buttonsvg/volume-0.svg';
 import UpIcon from './../../assets/buttonsvg/chevron-up.svg';
 import DownIcon from './../../assets/buttonsvg/chevron-down.svg';
+import RepeatIcon from './../../assets/buttonsvg/repeat.svg';
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
 
@@ -272,6 +273,9 @@ const PlayerBar = props => {
                     </button>
                     <button className={"cursor-pointer"} onClick={nextTrack}>
                         <img data-dark-mode-compatible alt="Next" src={NextIcon} />
+                    </button>
+                    <button className={`${Styles.buttonSmall} cursor-pointer`} data-visible={mobileOpenAlbumDetails}>
+                        <img data-dark-mode-compatible alt="Repeat" src={RepeatIcon} />
                     </button>
                 </div>
                 <ProgressBar playerRef={audioPlayerRef} />
