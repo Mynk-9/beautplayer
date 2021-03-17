@@ -18,6 +18,7 @@ import VolumeNormalIcon from './../../assets/buttonsvg/volume-1.svg';
 import VolumeNoneIcon from './../../assets/buttonsvg/volume-0.svg';
 import UpIcon from './../../assets/buttonsvg/chevron-up.svg';
 import DownIcon from './../../assets/buttonsvg/chevron-down.svg';
+import RepeatIcon from './../../assets/buttonsvg/repeat.svg';
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
 
@@ -36,6 +37,9 @@ const PlayerBar = props => {
     const [volumeStatus, setVolumeStatus] = useState('high');
     const [volumeDisplay, setVolumeDisplay] = useState(100);
     const [mobileOpenAlbumDetails, setMobileOpenAlbumDetails] = useState(false);
+
+    // repeat and shuffle
+    const [loopTrack, setLoopTrack] = useState(false);
 
     // acrylic color management
     const [acrylicColorStyle, setAcrylicColorStyle] = useState({});
@@ -183,6 +187,10 @@ const PlayerBar = props => {
         setVolumeDisplay(audioVolume * 100);
     }, [audioVolume]);
 
+    useEffect(() => {
+        audioPlayerRef.current.loop = loopTrack;
+    }, [loopTrack]);
+
     let reduceVolume = () => {
         if (audioVolume > 0)
             setAudioVolume(
@@ -194,6 +202,11 @@ const PlayerBar = props => {
                 parseFloat(audioPlayerRef.current.volume + 0.1).toFixed(2));
     };
 
+    let audioPlayerOnEndedHandler = () => {
+        if (!loopTrack)
+            nextTrack();
+    }
+
 
     return (
         <footer
@@ -202,7 +215,7 @@ const PlayerBar = props => {
         >
             {/* Audio Player */}
             <audio
-                onEnded={() => nextTrack()}
+                onEnded={audioPlayerOnEndedHandler}
                 ref={audioPlayerRef}
             />
 
@@ -272,6 +285,16 @@ const PlayerBar = props => {
                     </button>
                     <button className={"cursor-pointer"} onClick={nextTrack}>
                         <img data-dark-mode-compatible alt="Next" src={NextIcon} />
+                    </button>
+                    <button
+                        className={`${Styles.buttonSmall} cursor-pointer`}
+                        data-visible={mobileOpenAlbumDetails}
+                        data-active={loopTrack}
+                        onClick={
+                            () => setLoopTrack(!loopTrack)
+                        }
+                    >
+                        <img data-dark-mode-compatible alt="Repeat" src={RepeatIcon} />
                     </button>
                 </div>
                 <ProgressBar playerRef={audioPlayerRef} />
