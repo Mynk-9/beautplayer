@@ -61,7 +61,7 @@
       .albumInfo {
          display: table-cell;
          vertical-align: middle;
-         
+
          height: 100%;
          // copied from .albumArt
          // max-width: calc(24px + 2 * 1rem + 2 * 1px + 2 * 0.3rem + 2 * 1rem);
@@ -150,6 +150,26 @@
       img {
          vertical-align: middle;
       }
+   }
+   .buttonSmall {
+      padding: 0;
+      height: calc(15px + 1rem);
+      width: calc(15px + 1rem);
+      vertical-align: middle;
+
+      img {
+         width: 15px;
+         height: 15px;
+         margin-top: -0.1rem;
+      }
+   }
+   .buttonSmall[data-visible="false"] {
+      @media only screen and (max-width: 540px) {
+         display: none;
+      }
+   }
+   .buttonSmall[data-active="true"] {
+      background-color: var(--tint-level3-color);
    }
    button:hover {
       background-color: var(--tint-level2-color);

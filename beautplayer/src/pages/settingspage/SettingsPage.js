@@ -2,6 +2,7 @@ import { React, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import ColorModeSwitcher from '../../components/colormodeswitch/ColorModeSwitch';
+import './../../components/commonstyles.scss';
 import Styles from './SettingsPage.module.scss';
 
 import ThemeContext from './../../components/themecontext';

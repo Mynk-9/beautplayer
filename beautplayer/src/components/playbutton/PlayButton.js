@@ -10,6 +10,8 @@ import ThemeContext from '../themecontext';
 import PlayIcon from './../../assets/buttonsvg/play.svg';
 import PauseIcon from './../../assets/buttonsvg/pause.svg';
 
+import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
+
 const ColorThief = require('color-thief');
 
 const PlayButton = props => {
@@ -20,11 +22,29 @@ const PlayButton = props => {
 
     const [playButtonState, setPlayButtonState] = useState('play-button');
 
+    // INFO:
+    // following code is also copied to PlayerBar.js under minor modifications
+    // in function nextTrack, don't forget to reflect any major changes there too
+
     // to get the acrylic color tint
     const getDominantColorAlbumArt = async () => {
-        let colorThief = new ColorThief();
-        let rgb = colorThief.getColor(artContext.current);
-        setAcrylicColor(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.6)`);
+        let imgEle = document.createElement('img');
+        // imgEle.loading = 'lazy';
+
+        imgEle.onerror = () => imgEle.src = AlbumArt;
+        imgEle.onload = () => {
+            let colorThief = new ColorThief();
+            let rgb = colorThief.getColor(imgEle, 1);
+            setAcrylicColor(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.6)`);
+        };
+
+
+        imgEle.crossOrigin = "Anonymous";
+        imgEle.src = props.albumArt;
+
+        // let colorThief = new ColorThief();
+        // let rgb = colorThief.getColor(artContext.current);
+        // setAcrylicColor(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.6)`);
     };
 
     // play/pause toggle
@@ -52,6 +72,23 @@ const PlayButton = props => {
                 setLinkBack(`/playlist/${props.playlistTitle}`);
             else
                 setLinkBack(`/album/${props.albumTitle}`);
+
+            props.addToQueue(
+                {
+                    'trackId': props.audioSrc,
+                    'audioSrc': props.audioSrc,
+                    'audioDuration': props.audioDuration,
+                    'track': props.track,
+                    'albumArt': props.albumArt,
+                    'albumTitle': props.albumTitle,
+                    'albumArtist': props.albumArtist,
+                    'isPlaylist': props.isPlaylist,
+                    'playlistTitle': props.playlistTitle,
+                    'linkBack': (props.isPlaylist
+                        ? `/playlist/${props.playlistTitle}`
+                        : `/album/${props.albumTitle}`)
+                }
+            );
 
             setPlayPause('play');
         }

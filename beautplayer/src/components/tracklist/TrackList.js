@@ -1,12 +1,32 @@
-import { React, useState } from 'react';
+import { React, useContext } from 'react';
 import TrackLiker from './../../components/trackliker/TrackLiker';
 import PlayButton from '../playbutton/PlayButton';
 import './../commonstyles.scss';
 import Styles from './TrackList.module.scss';
 
+import PlayerContext from './../playercontext';
+
 import { albumArt } from '../coverArtAPI';
 
 const TrackList = props => {
+    const { playerQueue, setPlayerQueue } = useContext(PlayerContext);
+
+    const addToQueue = (trackData) => {
+        let queue = playerQueue;
+
+        // remove the track from previous position to be added to front
+        for (let i = 0; i < queue.length; ++i) {
+            let track = queue[i];
+            if (track.trackId === trackData.trackId) {
+                queue.splice(i, 1);
+                break;
+            }
+        }
+
+        queue.push(trackData);
+        setPlayerQueue(queue);
+    };
+
     let key = 0;
     let trackList = props.tracks.tracks.map((data) => {
         ++key;
@@ -33,6 +53,7 @@ const TrackList = props => {
                                 : false                 // not passed further
                         }
                         playlistTitle={props.tracks.playlistTitle}
+                        addToQueue={addToQueue}
                     />
                 </td>
                 <td>{data[0]}</td>
