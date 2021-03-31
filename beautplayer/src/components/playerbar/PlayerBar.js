@@ -177,9 +177,9 @@ const PlayerBar = props => {
     useEffect(() => {
         audioPlayerRef.current.volume = audioVolume;
 
-        if (audioVolume === 1.0)
+        if (audioVolume >= 0.8)
             setVolumeStatus('high');
-        else if (audioVolume === 0.0)
+        else if (parseFloat(audioVolume) === 0.0)
             setVolumeStatus('none');
         else
             setVolumeStatus('normal');
