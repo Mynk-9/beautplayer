@@ -2,6 +2,7 @@ import { React, useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import TrackLiker from './../../components/trackliker/TrackLiker';
+import TrackOptions from './../../components/trackoptions/TrackOptions';
 import PlayButton from './../../components/playbutton/PlayButton';
 
 import './../../components/commonstyles.scss';
@@ -12,6 +13,7 @@ import PlayerContext from './../../components/playercontext';
 
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg';
 import MinusIcon from './../../assets/buttonsvg/minus.svg';
+import PlusIcon from './../../assets/buttonsvg/plus.svg';
 
 const PlayerQueue = () => {
     const [acrylicColorStyle, setAcrylicColorStyle] = useState({});
@@ -45,7 +47,20 @@ const PlayerQueue = () => {
             ++key;
             return (
                 <tr key={key} className={Styles.trackEntry}>
-                    <td><TrackLiker trackId={data.trackId} /></td>
+                    <td>
+                        <TrackOptions
+                            options={[
+                                {
+                                    'component': <TrackLiker trackId={data.trackId} />,
+                                    'text': 'Like',
+                                },
+                                {
+                                    'component': <img src={PlusIcon} data-dark-mode-compatible />,
+                                    'text': 'Add to Playlist',
+                                },
+                            ]}
+                        />
+                    </td>
                     <td>
                         <PlayButton
                             audioSrc={data.audioSrc}
