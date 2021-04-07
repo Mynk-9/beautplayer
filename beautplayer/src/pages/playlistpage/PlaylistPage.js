@@ -8,6 +8,8 @@ import Styles from './PlaylistPage.module.scss';
 import ThemeContext from './../../components/themecontext';
 
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg'
+import PlayIcon from './../../assets/buttonsvg/play.svg';
+import TrashIcon from './../../assets/buttonsvg/trash-2.svg';
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
 import { playlistArt } from './../../components/coverArtAPI';
@@ -91,7 +93,7 @@ const PlaylistPage = props => {
                 }
 
                 tracksArray.playlistTitle = playlistName;
-                
+
                 // first reset the value then set the value
                 // done to rectify React not updating 
                 // Play button and other possibly overlooked
@@ -169,6 +171,31 @@ const PlaylistPage = props => {
                             <tr>
                                 <td>Genres</td>
                                 <td>{playlistPageGenre}</td>
+                            </tr>
+                            <tr>
+                                <td>Actions</td>
+                                <td>
+                                    <button
+                                        onClick={() => {
+                                            console.log('play playlist');
+                                        }}
+                                    >
+                                        <img
+                                            src={PlayIcon}
+                                            data-dark-mode-compatible
+                                        />
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            console.log('delete playlist');
+                                        }}
+                                    >
+                                        <img
+                                            src={TrashIcon}
+                                            data-dark-mode-compatible
+                                        />
+                                    </button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
