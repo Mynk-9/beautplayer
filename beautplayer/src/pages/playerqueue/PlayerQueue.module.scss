@@ -5,14 +5,17 @@
 .trackList {
    background-color: var(--acrylic-color);
 
-   .trackEntry {
-      td:nth-child(1),
-      td:nth-child(2),
-      td:last-child {
-         width: 1%;
-         white-space: nowrap;
-      }
-   }
+   // removed the properties below because they were added to the 
+   // TrackList styles
+
+   // .trackEntry {
+   //    td:nth-child(1),
+   //    td:nth-child(2),
+   //    td:last-child {
+   //       width: 1%;
+   //       white-space: nowrap;
+   //    }
+   // }
 }
 // {
 
