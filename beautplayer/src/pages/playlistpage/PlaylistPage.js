@@ -48,14 +48,9 @@ const PlaylistPage = props => {
         imgRef.current.crossOrigin = 'Anonymous'; // fix for: "canvas has been tainted by cross-origin data" security error
     });
 
-    useEffect(() => {
-
-        // set playlist cover art
-        const src = playlistArt(playlistName.replace('%2F', '/'));
-        setPlaylistPageArt(src);
-
-        // fetch the album data
-        // get the tracks of the album
+    // fetch the playlist data
+    // get the tracks of the playlist
+    const refreshPlaylist = () => {
         axios.get(API + '/playlists/' + playlistName)
             .then(async resp => {
                 const playlist = resp.data.Playlist;
@@ -101,7 +96,35 @@ const PlaylistPage = props => {
             .catch(err => {
                 console.log(err);
             });
+    };
+
+    useEffect(() => {
+
+        // set playlist cover art
+        const src = playlistArt(playlistName.replace('%2F', '/'));
+        setPlaylistPageArt(src);
+
+        // fetch the playlist data
+        // get the tracks of the playlist
+        refreshPlaylist();
+
     }, [playlistName]);
+
+    const removeTrack = async (trackId) => {
+        let success = false;
+        await axios.delete(`${API}/playlists/${playlistName.replace('%2F', '/')}/${trackId}`)
+            .then(resp => {
+                if (resp.status === 200)
+                    success = true;
+                else
+                    console.log(resp);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+        refreshPlaylist();
+    };
 
     return (
         <>
@@ -140,7 +163,11 @@ const PlaylistPage = props => {
                     </table>
                 </div>
                 <div className={Styles.content}>
-                    <TrackList tracks={tracks} />
+                    <TrackList
+                        tracks={tracks}
+                        showRemoveOption={true}
+                        removeTrack={(trackId) => removeTrack(trackId)}
+                    />
                 </div>
             </div>
         </>
