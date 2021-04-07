@@ -4,5 +4,23 @@
 
 // overloads:
 .section .header table tr {
-   height: calc(var(--albumArtHeight) / 3);
+    height: calc(var(--albumArtHeight) / 4);
+
+    td * {
+        vertical-align: middle;
+        margin: auto;
+    }
+
+    button {
+        margin: 0 0.5rem 0 0.5rem;
+        outline: 0;
+        border: 0;
+
+        padding: 0.5rem;
+
+        border-radius: var(--border-radius);
+        background-color: var(--non-transparent-acrylic-like-color);
+
+        cursor: pointer;
+    }
 }
