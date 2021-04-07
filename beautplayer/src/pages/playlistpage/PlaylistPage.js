@@ -8,6 +8,8 @@ import Styles from './PlaylistPage.module.scss';
 import ThemeContext from './../../components/themecontext';
 
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg'
+import PlayIcon from './../../assets/buttonsvg/play.svg';
+import TrashIcon from './../../assets/buttonsvg/trash-2.svg';
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
 import { playlistArt } from './../../components/coverArtAPI';
@@ -48,14 +50,9 @@ const PlaylistPage = props => {
         imgRef.current.crossOrigin = 'Anonymous'; // fix for: "canvas has been tainted by cross-origin data" security error
     });
 
-    useEffect(() => {
-
-        // set playlist cover art
-        const src = playlistArt(playlistName.replace('%2F', '/'));
-        setPlaylistPageArt(src);
-
-        // fetch the album data
-        // get the tracks of the album
+    // fetch the playlist data
+    // get the tracks of the playlist
+    const refreshPlaylist = () => {
         axios.get(API + '/playlists/' + playlistName)
             .then(async resp => {
                 const playlist = resp.data.Playlist;
@@ -96,12 +93,51 @@ const PlaylistPage = props => {
                 }
 
                 tracksArray.playlistTitle = playlistName;
+
+                // first reset the value then set the value
+                // done to rectify React not updating 
+                // Play button and other possibly overlooked
+                // things on removing track above current 
+                // track
+                setTracks({
+                    isPlaylist: true,
+                    playlistName: '',
+                    tracks: [],
+                });
                 setTracks(tracksArray);
             })
             .catch(err => {
                 console.log(err);
             });
+    };
+
+    useEffect(() => {
+
+        // set playlist cover art
+        const src = playlistArt(playlistName.replace('%2F', '/'));
+        setPlaylistPageArt(src);
+
+        // fetch the playlist data
+        // get the tracks of the playlist
+        refreshPlaylist();
+
     }, [playlistName]);
+
+    const removeTrack = async (trackId) => {
+        let success = false;
+        await axios.delete(`${API}/playlists/${playlistName.replace('%2F', '/')}/${trackId}`)
+            .then(resp => {
+                if (resp.status === 200)
+                    success = true;
+                else
+                    console.log(resp);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+        refreshPlaylist();
+    };
 
     return (
         <>
@@ -136,11 +172,40 @@ const PlaylistPage = props => {
                                 <td>Genres</td>
                                 <td>{playlistPageGenre}</td>
                             </tr>
+                            <tr>
+                                <td>Actions</td>
+                                <td>
+                                    <button
+                                        onClick={() => {
+                                            console.log('play playlist');
+                                        }}
+                                    >
+                                        <img
+                                            src={PlayIcon}
+                                            data-dark-mode-compatible
+                                        />
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            console.log('delete playlist');
+                                        }}
+                                    >
+                                        <img
+                                            src={TrashIcon}
+                                            data-dark-mode-compatible
+                                        />
+                                    </button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
                 <div className={Styles.content}>
-                    <TrackList tracks={tracks} />
+                    <TrackList
+                        tracks={tracks}
+                        showRemoveOption={true}
+                        removeTrack={(trackId) => removeTrack(trackId)}
+                    />
                 </div>
             </div>
         </>

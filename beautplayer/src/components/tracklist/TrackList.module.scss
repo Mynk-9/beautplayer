@@ -28,6 +28,14 @@
         td:nth-child(5) {
             text-align: right;
         }
+
+        // taken from player queue styles at PlayerQueue.module.scss
+        td:nth-child(1),
+        td:nth-child(2),
+        td:last-child {
+            width: 1%;
+            white-space: nowrap;
+        }
     }
     .trackEntry:first-child {
         border-top-left-radius: var(--border-radius);
