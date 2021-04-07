@@ -91,6 +91,17 @@ const PlaylistPage = props => {
                 }
 
                 tracksArray.playlistTitle = playlistName;
+                
+                // first reset the value then set the value
+                // done to rectify React not updating 
+                // Play button and other possibly overlooked
+                // things on removing track above current 
+                // track
+                setTracks({
+                    isPlaylist: true,
+                    playlistName: '',
+                    tracks: [],
+                });
                 setTracks(tracksArray);
             })
             .catch(err => {
