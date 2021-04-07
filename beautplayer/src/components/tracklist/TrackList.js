@@ -1,6 +1,9 @@
-import { React, useContext } from 'react';
-import TrackLiker from './../../components/trackliker/TrackLiker';
+import { React, useContext, useState } from 'react';
 import PlayButton from '../playbutton/PlayButton';
+import TrackOptions from '../trackoptions/TrackOptions';
+import TrackLiker from '../trackliker/TrackLiker';
+import AddToPlaylistModal from './../addtoplaylistmodal/AddToPlaylistModal';
+
 import './../commonstyles.scss';
 import Styles from './TrackList.module.scss';
 
@@ -8,8 +11,16 @@ import PlayerContext from './../playercontext';
 
 import { albumArt } from '../coverArtAPI';
 
+import PlusIcon from './../../assets/buttonsvg/plus.svg';
+import MinusIcon from './../../assets/buttonsvg/minus.svg';
+
+// props: tracks, showRemoveOption, removeTrack(trackId)
 const TrackList = props => {
     const { playerQueue, setPlayerQueue } = useContext(PlayerContext);
+
+    const [addToPlaylistModalVisible, setAddToPlaylistModalVisible] = useState(false);
+    const [addToPlaylistModalTrackId, setAddToPlaylistModalTrackId] = useState(null);
+    const [addToPlaylistModalTrackName, setAddToPlaylistModalTrackName] = useState(null);
 
     const addToQueue = (trackData) => {
         let queue = playerQueue;
@@ -32,7 +43,61 @@ const TrackList = props => {
         ++key;
         return (
             <tr key={key} className={Styles.trackEntry}>
-                <td><TrackLiker trackId={data[3]} /></td>
+                <td>
+                    {props.showRemoveOption
+                        ? <TrackOptions
+                            options={[
+                                {
+                                    'component': <TrackLiker trackId={data[3]} />,
+                                    'text': 'Like',
+                                },
+                                {
+                                    'component':
+                                        <img
+                                            src={PlusIcon}
+                                            onClick={() => {
+                                                setAddToPlaylistModalTrackId(data[3]);
+                                                setAddToPlaylistModalTrackName(data[0]);
+                                                setAddToPlaylistModalVisible(true);
+                                            }}
+                                            data-dark-mode-compatible
+                                        />,
+                                    'text': 'Add to Playlist',
+                                },
+                                {
+                                    'component':
+                                        <img
+                                            src={MinusIcon}
+                                            onClick={() => props.removeTrack(data[3])}
+                                            data-dark-mode-compatible
+                                        />,
+                                    'text': 'Remove',
+                                },
+                            ]}
+                        />
+                        : <TrackOptions
+                            options={[
+                                {
+                                    'component': <TrackLiker trackId={data[3]} />,
+                                    'text': 'Like',
+                                },
+                                {
+                                    'component':
+                                        <img
+                                            src={PlusIcon}
+                                            onClick={() => {
+                                                setAddToPlaylistModalTrackId(data[3]);
+                                                setAddToPlaylistModalTrackName(data[0]);
+                                                setAddToPlaylistModalVisible(true);
+                                            }}
+                                            data-dark-mode-compatible
+                                        />,
+                                    'text': 'Add to Playlist',
+                                },
+                            ]}
+                        />
+                    }
+                </td>
                 <td>
                     <PlayButton
                         audioSrc={data[3]}
@@ -64,11 +129,23 @@ const TrackList = props => {
     });
 
     return (
-        <table className={Styles.trackList}>
-            <tbody>
-                {trackList}
-            </tbody>
-        </table>
+        <>
+            {
+                addToPlaylistModalVisible
+                    ? <AddToPlaylistModal
+                        trackId={addToPlaylistModalTrackId}
+                        trackName={addToPlaylistModalTrackName}
+                        close={() => setAddToPlaylistModalVisible(false)}
+                    // acrylicColorStyle={acrylicColorStyle}
+                    />
+                    : <></>
+            }
+            <table className={Styles.trackList}>
+                <tbody>
+                    {trackList}
+                </tbody>
+            </table>
+        </>
     );
 };
 
