@@ -5,6 +5,7 @@ import './../commonstyles.scss';
 import Styles from './PlayerBar.module.scss';
 
 import PlayerContext from './../playercontext';
+import ThemeContext from './../themecontext';
 
 import BackIcon from './../../assets/buttonsvg/skip-back.svg';
 import PlayIcon from './../../assets/buttonsvg/play.svg';
@@ -17,9 +18,18 @@ import VolumeNormalIcon from './../../assets/buttonsvg/volume-1.svg';
 import VolumeNoneIcon from './../../assets/buttonsvg/volume-0.svg';
 import UpIcon from './../../assets/buttonsvg/chevron-up.svg';
 import DownIcon from './../../assets/buttonsvg/chevron-down.svg';
+import RepeatIcon from './../../assets/buttonsvg/repeat.svg';
+
+import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
+
+const ColorThief = require('color-thief');
 
 const PlayerBar = props => {
-    const { playPause, albumArt, currentTrack, albumTitle, albumArtist, audioSrc, audioDuration, setPlayPause } = useContext(PlayerContext);
+    const { playPause, albumArt, currentTrack, albumTitle, albumArtist,
+        audioVolume, audioSrc, audioDuration, linkBack, playerQueue,
+        setCurrentTrack, setAlbumTitle, setAlbumArtist, setLinkBack,
+        setAlbumArt, setAudioSrc, setAudioDuration,
+        setPlayPause, setAudioVolume } = useContext(PlayerContext);
     let audioPlayerRef = useRef(null);
     let history = useHistory();
 
@@ -28,11 +38,22 @@ const PlayerBar = props => {
     const [volumeDisplay, setVolumeDisplay] = useState(100);
     const [mobileOpenAlbumDetails, setMobileOpenAlbumDetails] = useState(false);
 
-    let acrylicColorStyle;
-    if (props.acrylicColor)
-        acrylicColorStyle = { '--acrylic-color': props.acrylicColor };
-    else
-        acrylicColorStyle = {};
+    // repeat and shuffle
+    const [loopTrack, setLoopTrack] = useState(false);
+
+    // acrylic color management
+    const [acrylicColorStyle, setAcrylicColorStyle] = useState({});
+    const { acrylicColor, setAcrylicColor, letAcrylicTints } = useContext(ThemeContext);
+    useEffect(() => {
+        if (!letAcrylicTints)
+            setAcrylicColorStyle({});
+        else {
+            if (acrylicColor && acrylicColor !== '--acrylic-color' && acrylicColor !== '')
+                setAcrylicColorStyle({ '--acrylic-color': acrylicColor })
+            else
+                setAcrylicColorStyle({});
+        }
+    }, [acrylicColor, letAcrylicTints]);
 
     // api endpoint -- same domain, port 5000
     let API = window.location.origin;
@@ -45,6 +66,94 @@ const PlayerBar = props => {
         }
         else {
             setPlayPause('play');
+        }
+    };
+
+    // advance on the playlist
+    // copied from PlayButton.js under
+    // minor modifications, don't forget to sync
+    // major changes in both the files
+    let setTheTrack = (i) => {
+        //////// copied from play button {
+
+        const getDominantColorAlbumArt = async (thisAlbumArt) => {
+            let imgEle = document.createElement('img');
+
+            imgEle.onerror = () => imgEle.src = AlbumArt;
+            imgEle.onload = () => {
+                let colorThief = new ColorThief();
+                let rgb = colorThief.getColor(imgEle, 1);
+                setAcrylicColor(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.6)`);
+            };
+
+
+            imgEle.crossOrigin = "Anonymous";
+            imgEle.src = thisAlbumArt;
+        };
+
+        const data = playerQueue[i];
+
+        setAudioSrc(data.audioSrc);
+
+        let duration = data.audioDuration.split(":");
+        setAudioDuration(parseFloat(duration[0]) * 60 + parseFloat(duration[1]));
+
+        setAlbumArt(data.albumArt);
+
+        setAlbumArtist(data.albumArtist);
+        setCurrentTrack(data.track);
+        setAlbumTitle(data.albumTitle);
+
+        getDominantColorAlbumArt(data.albumArt);
+
+        if (data.isPlaylist)
+            setLinkBack(`/playlist/${data.playlistTitle}`);
+        else
+            setLinkBack(`/album/${data.albumTitle}`);
+
+        //////// } copied from play button 
+    };
+    let nextTrack = () => {
+        setPlayPause('pause');      // temporary pause
+
+        let trackId = audioSrc;     // both are same
+
+        let i = 0;
+        for (; i < playerQueue.length; ++i) {
+            if (playerQueue[i].trackId === trackId) {
+                ++i;
+                break;
+            }
+        }
+
+        if (i >= playerQueue.length)
+            return;                 // queue ended
+
+        setTheTrack(i);
+
+        setPlayPause('play');
+    };
+    let prevTrack = () => {
+        if (audioPlayerRef.current.currentTime < 5) {
+            setPlayPause('pause');      // temporary pause
+            let trackId = audioSrc;     // both are same
+
+            let i = 0;
+            for (; i < playerQueue.length; ++i) {
+                if (playerQueue[i].trackId === trackId) {
+                    --i;
+                    break;
+                }
+            }
+
+            if (i < 0 || i >= playerQueue.length)
+                return;                 // nothing further back
+
+            setTheTrack(i);
+
+            setPlayPause('play');
+        } else {
+            audioPlayerRef.current.currentTime = 0;
         }
     };
 
@@ -65,34 +174,38 @@ const PlayerBar = props => {
             audioPlayerRef.current.pause();
     }, [playPause]);
 
-    let reduceVolume = () => {
-        if (audioPlayerRef.current.volume > 0)
-            audioPlayerRef.current.volume =
-                parseFloat(audioPlayerRef.current.volume - 0.1).toFixed(2);
+    useEffect(() => {
+        audioPlayerRef.current.volume = audioVolume;
 
-        if (audioPlayerRef.current.volume === 1.0)
+        if (audioVolume >= 0.8)
             setVolumeStatus('high');
-        else if (audioPlayerRef.current.volume === 0.0)
+        else if (parseFloat(audioVolume) === 0.0)
             setVolumeStatus('none');
         else
             setVolumeStatus('normal');
 
-        setVolumeDisplay(audioPlayerRef.current.volume * 100);
+        setVolumeDisplay(audioVolume * 100);
+    }, [audioVolume]);
+
+    useEffect(() => {
+        audioPlayerRef.current.loop = loopTrack;
+    }, [loopTrack]);
+
+    let reduceVolume = () => {
+        if (audioVolume > 0)
+            setAudioVolume(
+                parseFloat(audioPlayerRef.current.volume - 0.1).toFixed(2));
     };
     let increaseVolume = () => {
-        if (audioPlayerRef.current.volume < 1)
-            audioPlayerRef.current.volume =
-                parseFloat(audioPlayerRef.current.volume + 0.1).toFixed(2);
-
-        if (audioPlayerRef.current.volume === 1.0)
-            setVolumeStatus('high');
-        else if (audioPlayerRef.current.volume === 0.0)
-            setVolumeStatus('none');
-        else
-            setVolumeStatus('normal');
-
-        setVolumeDisplay(audioPlayerRef.current.volume * 100);
+        if (audioVolume < 1)
+            setAudioVolume(
+                parseFloat(audioPlayerRef.current.volume + 0.1).toFixed(2));
     };
+
+    let audioPlayerOnEndedHandler = () => {
+        if (!loopTrack)
+            nextTrack();
+    }
 
 
     return (
@@ -102,7 +215,7 @@ const PlayerBar = props => {
         >
             {/* Audio Player */}
             <audio
-                onEnded={() => setPlayPause('pause')}
+                onEnded={audioPlayerOnEndedHandler}
                 ref={audioPlayerRef}
             />
 
@@ -137,22 +250,24 @@ const PlayerBar = props => {
                     }
                 >
                     <span>
-                        <b
+                        <span
                             className={Styles.albumLinker}
                             onClick={() => {
-                                history.push(`/album/${albumTitle}`);
+                                history.push(linkBack);
                             }}
                         >
                             {currentTrack}
-                        </b>
+                        </span>
                         <br />
-                        <i>{albumArtist}</i>
+                        <span className={Styles.albumArtistInfo}>
+                            {albumArtist}
+                        </span>
                     </span>
                 </div>
             </div>
             <div className={Styles.center}>
                 <div>
-                    <button className={"cursor-pointer"}>
+                    <button className={"cursor-pointer"} onClick={prevTrack}>
                         <img data-dark-mode-compatible alt="Back" src={BackIcon} />
                     </button>
                     <button
@@ -168,8 +283,18 @@ const PlayerBar = props => {
                             }
                         />
                     </button>
-                    <button className={"cursor-pointer"}>
+                    <button className={"cursor-pointer"} onClick={nextTrack}>
                         <img data-dark-mode-compatible alt="Next" src={NextIcon} />
+                    </button>
+                    <button
+                        className={`${Styles.buttonSmall} cursor-pointer`}
+                        data-visible={mobileOpenAlbumDetails}
+                        data-active={loopTrack}
+                        onClick={
+                            () => setLoopTrack(!loopTrack)
+                        }
+                    >
+                        <img data-dark-mode-compatible alt="Repeat" src={RepeatIcon} />
                     </button>
                 </div>
                 <ProgressBar playerRef={audioPlayerRef} />

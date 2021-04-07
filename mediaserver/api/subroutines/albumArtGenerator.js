@@ -43,11 +43,11 @@ module.exports = () => {
                             })
                             .catch(e => {
                                 console.log('debug: albumArtGenerator: ', filePath);
-                                console.log(e);
+                                console.log('debug: albumArtGenerator: ', e);
                             });
                     })
-                    .catch(e => console.log(e));
+                    .catch(e => console.log('debug: albumArtGenerator: ', e));
             });
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log('debug: albumArtGenerator: ', err));
 };

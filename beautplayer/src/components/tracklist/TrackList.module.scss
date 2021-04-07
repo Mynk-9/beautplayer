@@ -10,6 +10,15 @@
         td {
             padding: 1rem;
             border: 0;
+
+            > * {
+                vertical-align: middle;
+                vertical-align: -webkit-baseline-middle;
+            }
+            img {
+                vertical-align: middle;
+                vertical-align: -webkit-baseline-middle;
+            }
         }
         td:nth-child(4) {
             @media only screen and (max-width: 540px) {

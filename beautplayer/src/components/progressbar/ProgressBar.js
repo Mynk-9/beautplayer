@@ -43,6 +43,9 @@ const ProgressBar = props => {
 
     useEffect(() => {
         if (playPause === 'play') {
+            setProgressVal(
+                parseInt(props.playerRef.current.currentTime)
+            );
             setProgressInterval(
                 setInterval(() => {
                     setProgressVal(
@@ -70,7 +73,7 @@ const ProgressBar = props => {
     };
 
     return (
-        <>
+        <div className={Styles.progressBarContainer}>
             <span className={Styles.time}>
                 {convertSecondsToMinsSecs(progressVal)}
             </span>
@@ -88,7 +91,7 @@ const ProgressBar = props => {
             <span className={Styles.time}>
                 {convertSecondsToMinsSecs(parseInt(audioDuration))}
             </span>
-        </>
+        </div>
     );
 };
 
