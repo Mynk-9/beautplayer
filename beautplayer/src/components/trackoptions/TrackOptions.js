@@ -9,9 +9,9 @@ import MoreHorizontalIcon from './../../assets/buttonsvg/more-horizontal.svg';
 const TrackOptions = props => {
     
     let options = [];
-    props.options.forEach(option => {
+    props.options.forEach((option, index) => {
         options.push(
-            <div className={Styles.optionsMenuItem}>
+            <div className={Styles.optionsMenuItem} key={index}>
                 <span>{option.component}</span>
                 <span>{option.text}</span>
             </div>
