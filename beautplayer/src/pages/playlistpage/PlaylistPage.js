@@ -205,6 +205,7 @@ const PlaylistPage = props => {
                         tracks={tracks}
                         showRemoveOption={true}
                         removeTrack={(trackId) => removeTrack(trackId)}
+                        showAddToQueueOption={true}
                     />
                 </div>
             </div>
