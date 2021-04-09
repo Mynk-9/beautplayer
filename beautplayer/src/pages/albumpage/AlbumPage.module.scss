@@ -58,11 +58,25 @@
             td:first-child {
                font-family: "Lato-LightItalic";
             }
+            td {
+               @media only screen and (max-width: 540px) {
+                  border-top: 1rem solid transparent;
+                  border-bottom: 1rem solid transparent;
+               }
+            }
+         }
+         tr:last-child {
+            td {
+               @media only screen and (max-width: 540px) {
+                  border-bottom: 0;
+               }
+            }
          }
 
          @media only screen and (max-width: 540px) {
             padding-right: 2rem; // same as left padding
             width: auto;
+            height: auto;
          }
       }
    }
