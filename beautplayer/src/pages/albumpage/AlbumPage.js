@@ -135,7 +135,7 @@ const AlbumPage = props => {
                     </table>
                 </div>
                 <div className={Styles.content}>
-                    <TrackList tracks={tracks} />
+                    <TrackList tracks={tracks} showAddToQueueOption={true} />
                 </div>
             </div>
         </>

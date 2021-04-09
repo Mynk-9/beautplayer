@@ -13,6 +13,7 @@ import { albumArt } from '../coverArtAPI';
 
 import PlusIcon from './../../assets/buttonsvg/plus.svg';
 import MinusIcon from './../../assets/buttonsvg/minus.svg';
+import PlusCircleIcon from './../../assets/buttonsvg/plus-circle.svg';
 
 // props: tracks, showRemoveOption, removeTrack(trackId)
 const TrackList = props => {
@@ -41,89 +42,100 @@ const TrackList = props => {
     let key = 0;
     let trackList = props.tracks.tracks.map((data) => {
         ++key;
+
+        const trackData = {
+            'trackId': data[3],
+            'audioSrc': data[3],
+            'audioDuration': data[2],
+            'track': data[0],
+            'albumArt': (
+                props.tracks.isPlaylist
+                    ? albumArt(data[4].replace('%2F', '/'))
+                    : props.tracks.albumArt
+            ),
+            'albumTitle': (
+                props.tracks.isPlaylist ? data[4] : props.tracks.album
+            ),
+            'albumArtist': data[1],
+            'isPlaylist': (
+                props.tracks.isPlaylist     // this is done to make
+                    ? true                  // sure undefined is 
+                    : false                 // not passed further
+            ),
+            'playlistTitle': props.tracks.playlistTitle,
+            'linkBack': (
+                props.isPlaylist
+                    ? `/playlist/${props.tracks.playlistTitle}`
+                    : `/album/${props.tracks.isPlaylist ? data[4] : props.tracks.album}`
+            ),
+        };
+
+        // generate track options
+        let trackOptionsList = [];
+        trackOptionsList.push({
+            'text': 'Like',
+            'component': <TrackLiker trackId={trackData.trackId} />,
+        });
+        if (props.showAddToQueueOption) { // optional component
+            trackOptionsList.push({
+                'text': 'Add to Queue',
+                'component': (
+                    <img
+                        src={PlusCircleIcon}
+                        onClick={() => addToQueue(trackData)}
+                        data-dark-mode-compatible
+                    />
+                ),
+            });
+        }
+        trackOptionsList.push({
+            'text': 'Add to Playlist',
+            'component': (
+                <img
+                    src={PlusIcon}
+                    onClick={() => {
+                        setAddToPlaylistModalTrackId(trackData.trackId);
+                        setAddToPlaylistModalTrackName(trackData.track);
+                        setAddToPlaylistModalVisible(true);
+                    }}
+                    data-dark-mode-compatible
+                />
+            ),
+        });
+        if (props.showRemoveOption) { // optional component
+            trackOptionsList.push({
+                'text': 'Remove',
+                'component': (
+                    <img
+                        src={MinusIcon}
+                        onClick={() => props.removeTrack(trackData.trackId)}
+                        data-dark-mode-compatible
+                    />
+                ),
+            });
+        }
+
         return (
             <tr key={key} className={Styles.trackEntry}>
                 <td>
-                    {props.showRemoveOption
-                        ? <TrackOptions
-                            options={[
-                                {
-                                    'component': <TrackLiker trackId={data[3]} />,
-                                    'text': 'Like',
-                                },
-                                {
-                                    'component':
-                                        <img
-                                            src={PlusIcon}
-                                            onClick={() => {
-                                                setAddToPlaylistModalTrackId(data[3]);
-                                                setAddToPlaylistModalTrackName(data[0]);
-                                                setAddToPlaylistModalVisible(true);
-                                            }}
-                                            data-dark-mode-compatible
-                                        />,
-                                    'text': 'Add to Playlist',
-                                },
-                                {
-                                    'component':
-                                        <img
-                                            src={MinusIcon}
-                                            onClick={() => props.removeTrack(data[3])}
-                                            data-dark-mode-compatible
-                                        />,
-                                    'text': 'Remove',
-                                },
-                            ]}
-                        />
-                        : <TrackOptions
-                            options={[
-                                {
-                                    'component': <TrackLiker trackId={data[3]} />,
-                                    'text': 'Like',
-                                },
-                                {
-                                    'component':
-                                        <img
-                                            src={PlusIcon}
-                                            onClick={() => {
-                                                setAddToPlaylistModalTrackId(data[3]);
-                                                setAddToPlaylistModalTrackName(data[0]);
-                                                setAddToPlaylistModalVisible(true);
-                                            }}
-                                            data-dark-mode-compatible
-                                        />,
-                                    'text': 'Add to Playlist',
-                                },
-                            ]}
-                        />
-                    }
+                    <TrackOptions options={trackOptionsList} />
                 </td>
                 <td>
                     <PlayButton
-                        audioSrc={data[3]}
-                        audioDuration={data[2]}
-                        track={data[0]}
-                        albumArt={
-                            props.tracks.isPlaylist
-                                ? albumArt(data[4].replace('%2F', '/'))
-                                : props.tracks.albumArt
-                        }
-                        albumTitle={
-                            props.tracks.isPlaylist ? data[4] : props.tracks.album
-                        }
-                        albumArtist={data[1]}
-                        isPlaylist={
-                            props.tracks.isPlaylist     // this is done to make
-                                ? true                  // sure undefined is 
-                                : false                 // not passed further
-                        }
-                        playlistTitle={props.tracks.playlistTitle}
-                        addToQueue={addToQueue}
+                        audioSrc={trackData.audioSrc}
+                        audioDuration={trackData.audioDuration}
+                        track={trackData.track}
+                        albumArt={trackData.albumArt}
+                        albumTitle={trackData.albumTitle}
+                        albumArtist={trackData.albumArtist}
+                        isPlaylist={trackData.isPlaylist}
+                        playlistTitle={trackData.playlistTitle}
+                        addToQueue={() => addToQueue(trackData)}
                     />
                 </td>
-                <td>{data[0]}</td>
-                <td>{data[1]}</td>
-                <td>{data[2]}</td>
+                <td>{trackData.track}</td>
+                <td>{trackData.albumArtist}</td>
+                <td>{trackData.audioDuration}</td>
             </tr>
         );
     });
