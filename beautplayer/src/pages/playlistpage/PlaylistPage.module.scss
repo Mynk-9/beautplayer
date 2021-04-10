@@ -1,0 +1,35 @@
+@import "./../albumpage/AlbumPage.module.scss";
+
+// simply import album page styles, no need to rewrite
+
+// overloads:
+.section .header table tr {
+    td * {
+        vertical-align: middle;
+        margin: auto;
+    }
+
+    // action buttons
+    button {
+        margin: 0.5rem;
+        outline: 0;
+        border: 0;
+        padding: 0.5rem;
+
+        color: var(--primary-color);
+        border-radius: var(--border-radius);
+        background-color: var(--non-transparent-acrylic-like-color);
+
+        cursor: pointer;
+
+        transition: background-color var(--std-color-transition-time) ease;
+
+        span {
+            margin-left: 0.5rem;
+
+            @media only screen and (max-width: 540px) {
+                display: none;
+            }
+        }
+    }
+}

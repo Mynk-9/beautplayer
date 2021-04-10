@@ -90,10 +90,35 @@ router.post('/', async (req, res, next) => {
         });
 });
 
-// handle DELETE requests on /playlists
-router.delete('/', (req, res, next) => {
-    const trackId = req.body.trackId;
-    const playlistName = req.body.playlistName;
+// handle DELETE requests on /playlists/:playlistName/
+// delete the playlist
+router.delete('/:playlistName', (req, res, next) => {
+    const playlistName = req.params.playlistName;
+
+    Playlists
+        .deleteOne(
+            { _id: playlistName }
+        )
+        .then(result => {
+            res.status(200).json({
+                message: 'Removed successfully.',
+                systemMessage: result
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(404).json({
+                message: 'Encountered an error',
+                error: err
+            });
+        });
+});
+
+// handle DELETE requests on /playlists/:playlistName/:trackId
+// delete the track from playlist
+router.delete('/:playlistName/:trackId', (req, res, next) => {
+    const trackId = req.params.trackId;
+    const playlistName = req.params.playlistName;
 
     Playlists
         .findOneAndUpdate(
@@ -118,7 +143,5 @@ router.delete('/', (req, res, next) => {
             });
         });
 });
-
-router.delete('/')
 
 module.exports = router;

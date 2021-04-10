@@ -47,12 +47,36 @@
          height: var(--albumArtHeight);
          padding-left: 2rem;
 
+         // width = 100% width of parent element 
+         //          - width of album art
+         //          - left margin of album art
+         width: calc(100% - var(--albumArtHeight) - 5rem);
+
          tr {
             height: calc(var(--albumArtHeight) / 4);
 
             td:first-child {
                font-family: "Lato-LightItalic";
             }
+            td {
+               @media only screen and (max-width: 540px) {
+                  border-top: 1rem solid transparent;
+                  border-bottom: 1rem solid transparent;
+               }
+            }
+         }
+         tr:last-child {
+            td {
+               @media only screen and (max-width: 540px) {
+                  border-bottom: 0;
+               }
+            }
+         }
+
+         @media only screen and (max-width: 540px) {
+            padding-right: 2rem; // same as left padding
+            width: auto;
+            height: auto;
          }
       }
    }

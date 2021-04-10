@@ -1,8 +1,5 @@
-const mongoose = require('mongoose');
 const mm = require('music-metadata');
 const { basename, extname } = require('path');
-
-const Tracks = require('./../models/tracks');
 
 module.exports = async (files) => {
     let finalList = [];
@@ -30,13 +27,21 @@ module.exports = async (files) => {
                     metaData.common.musicbrainz_trackid;
 
                 if (metaData.common.title && metaData.format.duration)  // got both
+                {
+                    if (!metaData.common.album)
+                        file['album'] = file['title'];
                     finalList.push(file);
+                }
                 else if (metaData.format.duration) {    // got length
                     file['title'] = basename(path, extname(path));
+                    if (!metaData.common.album)
+                        file['album'] = file['title'];
                     finalList.push(file);
                 }
                 else if (metaData.common.title) { // got title
                     file['length'] = -1;
+                    if (!metaData.common.album)
+                        file['album'] = file['title'];
                     finalList.push(file);
                 }
                 else
@@ -47,18 +52,6 @@ module.exports = async (files) => {
                 console.log('debug: metaDataScanner:  NOT_MUSIC_FILE: ', path);
             });
     }
-
-    await mongoose.connection.db.collection('tracks')
-        .drop()
-        .catch(e => console.log(e));
-    await mongoose.connection.db.createCollection('tracks')
-        .catch(e => console.log(e));
-
-    await Tracks.insertMany(finalList)
-        .catch(e => {
-            console.log(e);
-            throw e;
-        });
 
     return finalList;
 };

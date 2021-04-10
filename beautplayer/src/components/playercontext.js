@@ -8,6 +8,28 @@ const PlayerContext = createContext({
     currentTrack: '',
     audioSrc: '',
     audioDuration: 0,
+    audioVolume: 1.0,
+    linkBack: '',
+
+    playerQueue: [],
+    /*
+        see components/tracklist/TrackList.js for more info
+        [
+            {
+                'trackId': ...,
+                'audioSrc': ...,
+                'audioDuration': ...,
+                'track': ...,
+                'albumArt': ...,
+                'albumTitle': ...,
+                'albumArtist': ...,
+                'isPlaylist': ...,
+                'playlistTitle': ...,
+                'linkBack': ...
+            }, 
+            ...
+        ]
+    */
 
     setPlayPause: () => { },
     setAlbumArt: () => { },
@@ -16,6 +38,10 @@ const PlayerContext = createContext({
     setCurrentTrack: () => { },
     setAudioSrc: () => { },
     setAudioDuration: () => { },
+    setAudioVolume: () => { },
+    setLinkBack: () => { },
+
+    setPlayerQueue: () => { },
 });
 
 export default PlayerContext;

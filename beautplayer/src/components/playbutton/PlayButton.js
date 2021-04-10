@@ -1,19 +1,54 @@
 import { React, useState, useEffect, useContext } from 'react';
 import './../commonstyles.scss';
 
+import axios from 'axios';
+import * as base64 from 'byte-base64';
+
 import PlayerContext from '../playercontext';
+import ThemeContext from '../themecontext';
 
 import PlayIcon from './../../assets/buttonsvg/play.svg';
 import PauseIcon from './../../assets/buttonsvg/pause.svg';
 
+import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
+
+const ColorThief = require('color-thief');
+
 const PlayButton = props => {
-    const { playPause, setPlayPause, setCurrentTrack, setAlbumTitle, setAlbumArtist,
+    const { playPause, setPlayPause, setCurrentTrack, setAlbumTitle, setAlbumArtist, setLinkBack,
         setAlbumArt, audioSrc, setAudioSrc, setAudioDuration } = useContext(PlayerContext);
+
+    const { setAcrylicColor, letAcrylicTints, artContext } = useContext(ThemeContext);
 
     const [playButtonState, setPlayButtonState] = useState('play-button');
 
+    // INFO:
+    // following code is also copied to PlayerBar.js under minor modifications
+    // in function nextTrack, don't forget to reflect any major changes there too
+
+    // to get the acrylic color tint
+    const getDominantColorAlbumArt = async () => {
+        let imgEle = document.createElement('img');
+        // imgEle.loading = 'lazy';
+
+        imgEle.onerror = () => imgEle.src = AlbumArt;
+        imgEle.onload = () => {
+            let colorThief = new ColorThief();
+            let rgb = colorThief.getColor(imgEle, 1);
+            setAcrylicColor(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.6)`);
+        };
+
+
+        imgEle.crossOrigin = "Anonymous";
+        imgEle.src = props.albumArt;
+
+        // let colorThief = new ColorThief();
+        // let rgb = colorThief.getColor(artContext.current);
+        // setAcrylicColor(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.6)`);
+    };
+
     // play/pause toggle
-    let play = () => {
+    const play = () => {
         if (audioSrc === props.audioSrc) {
             if (playPause === 'play')
                 setPlayPause('pause');
@@ -26,9 +61,19 @@ const PlayButton = props => {
             setAudioDuration(parseFloat(duration[0]) * 60 + parseFloat(duration[1]));
 
             setAlbumArt(props.albumArt);
+
             setAlbumArtist(props.albumArtist);
-            setCurrentTrack(props.track)
+            setCurrentTrack(props.track);
             setAlbumTitle(props.albumTitle);
+
+            getDominantColorAlbumArt();
+
+            if (props.isPlaylist)
+                setLinkBack(`/playlist/${props.playlistTitle}`);
+            else
+                setLinkBack(`/album/${props.albumTitle}`);
+
+            props.addToQueue(); // add the track to queue
 
             setPlayPause('play');
         }
