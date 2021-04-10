@@ -219,12 +219,6 @@ const MainPage = (props) => {
                     </div>
                 </div>
             </div>
-            {/* <PlayerBar
-                acrylicColor={acrylicColor}
-                albumArt={AlbumArt}
-                AlbumTitle="Awesome Album"
-                albumArtist="Human"
-            /> */}
         </div>
     );
 }
