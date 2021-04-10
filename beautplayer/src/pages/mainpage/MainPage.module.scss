@@ -1,14 +1,40 @@
 .mainBody {
-   padding-top: 5.25rem;
+   padding-top: 6rem;
    padding-bottom: 6.25rem;
 
-   .section {
-      padding: 1rem;
+   .sectionHeadList {
+      padding: 2rem;
+      
+      overflow-x: auto;
+      white-space: nowrap;
 
       .sectionHead {
-         padding-bottom: 0.5rem;
-         padding-left: 1rem;
+         font-size: xx-large;
+         font-family: "Lato-Light";
+
+         cursor: pointer;
       }
+      .sectionHead[data-selected="true"] {
+         font-family: "Lato";
+         // text-decoration: overline;
+      }
+      .sectionHead + .sectionHead {
+         margin-left: 1rem;
+      }
+   }
+   
+   .section[data-selected="true"] {
+      display: block;
+      opacity: 1;
+
+      animation: MainPageSectionsAnimation var(--std-color-transition-time) ease;
+   }
+   .section {
+      display: none;
+      opacity: 0;
+
+      padding: 1rem;
+
       .sectionBody {
          padding-top: 0.5rem;
          margin: 0 -1rem 0 -1rem;
@@ -28,5 +54,22 @@
             }
          }
       }
+   }
+}
+
+@keyframes MainPageSectionsAnimation {
+   from {
+      opacity: 0;
+   }
+   to {
+      opacity: 1;
+   }
+}
+@keyframes MainPageSectionsAnimationAlternate {
+   from {
+      opacity: 1;
+   }
+   to {
+      opacity: 0;
    }
 }

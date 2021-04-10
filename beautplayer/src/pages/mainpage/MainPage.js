@@ -148,19 +148,74 @@ const MainPage = (props) => {
                 });
     }, []);
 
+    const selectSection = (sectionHead) => {
+        let sectionHeadList = sectionHead.parentNode;
+        let sectionList = sectionHead.parentNode.parentNode.childNodes;
+        let sectionHeads = sectionHeadList.childNodes;
+        const sectionFor = sectionHead.getAttribute('data-for');
+
+        // set section head
+        for (const thisSectionHead of sectionHeads)
+            thisSectionHead.setAttribute('data-selected', false);
+        sectionHead.setAttribute('data-selected', true);
+
+        // set section
+        for (const thisSection of sectionList) {
+            if (thisSection.getAttribute('data-for') === sectionFor)
+                thisSection.setAttribute('data-selected', true);
+            else
+                thisSection.setAttribute('data-selected', false);
+        }
+
+        // set persistent storage
+        PersistentStorage.MainPageActivePage = sectionFor;
+    };
+
     return (
         <div>
             <div className={Styles.mainBody}>
-                <div className={Styles.section}>
-                    <div className={Styles.sectionHead}>Playlists</div>
-                    <div className={Styles.sectionBody}>
-                        {allPlaylists}
-                    </div>
+                <div className={Styles.sectionHeadList}>
+                    <span
+                        className={Styles.sectionHead}
+                        onClick={(e) => selectSection(e.target)}
+                        data-for={"albums"}
+                        data-selected={
+                            PersistentStorage.MainPageActivePage === "albums"
+                        }
+                    >
+                        Albums
+                    </span>
+                    <span
+                        className={Styles.sectionHead}
+                        onClick={(e) => selectSection(e.target)}
+                        data-for={"playlist"}
+                        data-selected={
+                            PersistentStorage.MainPageActivePage === "playlist"
+                        }
+                    >
+                        Playlists
+                    </span>
                 </div>
-                <div className={Styles.section}>
-                    <div className={Styles.sectionHead}>All Albums</div>
+                <div
+                    className={Styles.section}
+                    data-for={"albums"}
+                    data-selected={
+                        PersistentStorage.MainPageActivePage === "albums"
+                    }
+                >
                     <div className={`${Styles.sectionBody} ${Styles.sectionBodyNoScroll}`}>
                         {allAlbums}
+                    </div>
+                </div>
+                <div
+                    className={Styles.section}
+                    data-for={"playlist"}
+                    data-selected={
+                        PersistentStorage.MainPageActivePage === "playlist"
+                    }
+                >
+                    <div className={`${Styles.sectionBody} ${Styles.sectionBodyNoScroll}`}>
+                        {allPlaylists}
                     </div>
                 </div>
             </div>
