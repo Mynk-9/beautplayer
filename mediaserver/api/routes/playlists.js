@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Playlists = require('../models/playlists');
+const playlistArtGenerator = require('./../subroutines/playlistArtGenerator');
 
 // handle GET to /playlists
 router.get('/', (req, res, next) => {
@@ -81,6 +82,7 @@ router.post('/', async (req, res, next) => {
                 track: track,
             });
         })
+        .then(() => playlistArtGenerator(playList))
         .catch(err => {
             console.log(err);
             res.status(500).json({
@@ -135,6 +137,7 @@ router.delete('/:playlistName/:trackId', (req, res, next) => {
                 systemMessage: result
             });
         })
+        .then(() => playlistArtGenerator(playlistName))
         .catch(err => {
             console.log(err);
             res.status(404).json({
