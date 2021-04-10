@@ -15,6 +15,10 @@
                 vertical-align: middle;
                 vertical-align: -webkit-baseline-middle;
             }
+            img {
+                vertical-align: middle;
+                vertical-align: -webkit-baseline-middle;
+            }
         }
         td:nth-child(4) {
             @media only screen and (max-width: 540px) {
@@ -23,6 +27,14 @@
         }
         td:nth-child(5) {
             text-align: right;
+        }
+
+        // taken from player queue styles at PlayerQueue.module.scss
+        td:nth-child(1),
+        td:nth-child(2),
+        td:last-child {
+            width: 1%;
+            white-space: nowrap;
         }
     }
     .trackEntry:first-child {
