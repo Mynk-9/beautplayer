@@ -1,5 +1,5 @@
 import { React, useState, useEffect, useContext, useRef } from 'react';
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import ProgressBar from './../progressbar/ProgressBar';
 import './../commonstyles.scss';
 import Styles from './PlayerBar.module.scss';
@@ -32,6 +32,9 @@ const PlayerBar = props => {
         setPlayPause, setAudioVolume } = useContext(PlayerContext);
     let audioPlayerRef = useRef(null);
     let history = useHistory();
+    // location hook required to retain after navigation the updated document
+    // title containing the track name
+    let location = useLocation();
 
     // volume states: high, normal, none, muted
     const [volumeStatus, setVolumeStatus] = useState('high');
@@ -134,6 +137,8 @@ const PlayerBar = props => {
         setPlayPause('play');
     };
     let prevTrack = () => {
+        // go to prev track if current time < 5s
+        // else set current time to 0s
         if (audioPlayerRef.current.currentTime < 5) {
             setPlayPause('pause');      // temporary pause
             let trackId = audioSrc;     // both are same
@@ -191,6 +196,12 @@ const PlayerBar = props => {
         audioPlayerRef.current.loop = loopTrack;
     }, [loopTrack]);
 
+    useEffect(() => {
+        document.title = 'BeautPlayer'
+        if (currentTrack)
+            document.title += ' - ' + currentTrack;
+    }, [currentTrack, location]);
+
     let reduceVolume = () => {
         if (audioVolume > 0)
             setAudioVolume(
@@ -206,7 +217,6 @@ const PlayerBar = props => {
         if (!loopTrack)
             nextTrack();
     }
-
 
     return (
         <footer
