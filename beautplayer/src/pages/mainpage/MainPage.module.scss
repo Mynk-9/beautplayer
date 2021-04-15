@@ -1,14 +1,76 @@
 .mainBody {
-   padding-top: 5.25rem;
+   padding-top: 6rem;
    padding-bottom: 6.25rem;
 
-   .section {
-      padding: 1rem;
+   .sectionHeadList {
+      padding: 2rem;
+      padding-bottom: 1rem;
+      
+      overflow-x: auto;
+      white-space: nowrap;
 
       .sectionHead {
-         padding-bottom: 0.5rem;
-         padding-left: 1rem;
+         font-size: xx-large;
+         font-family: "Lato-Light";
+
+         cursor: pointer;
       }
+      .sectionHead[data-selected="true"] {
+         font-family: "Lato";
+         // text-decoration: overline;
+      }
+      .sectionHead + .sectionHead {
+         margin-left: 1rem;
+      }
+
+      .sectionOption {
+         padding: 0.5rem;
+         font-size: large;
+
+         span + span {
+            margin-left: 1rem;
+         }
+
+         select {
+            color: var(--primary-color);
+            background-color: var(--transparent-color);
+            appearance: inherit;
+            text-decoration: underline dotted;
+
+            margin: 0 1rem;
+            outline: none;
+            border: none;
+
+            cursor: pointer;
+
+            option {
+               border: none;
+               outline: none;
+               margin: 0;
+               padding: 1rem;
+
+               background-color: var(--secondary-color);
+            }
+         }
+
+         input[type="checkbox"] {
+            background-color: transparent;
+         }
+      }
+   }
+   
+   .section[data-selected="true"] {
+      display: block;
+      opacity: 1;
+
+      animation: MainPageSectionsAnimation 300ms ease;
+   }
+   .section {
+      display: none;
+      opacity: 0;
+
+      padding: 1rem;
+
       .sectionBody {
          padding-top: 0.5rem;
          margin: 0 -1rem 0 -1rem;
@@ -28,5 +90,26 @@
             }
          }
       }
+   }
+}
+
+@keyframes MainPageSectionsAnimation {
+   from {
+      opacity: 0;
+      transform: translateY(1rem);
+   }
+   to {
+      opacity: 1;
+      transform: translateY(0%);
+   }
+}
+@keyframes MainPageSectionsAnimationAlternate {
+   from {
+      opacity: 1;
+      transform: translateY(0%);
+   }
+   to {
+      opacity: 0;
+      transform: translateY(1rem);
    }
 }
