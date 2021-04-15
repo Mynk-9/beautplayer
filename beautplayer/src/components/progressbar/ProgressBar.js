@@ -41,7 +41,14 @@ const ProgressBar = props => {
         setProgressVal(0);
     }, [audioDuration]);
 
-    useEffect(() => {
+    const playPauseHandle = () => {
+        if (!props.playerRef) {
+            console.log('player reference undefined, retry in 1 sec');
+            setTimeout(() => playPauseHandle(), 1000);
+            clearInterval(progressInterval);
+            return;
+        }
+
         if (playPause === 'play') {
             setProgressVal(
                 parseInt(props.playerRef.current.currentTime)
@@ -59,7 +66,8 @@ const ProgressBar = props => {
                 Math.round(props.playerRef.current.currentTime)
             );
         }
-    }, [playPause]);
+    };
+    useEffect(() => playPauseHandle(), [playPause]);
 
     const handleProgressBarInterrupt = (e) => {
         const cursorPosX = parseInt(e.clientX);
