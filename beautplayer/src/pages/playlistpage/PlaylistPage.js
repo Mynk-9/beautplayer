@@ -10,6 +10,7 @@ import ThemeContext from './../../components/themecontext';
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg'
 import PlayIcon from './../../assets/buttonsvg/play.svg';
 import TrashIcon from './../../assets/buttonsvg/trash-2.svg';
+import PlusCircleIcon from './../../assets/buttonsvg/plus-circle.svg';
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
 import { playlistArt } from './../../components/coverArtAPI';
@@ -139,6 +140,18 @@ const PlaylistPage = props => {
         refreshPlaylist();
     };
 
+    const deletePlaylist = () => {
+
+    };
+
+    const addPlaylistToQueue = () => {
+
+    };
+
+    const playPlaylist = () => {
+
+    };
+
     return (
         <>
             <div className={Styles.section}>
@@ -184,6 +197,18 @@ const PlaylistPage = props => {
                                             src={PlayIcon}
                                             data-dark-mode-compatible
                                         />
+                                        <span>Play Playlist</span>
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            console.log('add to queue');
+                                        }}
+                                    >
+                                        <img
+                                            src={PlusCircleIcon}
+                                            data-dark-mode-compatible
+                                        />
+                                        <span>Add to Queue</span>
                                     </button>
                                     <button
                                         onClick={() => {
@@ -194,6 +219,7 @@ const PlaylistPage = props => {
                                             src={TrashIcon}
                                             data-dark-mode-compatible
                                         />
+                                        <span>Delete Playlist</span>
                                     </button>
                                 </td>
                             </tr>

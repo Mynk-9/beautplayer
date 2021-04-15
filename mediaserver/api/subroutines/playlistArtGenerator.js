@@ -33,6 +33,7 @@ module.exports = (plName) => {
             const tracks = playlist.tracks;
             let options;
 
+            // imageWidth and imageHeight properties are for individual images
             switch (tracks.length) {
                 case 0:
                     break;
@@ -43,8 +44,8 @@ module.exports = (plName) => {
                         ],
                         width: 1,
                         height: 1,
-                        imageWidth: 1000,
-                        imageHeight: 1000,
+                        imageWidth: 500,
+                        imageHeight: 500,
                         backgroundImage: '',
                         spacing: 0
                     };
@@ -58,7 +59,7 @@ module.exports = (plName) => {
                         width: 2,
                         height: 1,
                         imageWidth: 500,
-                        imageHeight: 1000,
+                        imageHeight: 500,
                         backgroundImage: '',
                         spacing: 0
                     };
