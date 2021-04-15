@@ -9,6 +9,13 @@ const ProgressBar = props => {
     const [progressInterval, setProgressInterval] = useState();
     const progressBarRef = useRef();
 
+    // cleanup of interval on component unmount
+    useEffect(() => {
+        return () => {
+            clearInterval(progressInterval);
+        };
+    }, []);
+
     const convertSecondsToMinsSecs = (secs) => {
         if (isNaN(secs))
             return '-/-';
@@ -53,13 +60,14 @@ const ProgressBar = props => {
             setProgressVal(
                 parseInt(props.playerRef.current.currentTime)
             );
-            setProgressInterval(
-                setInterval(() => {
+            setProgressInterval(prevInterval => {
+                clearInterval(prevInterval);
+                return setInterval(() => {
                     setProgressVal(
                         parseInt(props.playerRef.current.currentTime)
                     );
-                }, 1000)
-            );
+                }, 1000);
+            });
         } else {
             clearInterval(progressInterval);
             setProgressVal(
