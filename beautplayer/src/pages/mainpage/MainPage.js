@@ -243,6 +243,7 @@ const MainPage = (props) => {
         _allAlbums.sort(albumsSortFunctions[sortBy]);
         setAllAlbums(_allAlbums);
         PersistentStorage.MainPageAllAlbumCards = _allAlbums;
+        PersistentStorage.MainPageAlbumsSort = sortBy;
     };
 
     return (
@@ -278,10 +279,30 @@ const MainPage = (props) => {
                                 id={"main-page-album-sort"}
                                 onChange={(e) => sortChange(e.target.value)}
                             >
-                                <option value="name">Name</option>
-                                <option value="name-reverse">Name (reverse)</option>
-                                <option value="release-year">Release Year</option>
-                                <option value="release-year-reverse">Release Year (reverse)</option>
+                                <option
+                                    value="name"
+                                    selected={PersistentStorage.MainPageAlbumsSort === 'name'}
+                                >
+                                    Name
+                                    </option>
+                                <option
+                                    value="name-reverse"
+                                    selected={PersistentStorage.MainPageAlbumsSort === 'name-reverse'}
+                                >
+                                    Name (reverse)
+                                    </option>
+                                <option
+                                    value="release-year"
+                                    selected={PersistentStorage.MainPageAlbumsSort === 'release-year'}
+                                >
+                                    Release Year
+                                    </option>
+                                <option
+                                    value="release-year-reverse"
+                                    selected={PersistentStorage.MainPageAlbumsSort === 'release-year-reverse'}
+                                >
+                                    Release Year (reverse)
+                                    </option>
                             </select>
                         </span>
                     </div>
