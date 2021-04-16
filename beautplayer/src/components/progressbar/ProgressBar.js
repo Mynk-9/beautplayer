@@ -9,13 +9,6 @@ const ProgressBar = props => {
     const [progressInterval, setProgressInterval] = useState();
     const progressBarRef = useRef();
 
-    // cleanup of interval on component unmount
-    useEffect(() => {
-        return () => {
-            clearInterval(progressInterval);
-        };
-    }, []);
-
     const convertSecondsToMinsSecs = (secs) => {
         if (isNaN(secs))
             return '-/-';
@@ -48,34 +41,25 @@ const ProgressBar = props => {
         setProgressVal(0);
     }, [audioDuration]);
 
-    const playPauseHandle = () => {
-        if (!props.playerRef) {
-            console.log('player reference undefined, retry in 1 sec');
-            setTimeout(() => playPauseHandle(), 1000);
-            clearInterval(progressInterval);
-            return;
-        }
-
+    useEffect(() => {
         if (playPause === 'play') {
             setProgressVal(
-                parseInt(props.playerRef.current.currentTime)
+                parseInt(props.playerRef?.current?.currentTime)
             );
-            setProgressInterval(prevInterval => {
-                clearInterval(prevInterval);
-                return setInterval(() => {
+            setProgressInterval(
+                setInterval(() => {
                     setProgressVal(
-                        parseInt(props.playerRef.current.currentTime)
+                        parseInt(props.playerRef?.current?.currentTime)
                     );
-                }, 1000);
-            });
+                }, 1000)
+            );
         } else {
             clearInterval(progressInterval);
             setProgressVal(
-                Math.round(props.playerRef.current.currentTime)
+                Math.round(props.playerRef?.current?.currentTime)
             );
         }
-    };
-    useEffect(() => playPauseHandle(), [playPause]);
+    }, [playPause]);
 
     const handleProgressBarInterrupt = (e) => {
         const cursorPosX = parseInt(e.clientX);
