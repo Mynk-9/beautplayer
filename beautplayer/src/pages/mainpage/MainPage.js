@@ -232,10 +232,6 @@ const MainPage = (props) => {
                 'data-visible',
                 sectionOption.getAttribute('data-for') === sectionFor
             );
-            // if (sectionOption.getAttribute('data-for') === sectionFor)
-            //     sectionOption.style.display = 'block';
-            // else
-            //     sectionOption.style.display = 'none';
         }
 
         // set persistent storage
