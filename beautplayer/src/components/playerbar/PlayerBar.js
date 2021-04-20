@@ -28,8 +28,8 @@ import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
 const ColorThief = require('color-thief');
 
 const PlayerBar = props => {
-    const { playPause, albumArt, currentTrack, albumTitle, albumArtist,
-        audioVolume, audioSrc, audioDuration, linkBack, playerQueue,
+    const { playPause, albumArt, currentTrack, albumArtist,
+        audioVolume, audioSrc, linkBack, playerQueue,
         setCurrentTrack, setAlbumTitle, setAlbumArtist, setLinkBack,
         setAlbumArt, setAudioSrc, setAudioDuration, setPlayPause,
         setAudioVolume, setPlayerQueue } = useContext(PlayerContext);
@@ -152,7 +152,9 @@ const PlayerBar = props => {
         if (playPause === 'pause') audioPlayerRef.current.pause();
         else audioPlayerRef.current.play();
 
-    }, [audioSrc]);
+    }, [audioSrc]); // eslint-disable-line react-hooks/exhaustive-deps
+    // linter recommendation here is inaccurate, 
+    // so disabled message for this line
 
     useEffect(() => {
         if (playPause === 'play')
