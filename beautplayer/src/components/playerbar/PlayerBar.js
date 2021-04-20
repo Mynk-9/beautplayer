@@ -4,6 +4,8 @@ import ProgressBar from './../progressbar/ProgressBar';
 import './../commonstyles.scss';
 import Styles from './PlayerBar.module.scss';
 
+import QueueManager from './../queuemanager';
+
 import PlayerContext from './../playercontext';
 import ThemeContext from './../themecontext';
 
@@ -19,6 +21,7 @@ import VolumeNoneIcon from './../../assets/buttonsvg/volume-0.svg';
 import UpIcon from './../../assets/buttonsvg/chevron-up.svg';
 import DownIcon from './../../assets/buttonsvg/chevron-down.svg';
 import RepeatIcon from './../../assets/buttonsvg/repeat.svg';
+import ShuffleIcon from './../../assets/buttonsvg/shuffle.svg';
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
 
@@ -28,8 +31,8 @@ const PlayerBar = props => {
     const { playPause, albumArt, currentTrack, albumTitle, albumArtist,
         audioVolume, audioSrc, audioDuration, linkBack, playerQueue,
         setCurrentTrack, setAlbumTitle, setAlbumArtist, setLinkBack,
-        setAlbumArt, setAudioSrc, setAudioDuration,
-        setPlayPause, setAudioVolume } = useContext(PlayerContext);
+        setAlbumArt, setAudioSrc, setAudioDuration, setPlayPause,
+        setAudioVolume, setPlayerQueue } = useContext(PlayerContext);
     let audioPlayerRef = useRef(null);
     let history = useHistory();
     // location hook required to retain after navigation the updated document
@@ -43,6 +46,7 @@ const PlayerBar = props => {
 
     // repeat and shuffle
     const [loopTrack, setLoopTrack] = useState(false);
+    const [shuffle, setShuffle] = useState(false);
 
     // acrylic color management
     const [acrylicColorStyle, setAcrylicColorStyle] = useState({});
@@ -76,7 +80,7 @@ const PlayerBar = props => {
     // copied from PlayButton.js under
     // minor modifications, don't forget to sync
     // major changes in both the files
-    let setTheTrack = (i) => {
+    let setTheTrack = (data) => {
         //////// copied from play button {
 
         const getDominantColorAlbumArt = async (thisAlbumArt) => {
@@ -94,7 +98,6 @@ const PlayerBar = props => {
             imgEle.src = thisAlbumArt;
         };
 
-        const data = playerQueue[i];
 
         setAudioSrc(data.audioSrc);
 
@@ -120,19 +123,8 @@ const PlayerBar = props => {
         setPlayPause('pause');      // temporary pause
 
         let trackId = audioSrc;     // both are same
-
-        let i = 0;
-        for (; i < playerQueue.length; ++i) {
-            if (playerQueue[i].trackId === trackId) {
-                ++i;
-                break;
-            }
-        }
-
-        if (i >= playerQueue.length)
-            return;                 // queue ended
-
-        setTheTrack(i);
+        let trackData = QueueManager.getNextTrack(playerQueue, trackId, setPlayerQueue, null, shuffle);
+        setTheTrack(trackData);
 
         setPlayPause('play');
     };
@@ -141,20 +133,10 @@ const PlayerBar = props => {
         // else set current time to 0s
         if (audioPlayerRef.current.currentTime < 5) {
             setPlayPause('pause');      // temporary pause
+
             let trackId = audioSrc;     // both are same
-
-            let i = 0;
-            for (; i < playerQueue.length; ++i) {
-                if (playerQueue[i].trackId === trackId) {
-                    --i;
-                    break;
-                }
-            }
-
-            if (i < 0 || i >= playerQueue.length)
-                return;                 // nothing further back
-
-            setTheTrack(i);
+            let trackData = QueueManager.getPrevTrack(playerQueue, trackId);
+            setTheTrack(trackData);
 
             setPlayPause('play');
         } else {
@@ -277,6 +259,20 @@ const PlayerBar = props => {
             </div>
             <div className={Styles.center}>
                 <div>
+                    <button
+                        className={`${Styles.buttonSmall} cursor-pointer`}
+                        data-visible={mobileOpenAlbumDetails}
+                        data-active={shuffle}
+                        onClick={
+                            () => setShuffle(!shuffle)
+                        }
+                    >
+                        <img
+                            data-dark-mode-compatible
+                            alt="Shuffle"
+                            src={ShuffleIcon}
+                        />
+                    </button>
                     <button className={"cursor-pointer"} onClick={prevTrack}>
                         <img data-dark-mode-compatible alt="Back" src={BackIcon} />
                     </button>
@@ -294,7 +290,11 @@ const PlayerBar = props => {
                         />
                     </button>
                     <button className={"cursor-pointer"} onClick={nextTrack}>
-                        <img data-dark-mode-compatible alt="Next" src={NextIcon} />
+                        <img
+                            data-dark-mode-compatible
+                            alt="Next"
+                            src={NextIcon}
+                        />
                     </button>
                     <button
                         className={`${Styles.buttonSmall} cursor-pointer`}
