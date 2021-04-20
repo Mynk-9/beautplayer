@@ -228,10 +228,14 @@ const MainPage = (props) => {
 
         // set options
         for (const sectionOption of sectionOptions) {
-            if (sectionOption.getAttribute('data-for') === sectionFor)
-                sectionOption.style.display = 'block';
-            else
-                sectionOption.style.display = 'none';
+            sectionOption.setAttribute(
+                'data-visible',
+                sectionOption.getAttribute('data-for') === sectionFor
+            );
+            // if (sectionOption.getAttribute('data-for') === sectionFor)
+            //     sectionOption.style.display = 'block';
+            // else
+            //     sectionOption.style.display = 'none';
         }
 
         // set persistent storage
@@ -271,7 +275,13 @@ const MainPage = (props) => {
                         Playlists
                     </span>
 
-                    <div className={Styles.sectionOption} data-for={"albums"}>
+                    <div
+                        className={Styles.sectionOption}
+                        data-for={"albums"}
+                        data-visible={
+                            PersistentStorage.MainPageActivePage === 'albums'
+                        }
+                    >
                         <span>
                             <label>Sort by:</label>
                             <select
