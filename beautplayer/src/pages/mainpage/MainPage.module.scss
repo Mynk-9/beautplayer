@@ -24,6 +24,10 @@
       }
 
       .sectionOption {
+         display: none;
+      }
+      .sectionOption[data-visible="true"] {
+         display: block;
          padding: 0.5rem;
          font-size: large;
 
