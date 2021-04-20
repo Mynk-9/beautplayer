@@ -4,6 +4,8 @@ import TrackOptions from '../trackoptions/TrackOptions';
 import TrackLiker from '../trackliker/TrackLiker';
 import AddToPlaylistModal from './../addtoplaylistmodal/AddToPlaylistModal';
 
+import QueueManager from './../queuemanager';
+
 import './../commonstyles.scss';
 import Styles from './TrackList.module.scss';
 
@@ -22,22 +24,6 @@ const TrackList = props => {
     const [addToPlaylistModalVisible, setAddToPlaylistModalVisible] = useState(false);
     const [addToPlaylistModalTrackId, setAddToPlaylistModalTrackId] = useState(null);
     const [addToPlaylistModalTrackName, setAddToPlaylistModalTrackName] = useState(null);
-
-    const addToQueue = (trackData) => {
-        let queue = playerQueue;
-
-        // remove the track from previous position to be added to front
-        for (let i = 0; i < queue.length; ++i) {
-            let track = queue[i];
-            if (track.trackId === trackData.trackId) {
-                queue.splice(i, 1);
-                break;
-            }
-        }
-
-        queue.push(trackData);
-        setPlayerQueue(queue);
-    };
 
     let key = 0;
     let trackList = props.tracks.tracks.map((data) => {
@@ -81,8 +67,11 @@ const TrackList = props => {
                 'text': 'Add to Queue',
                 'component': (
                     <img
+                        alt={""}
                         src={PlusCircleIcon}
-                        onClick={() => addToQueue(trackData)}
+                        onClick={() =>
+                            QueueManager.addTrack(playerQueue, trackData, setPlayerQueue)
+                        }
                         data-dark-mode-compatible
                     />
                 ),
@@ -92,6 +81,7 @@ const TrackList = props => {
             'text': 'Add to Playlist',
             'component': (
                 <img
+                    alt={""}
                     src={PlusIcon}
                     onClick={() => {
                         setAddToPlaylistModalTrackId(trackData.trackId);
@@ -107,6 +97,7 @@ const TrackList = props => {
                 'text': 'Remove',
                 'component': (
                     <img
+                        alt={""}
                         src={MinusIcon}
                         onClick={() => props.removeTrack(trackData.trackId)}
                         data-dark-mode-compatible
@@ -130,7 +121,9 @@ const TrackList = props => {
                         albumArtist={trackData.albumArtist}
                         isPlaylist={trackData.isPlaylist}
                         playlistTitle={trackData.playlistTitle}
-                        addToQueue={() => addToQueue(trackData)}
+                        addToQueue={() =>
+                            QueueManager.addTrack(playerQueue, trackData, setPlayerQueue)
+                        }
                     />
                 </td>
                 <td>{trackData.track}</td>
