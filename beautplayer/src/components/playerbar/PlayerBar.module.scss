@@ -169,7 +169,9 @@
       }
    }
    .buttonSmall[data-active="true"] {
-      background-color: var(--tint-level3-color);
+      background-color: var(--highlight-color-no-alpha);
+      // more styles added at the end of style-sheet
+      // related to color config of button icon
    }
    button:hover {
       background-color: var(--tint-level2-color);
@@ -207,3 +209,15 @@
       transform: translateX(-50%);
    }
 }
+
+// color switching of push buttons shuffle and repeat {
+
+body .playerBar .buttonSmall[data-active="true"] img {
+   filter: none;
+}
+// :global would prevent renaming of .light-mode
+:global(body.light-mode) .playerBar .buttonSmall[data-active="true"] img {
+   filter: invert(0.9);
+}
+
+// }
