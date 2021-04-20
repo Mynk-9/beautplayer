@@ -6,6 +6,8 @@ import TrackOptions from './../../components/trackoptions/TrackOptions';
 import PlayButton from './../../components/playbutton/PlayButton';
 import AddToPlaylistModal from '../../components/addtoplaylistmodal/AddToPlaylistModal';
 
+import QueueManager from './../../components/queuemanager';
+
 import './../../components/commonstyles.scss';
 import Styles from './PlayerQueue.module.scss';
 
@@ -46,7 +48,8 @@ const PlayerQueue = () => {
 
     let history = useHistory();
 
-    let buildQueue = () => {
+    // build queue on playerQueue change
+    useEffect(() => {
         let key = 0;
         let _trackList = playerQueue.map((data) => {
             ++key;
@@ -108,22 +111,11 @@ const PlayerQueue = () => {
         _trackList.reverse();
 
         setTrackList(_trackList);
-    };
+    }, [playerQueue]);
 
     let removeItem = (trackId) => {
-        let queue = playerQueue;
-        let i = 0;
-        for (; i < playerQueue.length; ++i)
-            if (trackId === queue[i].trackId)
-                break;
-        if (i >= playerQueue.length)
-            return;
-        queue.splice(i, 1);
-        setPlayerQueue(queue);
-        buildQueue();
+        QueueManager.removeTrack(playerQueue, trackId, setPlayerQueue);
     };
-
-    useEffect(() => buildQueue(), []);
 
     return (
         <>
