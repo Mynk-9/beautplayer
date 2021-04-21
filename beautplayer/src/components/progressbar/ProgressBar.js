@@ -59,7 +59,7 @@ const ProgressBar = props => {
                 Math.round(props.playerRef?.current?.currentTime)
             );
         }
-    }, [playPause]);
+    }, [playPause, props.playerRef]);
 
     const handleProgressBarInterrupt = (e) => {
         const cursorPosX = parseInt(e.clientX);
