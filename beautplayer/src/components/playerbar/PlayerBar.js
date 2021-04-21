@@ -262,7 +262,7 @@ const PlayerBar = props => {
             <div className={Styles.center}>
                 <div>
                     <button
-                        className={`${Styles.buttonSmall} cursor-pointer`}
+                        className={`${Styles.buttonSmall} cursor-pointer display-desktop-only`}
                         data-visible={mobileOpenAlbumDetails}
                         data-active={shuffle}
                         onClick={
@@ -296,6 +296,21 @@ const PlayerBar = props => {
                             data-dark-mode-compatible
                             alt="Next"
                             src={NextIcon}
+                        />
+                    </button>
+                    {/* cloned above shuffle button for mobile displays */}
+                    <button
+                        className={`${Styles.buttonSmall} cursor-pointer display-mobile-only`}
+                        data-visible={mobileOpenAlbumDetails}
+                        data-active={shuffle}
+                        onClick={
+                            () => setShuffle(!shuffle)
+                        }
+                    >
+                        <img
+                            data-dark-mode-compatible
+                            alt="Shuffle"
+                            src={ShuffleIcon}
                         />
                     </button>
                     <button
