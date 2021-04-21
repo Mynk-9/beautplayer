@@ -28,8 +28,8 @@ import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
 const ColorThief = require('color-thief');
 
 const PlayerBar = props => {
-    const { playPause, albumArt, currentTrack, albumTitle, albumArtist,
-        audioVolume, audioSrc, audioDuration, linkBack, playerQueue,
+    const { playPause, albumArt, currentTrack, albumArtist,
+        audioVolume, audioSrc, linkBack, playerQueue,
         setCurrentTrack, setAlbumTitle, setAlbumArtist, setLinkBack,
         setAlbumArt, setAudioSrc, setAudioDuration, setPlayPause,
         setAudioVolume, setPlayerQueue } = useContext(PlayerContext);
@@ -152,7 +152,9 @@ const PlayerBar = props => {
         if (playPause === 'pause') audioPlayerRef.current.pause();
         else audioPlayerRef.current.play();
 
-    }, [audioSrc]);
+    }, [audioSrc]); // eslint-disable-line react-hooks/exhaustive-deps
+    // linter recommendation here is inaccurate, 
+    // so disabled message for this line
 
     useEffect(() => {
         if (playPause === 'play')
@@ -260,7 +262,7 @@ const PlayerBar = props => {
             <div className={Styles.center}>
                 <div>
                     <button
-                        className={`${Styles.buttonSmall} cursor-pointer`}
+                        className={`${Styles.buttonSmall} cursor-pointer display-desktop-only`}
                         data-visible={mobileOpenAlbumDetails}
                         data-active={shuffle}
                         onClick={
@@ -294,6 +296,21 @@ const PlayerBar = props => {
                             data-dark-mode-compatible
                             alt="Next"
                             src={NextIcon}
+                        />
+                    </button>
+                    {/* cloned above shuffle button for mobile displays */}
+                    <button
+                        className={`${Styles.buttonSmall} cursor-pointer display-mobile-only`}
+                        data-visible={mobileOpenAlbumDetails}
+                        data-active={shuffle}
+                        onClick={
+                            () => setShuffle(!shuffle)
+                        }
+                    >
+                        <img
+                            data-dark-mode-compatible
+                            alt="Shuffle"
+                            src={ShuffleIcon}
                         />
                     </button>
                     <button

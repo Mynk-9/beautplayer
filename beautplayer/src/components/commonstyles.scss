@@ -56,6 +56,8 @@ body {
 
    --same-tint-level1-color: rgba(70, 70, 70, 0.8);
 
+   --highlight-color-no-alpha: rgba(200, 200, 200, 1);
+
    --primary-color: #fafafa;
    --secondary-color: black;
 
@@ -87,6 +89,8 @@ body.light-mode {
    --tint-level3-color: rgba(200, 200, 200, 0.8);
 
    --same-tint-level1-color: rgba(255, 255, 255, 0.8);
+
+   --highlight-color-no-alpha: rgba(100, 100, 100, 1);
 
    --primary-color: black;
    --secondary-color: white;
@@ -124,4 +128,18 @@ body.light-mode::before {
    @media only screen and (max-width: 540px) {
       cursor: initial;
    }
+}
+
+.display-mobile-only {
+    @media only screen and (min-width: 540px) {
+        display: none;
+    }
+    @media only screen and (width: 540px) {
+        display: initial;
+    }
+}
+.display-desktop-only {
+    @media only screen and (max-width: 540px) {
+        display: none;
+    }
 }
