@@ -123,7 +123,14 @@ const PlayerBar = props => {
         setPlayPause('pause');      // temporary pause
 
         let trackId = audioSrc;     // both are same
-        let trackData = QueueManager.getNextTrack(playerQueue, trackId, setPlayerQueue, null, shuffle);
+        let trackData = QueueManager.getNextTrack(
+            playerQueue,
+            trackId,
+            setPlayerQueue,
+            null,
+            shuffle
+        );
+        if (!trackData) return;
         setTheTrack(trackData);
 
         setPlayPause('play');
@@ -136,6 +143,7 @@ const PlayerBar = props => {
 
             let trackId = audioSrc;     // both are same
             let trackData = QueueManager.getPrevTrack(playerQueue, trackId);
+            if (!trackData) return;
             setTheTrack(trackData);
 
             setPlayPause('play');
