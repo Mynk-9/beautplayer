@@ -59,7 +59,7 @@ const ProgressBar = props => {
                 Math.round(props.playerRef?.current?.currentTime)
             );
         }
-    }, [playPause, props.playerRef]);
+    }, [playPause, props.playerRef]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleProgressBarInterrupt = (e) => {
         const cursorPosX = parseInt(e.clientX);
