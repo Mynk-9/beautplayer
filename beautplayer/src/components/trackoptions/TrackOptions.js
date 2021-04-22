@@ -11,7 +11,11 @@ const TrackOptions = props => {
     let options = [];
     props.options.forEach((option, index) => {
         options.push(
-            <div className={Styles.optionsMenuItem} key={index}>
+            <div
+                className={Styles.optionsMenuItem}
+                key={index}
+                onClick={option.onClick}
+            >
                 <span>{option.component}</span>
                 <span>{option.text}</span>
             </div>
