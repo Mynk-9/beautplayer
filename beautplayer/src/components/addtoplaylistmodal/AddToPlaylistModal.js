@@ -55,8 +55,11 @@ const PlaylistsModal = props => {
             });
     };
     const addToPlaylist = async () => {
-        const selectedPlaylist = document.querySelector('input[type="radio"][name="playlists"]:checked').value;
-        let success = false;
+        const selectedPlaylist = document.querySelector('input[type="radio"][name="playlists"]:checked')?.value;
+        if (!selectedPlaylist) // if no playlist is selected
+            return -1;
+
+        let success = 0;
 
         await axios.post(API + '/playlists', {
             "playlistName": selectedPlaylist,
@@ -66,7 +69,7 @@ const PlaylistsModal = props => {
                 if (resp.status !== 201)
                     console.log(resp);
                 else
-                    success = true;
+                    success = 1;
             })
             .catch(err => {
                 console.log(err);
@@ -152,14 +155,20 @@ const PlaylistsModal = props => {
                     <span
                         className={`cursor-pointer`}
                         onClick={async () => {
-                            if (await addToPlaylist()) {
+                            let resp = await addToPlaylist();
+                            if (resp === 1) {        // success
                                 setTimeout(() => props.close(), 500);
                                 setOkButtonText('Done!');
-                            } else {
+                            } else if (resp === 0) { // failure
                                 setTimeout(() => {
                                     setOkButtonText('Ok');
                                 }, 2000);
                                 setOkButtonText('Error! Please try again.');
+                            } else if (resp === -1) { // playlist not selected
+                                setTimeout(() => {
+                                    setOkButtonText('Ok');
+                                }, 2000);
+                                setOkButtonText('Please select a playlist.');
                             }
                         }}
                     >
