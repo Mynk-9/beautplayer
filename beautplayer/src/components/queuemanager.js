@@ -120,6 +120,15 @@ const QueueManager = {
             return null;
         return playerQueue[i];
     },
+
+    /**
+     * Clears the player queue.
+     * 
+     * @param {Function} setter setter function of playerQueue
+     */
+    clearQueue: (setter) => {
+        setter([]);
+    },
 };
 
 export default QueueManager;
