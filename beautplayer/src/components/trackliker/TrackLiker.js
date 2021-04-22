@@ -42,12 +42,7 @@ const TrackLiker = (props) => {
                     console.log(err);
                 });
         else
-            axios.delete(API + '/playlists/', {
-                data: {
-                    trackId: props.trackId,
-                    playlistName: 'liked'
-                }
-            })
+            axios.delete(`${API}/playlists/liked/${props.trackId}`)
                 .then(resp => {
                     if (resp.status === 200)
                         setLiked(false);
