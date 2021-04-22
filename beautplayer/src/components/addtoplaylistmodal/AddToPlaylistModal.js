@@ -41,7 +41,7 @@ const PlaylistsModal = props => {
                             />
                             <label
                                 className={Styles.listItem}
-                                for={playlistName}
+                                htmlFor={playlistName}
                             >
                                 {playlistName}
                             </label>
@@ -86,7 +86,7 @@ const PlaylistsModal = props => {
                 />
                 <label
                     className={Styles.listItem}
-                    for={newPlaylistName}
+                    htmlFor={newPlaylistName}
                 >
                     {newPlaylistName}
                 </label>
@@ -102,7 +102,9 @@ const PlaylistsModal = props => {
 
     useEffect(() => {
         fetchPlaylists();
-    }, [props.trackId]);
+    }, [props.trackId]); // eslint-disable-line react-hooks/exhaustive-deps
+    // temporarily disabled exhaustive-deps check of linter that this line
+    // as it is better to disable it than to make a work-around.
 
     return (
         <div className={Styles.modal}>
@@ -115,7 +117,11 @@ const PlaylistsModal = props => {
                         className={Styles.close}
                         onClick={() => props.close()}
                     >
-                        <img src={XIcon} data-dark-mode-compatible />
+                        <img
+                            alt={"Close"}
+                            src={XIcon}
+                            data-dark-mode-compatible
+                        />
                     </span>
                 </div>
                 <div className={Styles.body}>
@@ -131,6 +137,7 @@ const PlaylistsModal = props => {
                     <div className={Styles.newPlaylist}>
                         <input type="text" ref={textBoxRef} />
                         <img
+                            alt={"Add"}
                             src={PlusIcon}
                             className={`cursor-pointer`}
                             onClick={() => {

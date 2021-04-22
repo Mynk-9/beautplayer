@@ -146,7 +146,7 @@ const MainPage = (props) => {
                 .catch(err => {
                     console.log(err);
                 });
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     // for playlists
     useEffect(() => {
@@ -204,7 +204,7 @@ const MainPage = (props) => {
                 .catch(err => {
                     console.log(err);
                 });
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const selectSection = (sectionHead) => {
         let sectionHeadParent = sectionHead.parentNode;

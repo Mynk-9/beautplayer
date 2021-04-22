@@ -22,9 +22,9 @@ const PlaylistPage = props => {
         playlistName: '',
         tracks: [],
     });
+    const [playlistPageName, setPlaylistPageName] = useState('');
     const [playlistPageYear, setPlaylistPageYear] = useState('');
     const [playlistPageGenre, setPlaylistPageGenre] = useState('');
-    const [playlistPageArtist, setPlaylistPageArtist] = useState('');
     const [playlistPageArt, setPlaylistPageArt] = useState('');
     let history = useHistory();
 
@@ -38,7 +38,6 @@ const PlaylistPage = props => {
     API += ':5000';
 
 
-    let playlistName = props.match.params.playlistName;
     let tracksArray = {
         isPlaylist: true,
         playlistTitle: '',
@@ -46,15 +45,15 @@ const PlaylistPage = props => {
     };
 
     useEffect(() => {
-        playlistName = props.match.params.playlistName;
+        setPlaylistPageName(props.match.params.playlistName);
         setArtContext(imgRef);
         imgRef.current.crossOrigin = 'Anonymous'; // fix for: "canvas has been tainted by cross-origin data" security error
-    });
+    }, [props.match.params.playlistName]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // fetch the playlist data
     // get the tracks of the playlist
     const refreshPlaylist = () => {
-        axios.get(API + '/playlists/' + playlistName)
+        axios.get(API + '/playlists/' + playlistPageName)
             .then(async resp => {
                 const playlist = resp.data.Playlist;
                 const playlistTracks = playlist.tracks;
@@ -93,7 +92,7 @@ const PlaylistPage = props => {
                     );
                 }
 
-                tracksArray.playlistTitle = playlistName;
+                tracksArray.playlistTitle = playlistPageName;
 
                 // first reset the value then set the value
                 // done to rectify React not updating 
@@ -113,20 +112,21 @@ const PlaylistPage = props => {
     };
 
     useEffect(() => {
+        if (!playlistPageName) return; // see AlbumPage.js:51 for explanation
 
         // set playlist cover art
-        const src = playlistArt(playlistName.replace('%2F', '/'));
+        const src = playlistArt(playlistPageName.replace('%2F', '/'));
         setPlaylistPageArt(src);
 
         // fetch the playlist data
         // get the tracks of the playlist
         refreshPlaylist();
 
-    }, [playlistName]);
+    }, [playlistPageName]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const removeTrack = async (trackId) => {
         let success = false;
-        await axios.delete(`${API}/playlists/${playlistName.replace('%2F', '/')}/${trackId}`)
+        await axios.delete(`${API}/playlists/${playlistPageName.replace('%2F', '/')}/${trackId}`)
             .then(resp => {
                 if (resp.status === 200)
                     success = true;
@@ -138,8 +138,12 @@ const PlaylistPage = props => {
             });
 
         refreshPlaylist();
+
+        return success;
     };
 
+    // TODO: implement the following
+    /*
     const deletePlaylist = () => {
 
     };
@@ -151,6 +155,7 @@ const PlaylistPage = props => {
     const playPlaylist = () => {
 
     };
+    */
 
     return (
         <>
@@ -175,7 +180,7 @@ const PlaylistPage = props => {
                         <tbody>
                             <tr>
                                 <td>Playlist</td>
-                                <td>{playlistName.replace('%2F', '/')}</td>
+                                <td>{playlistPageName.replace('%2F', '/')}</td>
                             </tr>
                             <tr>
                                 <td>Years</td>
@@ -195,6 +200,7 @@ const PlaylistPage = props => {
                                     >
                                         <img
                                             src={PlayIcon}
+                                            alt={""}
                                             data-dark-mode-compatible
                                         />
                                         <span>Play Playlist</span>
@@ -206,6 +212,7 @@ const PlaylistPage = props => {
                                     >
                                         <img
                                             src={PlusCircleIcon}
+                                            alt={""}
                                             data-dark-mode-compatible
                                         />
                                         <span>Add to Queue</span>
@@ -217,6 +224,7 @@ const PlaylistPage = props => {
                                     >
                                         <img
                                             src={TrashIcon}
+                                            alt={""}
                                             data-dark-mode-compatible
                                         />
                                         <span>Delete Playlist</span>

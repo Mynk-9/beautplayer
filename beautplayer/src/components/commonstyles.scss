@@ -129,3 +129,17 @@ body.light-mode::before {
       cursor: initial;
    }
 }
+
+.display-mobile-only {
+    @media only screen and (min-width: 540px) {
+        display: none;
+    }
+    @media only screen and (width: 540px) {
+        display: initial;
+    }
+}
+.display-desktop-only {
+    @media only screen and (max-width: 540px) {
+        display: none;
+    }
+}

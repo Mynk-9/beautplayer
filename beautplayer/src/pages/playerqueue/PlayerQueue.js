@@ -65,6 +65,7 @@ const PlayerQueue = () => {
                                 {
                                     'component':
                                         <img
+                                            alt={""}
                                             src={PlusIcon}
                                             onClick={() => {
                                                 setAddToPlaylistModalTrackId(data.trackId);
@@ -111,7 +112,7 @@ const PlayerQueue = () => {
         _trackList.reverse();
 
         setTrackList(_trackList);
-    }, [playerQueue]);
+    }, [playerQueue]); // eslint-disable-line react-hooks/exhaustive-deps
 
     let removeItem = (trackId) => {
         QueueManager.removeTrack(playerQueue, trackId, setPlayerQueue);

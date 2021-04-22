@@ -26,7 +26,7 @@ const TrackLiker = (props) => {
             .catch(err => {
                 console.log(err);
             });
-    }, [props.trackId]);
+    }, [props.trackId]); // eslint-disable-line react-hooks/exhaustive-deps
 
     let updateLikeStatus = async (newState) => {
         if (newState)
