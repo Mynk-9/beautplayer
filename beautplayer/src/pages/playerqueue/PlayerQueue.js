@@ -89,6 +89,7 @@ const PlayerQueue = () => {
                             albumArtist={data.albumArtist}
                             isPlaylist={data.isPlaylist}
                             playlistTitle={data.playlistTitle}
+                            linkBack={data.linkBack}
                             addToQueue={() => { }}  // already in the queue
                         />
                     </td>

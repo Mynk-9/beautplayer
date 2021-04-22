@@ -65,10 +65,7 @@ const PlayButton = props => {
 
             getDominantColorAlbumArt();
 
-            if (props.isPlaylist)
-                setLinkBack(`/playlist/${props.playlistTitle}`);
-            else
-                setLinkBack(`/album/${props.albumTitle}`);
+            setLinkBack(props.linkBack);
 
             props.addToQueue(); // add the track to queue
 

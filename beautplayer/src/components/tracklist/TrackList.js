@@ -51,7 +51,7 @@ const TrackList = props => {
             ),
             'playlistTitle': props.tracks.playlistTitle,
             'linkBack': (
-                props.isPlaylist
+                props.tracks.isPlaylist
                     ? `/playlist/${props.tracks.playlistTitle}`
                     : `/album/${props.tracks.isPlaylist ? data[4] : props.tracks.album}`
             ),
@@ -135,6 +135,7 @@ const TrackList = props => {
                         albumArtist={trackData.albumArtist}
                         isPlaylist={trackData.isPlaylist}
                         playlistTitle={trackData.playlistTitle}
+                        linkBack={trackData.linkBack}
                         addToQueue={() =>
                             QueueManager.addTrack(playerQueue, trackData, setPlayerQueue)
                         }
