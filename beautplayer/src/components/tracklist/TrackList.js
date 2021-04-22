@@ -16,6 +16,7 @@ import { albumArt } from '../coverArtAPI';
 import PlusIcon from './../../assets/buttonsvg/plus.svg';
 import MinusIcon from './../../assets/buttonsvg/minus.svg';
 import PlusCircleIcon from './../../assets/buttonsvg/plus-circle.svg';
+import CheckIcon from './../../assets/buttonsvg/check.svg';
 
 // props: tracks, showRemoveOption, removeTrack(trackId)
 const TrackList = props => {
@@ -72,6 +73,13 @@ const TrackList = props => {
                         data-dark-mode-compatible
                     />
                 ),
+                'successComponent': (
+                    <img
+                        alt={"Done"}
+                        src={CheckIcon}
+                        data-dark-mode-compatible
+                    />
+                ),
                 'onClick': () =>
                     QueueManager.addTrack(playerQueue, trackData, setPlayerQueue),
             });
@@ -82,6 +90,13 @@ const TrackList = props => {
                 <img
                     alt={""}
                     src={PlusIcon}
+                    data-dark-mode-compatible
+                />
+            ),
+            'successComponent': (
+                <img
+                    alt={"Done"}
+                    src={CheckIcon}
                     data-dark-mode-compatible
                 />
             ),
