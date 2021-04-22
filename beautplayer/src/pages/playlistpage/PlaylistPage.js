@@ -112,6 +112,7 @@ const PlaylistPage = props => {
     };
 
     useEffect(() => {
+        if (!playlistPageName) return; // see AlbumPage.js:51 for explanation
 
         // set playlist cover art
         const src = playlistArt(playlistPageName.replace('%2F', '/'));
