@@ -1,4 +1,4 @@
-import { React, useState, useContext } from 'react';
+import { React, useContext } from 'react';
 import './../commonstyles.scss';
 import Styles from './ColorModeSwitch.module.scss';
 import SunIcon from './../../assets/buttonsvg/sun.svg';

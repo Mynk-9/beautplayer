@@ -1,7 +1,5 @@
-import { React, useState, useEffect } from 'react';
+import { React } from 'react';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
-import * as base64 from 'byte-base64';
 import './../commonstyles.scss';
 import Styles from './AlbumCard.module.scss';
 

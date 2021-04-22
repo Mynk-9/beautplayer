@@ -16,6 +16,7 @@ import { albumArt } from '../coverArtAPI';
 import PlusIcon from './../../assets/buttonsvg/plus.svg';
 import MinusIcon from './../../assets/buttonsvg/minus.svg';
 import PlusCircleIcon from './../../assets/buttonsvg/plus-circle.svg';
+import CheckIcon from './../../assets/buttonsvg/check.svg';
 
 // props: tracks, showRemoveOption, removeTrack(trackId)
 const TrackList = props => {
@@ -69,12 +70,18 @@ const TrackList = props => {
                     <img
                         alt={""}
                         src={PlusCircleIcon}
-                        onClick={() =>
-                            QueueManager.addTrack(playerQueue, trackData, setPlayerQueue)
-                        }
                         data-dark-mode-compatible
                     />
                 ),
+                'successComponent': (
+                    <img
+                        alt={"Done"}
+                        src={CheckIcon}
+                        data-dark-mode-compatible
+                    />
+                ),
+                'onClick': () =>
+                    QueueManager.addTrack(playerQueue, trackData, setPlayerQueue),
             });
         }
         trackOptionsList.push({
@@ -83,14 +90,21 @@ const TrackList = props => {
                 <img
                     alt={""}
                     src={PlusIcon}
-                    onClick={() => {
-                        setAddToPlaylistModalTrackId(trackData.trackId);
-                        setAddToPlaylistModalTrackName(trackData.track);
-                        setAddToPlaylistModalVisible(true);
-                    }}
                     data-dark-mode-compatible
                 />
             ),
+            'successComponent': (
+                <img
+                    alt={"Done"}
+                    src={CheckIcon}
+                    data-dark-mode-compatible
+                />
+            ),
+            'onClick': () => {
+                setAddToPlaylistModalTrackId(trackData.trackId);
+                setAddToPlaylistModalTrackName(trackData.track);
+                setAddToPlaylistModalVisible(true);
+            },
         });
         if (props.showRemoveOption) { // optional component
             trackOptionsList.push({
@@ -99,10 +113,10 @@ const TrackList = props => {
                     <img
                         alt={""}
                         src={MinusIcon}
-                        onClick={() => props.removeTrack(trackData.trackId)}
                         data-dark-mode-compatible
                     />
                 ),
+                'onClick': () => props.removeTrack(trackData.trackId),
             });
         }
 

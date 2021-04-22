@@ -23,16 +23,12 @@
             span {
                 border-radius: var(--border-radius);
                 padding: 0.5rem;
+                cursor: pointer;
             }
             span:nth-child(1) {
-                cursor: pointer;
-
                 img {
                     vertical-align: revert;
                 }
-            }
-            span:nth-child(2) {
-                cursor: default;
             }
         }
         .optionsMenuItem:hover {

@@ -1,9 +1,6 @@
 import { React, useState, useEffect, useContext } from 'react';
 import './../commonstyles.scss';
 
-import axios from 'axios';
-import * as base64 from 'byte-base64';
-
 import PlayerContext from '../playercontext';
 import ThemeContext from '../themecontext';
 
@@ -18,7 +15,7 @@ const PlayButton = props => {
     const { playPause, setPlayPause, setCurrentTrack, setAlbumTitle, setAlbumArtist, setLinkBack,
         setAlbumArt, audioSrc, setAudioSrc, setAudioDuration } = useContext(PlayerContext);
 
-    const { setAcrylicColor, letAcrylicTints, artContext } = useContext(ThemeContext);
+    const { setAcrylicColor } = useContext(ThemeContext);
 
     const [playButtonState, setPlayButtonState] = useState('play-button');
 
@@ -93,7 +90,7 @@ const PlayButton = props => {
             setPlayButtonState('pause-button');
         else
             setPlayButtonState('play-button');
-    }, [playPause]);
+    }, [playPause]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <img

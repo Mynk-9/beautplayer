@@ -1,4 +1,4 @@
-export default {
+const QueueManager = {
     /**
      * Adds a new track to player queue.
      * 
@@ -121,3 +121,5 @@ export default {
         return playerQueue[i];
     },
 };
+
+export default QueueManager;

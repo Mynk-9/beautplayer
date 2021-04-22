@@ -1,4 +1,5 @@
-import { React, useEffect } from 'react';
+import { React } from 'react';
+import TrackOption from './TrackOption';
 
 import './../../components/commonstyles.scss';
 import Styles from './TrackOptions.module.scss';
@@ -7,14 +8,17 @@ import MoreHorizontalIcon from './../../assets/buttonsvg/more-horizontal.svg';
 
 // prop: options: [{component: <component />, text: "text"}, ...]
 const TrackOptions = props => {
-    
+
     let options = [];
     props.options.forEach((option, index) => {
         options.push(
-            <div className={Styles.optionsMenuItem} key={index}>
-                <span>{option.component}</span>
-                <span>{option.text}</span>
-            </div>
+            <TrackOption
+                text={option.text}
+                component={option.component}
+                successComponent={option.successComponent}
+                onClick={option.onClick}
+                key={index}
+            />
         );
     });
 
@@ -23,6 +27,7 @@ const TrackOptions = props => {
             <div className={Styles.optionButton}>
                 <img
                     data-dark-mode-compatible
+                    alt={"More options"}
                     src={MoreHorizontalIcon}
                 />
             </div>
