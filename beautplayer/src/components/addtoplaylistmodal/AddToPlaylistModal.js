@@ -26,13 +26,13 @@ const PlaylistsModal = props => {
 
         axios.get(API + '/playlists')
             .then(resp => {
-                setPlaylists(resp.data.Playlists.map(data => {
+                setPlaylists(resp.data.Playlists.map((data, key) => {
                     const playlistName = data._id;
                     if (playlistName === 'liked')
-                        return <></>;
+                        return null;
 
                     return (
-                        <>
+                        <div key={key}>
                             <input
                                 type="radio"
                                 name="playlists"
@@ -45,7 +45,7 @@ const PlaylistsModal = props => {
                             >
                                 {playlistName}
                             </label>
-                        </>
+                        </div>
                     );
                 }));
             })
@@ -77,7 +77,7 @@ const PlaylistsModal = props => {
     const createPlaylist = () => {
         const newPlaylistName = textBoxRef.current.value;
         let _playlist = (
-            <>
+            <div key={playlists.length}>
                 <input
                     type="radio"
                     name="playlists"
@@ -90,7 +90,7 @@ const PlaylistsModal = props => {
                 >
                     {newPlaylistName}
                 </label>
-            </>
+            </div>
         );
 
         setPlaylists(_playlists => [..._playlists, _playlist]);
