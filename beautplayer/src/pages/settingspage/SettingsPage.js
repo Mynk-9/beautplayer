@@ -43,6 +43,8 @@ const AlbumPage = props => {
                 case 3:
                     loadingText = 'Working';
                     break;
+                default:
+                    loadingText = 'Working';
             }
         }, 1000);
 
