@@ -244,19 +244,14 @@ const PlaylistPage = props => {
     };
 
     const addPlaylistToQueue = () => {
-        for (const track of tracks.tracks)
-            QueueManager.addTrack(
-                playerQueue,
-                getTrackData(track),
-                setPlayerQueue
-            );
+        let trackDataList = tracks.tracks.map(data => getTrackData(data));
+        QueueManager.addTracksMany(playerQueue, trackDataList, setPlayerQueue);
     };
 
     const playPlaylist = () => {
-        // clear the queue
-        QueueManager.clearQueue(setPlayerQueue);
-        // add the playlist to queue
-        addPlaylistToQueue();
+        // clear the queue and add many
+        let trackDataList = tracks.tracks.map(data => getTrackData(data));
+        QueueManager.addTracksMany([], trackDataList, setPlayerQueue);
         // start the play
         setTheTrack(getTrackData(tracks.tracks[0]));
         setPlayPause('play');
