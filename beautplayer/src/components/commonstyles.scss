@@ -68,6 +68,8 @@ body {
 
    // transition: color var(--std-color-transition-time) ease;
 
+   user-select: none;
+
    input {
       color: var(--primary-color);
    }

@@ -284,31 +284,20 @@ const MainPage = (props) => {
                                 name={"main-page-album-sort"}
                                 id={"main-page-album-sort"}
                                 onChange={(e) => sortChange(e.target.value)}
+                                value={PersistentStorage.MainPageAlbumsSort}
                             >
-                                <option
-                                    value="name"
-                                    selected={PersistentStorage.MainPageAlbumsSort === 'name'}
-                                >
+                                <option value="name">
                                     Name
-                                    </option>
-                                <option
-                                    value="name-reverse"
-                                    selected={PersistentStorage.MainPageAlbumsSort === 'name-reverse'}
-                                >
+                                </option>
+                                <option value="name-reverse">
                                     Name (reverse)
-                                    </option>
-                                <option
-                                    value="release-year"
-                                    selected={PersistentStorage.MainPageAlbumsSort === 'release-year'}
-                                >
+                                </option>
+                                <option value="release-year">
                                     Release Year
-                                    </option>
-                                <option
-                                    value="release-year-reverse"
-                                    selected={PersistentStorage.MainPageAlbumsSort === 'release-year-reverse'}
-                                >
+                                </option>
+                                <option value="release-year-reverse">
                                     Release Year (reverse)
-                                    </option>
+                                </option>
                             </select>
                         </span>
                     </div>

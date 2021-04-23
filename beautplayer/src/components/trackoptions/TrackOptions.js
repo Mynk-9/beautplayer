@@ -1,4 +1,5 @@
 import { React } from 'react';
+import TrackOption from './TrackOption';
 
 import './../../components/commonstyles.scss';
 import Styles from './TrackOptions.module.scss';
@@ -11,10 +12,13 @@ const TrackOptions = props => {
     let options = [];
     props.options.forEach((option, index) => {
         options.push(
-            <div className={Styles.optionsMenuItem} key={index}>
-                <span>{option.component}</span>
-                <span>{option.text}</span>
-            </div>
+            <TrackOption
+                text={option.text}
+                component={option.component}
+                successComponent={option.successComponent}
+                onClick={option.onClick}
+                key={index}
+            />
         );
     });
 
