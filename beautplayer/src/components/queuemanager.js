@@ -4,7 +4,7 @@ const QueueManager = {
      * 
      * @param {[]} playerQueue playerQueue definition can be found in 
      *                         PlayerContext
-     * @param {{}} trackData data of the track, definition maybe found in 
+     * @param {{}} trackData data of the track, definition found in 
      *                      PlayerContext or TrackList
      * @param {Function} setter if setter is provided, changed queue is updated
      *                          using setter
@@ -26,6 +26,28 @@ const QueueManager = {
         if (next) next();
 
         return playerQueue;
+    },
+
+    /**
+     * Adds a list of new tracks to player queue.
+     * 
+     * @param {[]} playerQueue playerQueue definition can be found in 
+     *                         PlayerContext
+     * @param {[]} trackDataList array of data of the tracks, definition found in 
+     *                      PlayerContext or TrackList
+     * @param {Function} setter if setter is provided, changed queue is updated
+     *                          using setter
+     * @param {Function} next if provided, it will be executed after setter
+     * @returns updated queue
+     */
+    addTracksMany: (playerQueue, trackDataList, setter, next) => {
+        let newData = [...playerQueue, ...trackDataList];
+        let newDataSet = new Set(newData);
+        
+        if (setter) setter([...newDataSet]);
+        if (next) next();
+
+        return newDataSet;
     },
 
     /**
