@@ -2,10 +2,15 @@ import { React, useState, useEffect, useContext, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import TrackList from './../../components/tracklist/TrackList';
+import Modal from '../../components/modal/Modal';
+import QueueManager from './../../components/queuemanager';
+import { albumArt } from './../../components/coverArtAPI';
+
 import './../../components/commonstyles.scss';
 import Styles from './PlaylistPage.module.scss';
 
 import ThemeContext from './../../components/themecontext';
+import PlayerContext from './../../components/playercontext';
 
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg'
 import PlayIcon from './../../assets/buttonsvg/play.svg';
@@ -14,6 +19,9 @@ import PlusCircleIcon from './../../assets/buttonsvg/plus-circle.svg';
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
 import { playlistArt } from './../../components/coverArtAPI';
+import PersistentStorage from '../persistentstorage';
+
+const ColorThief = require('color-thief');
 
 const PlaylistPage = props => {
     // tracks has the format: [title, artist, duration, trackId]
@@ -28,9 +36,22 @@ const PlaylistPage = props => {
     const [playlistPageArt, setPlaylistPageArt] = useState('');
     let history = useHistory();
 
-    // context of album art image
-    const { setArtContext } = useContext(ThemeContext);
+    // context of album art image, acrylic color
+    const { setArtContext, setAcrylicColor } = useContext(ThemeContext);
     const imgRef = useRef(null);
+
+    // player context
+    const { playerQueue, setPlayerQueue, setPlayPause, setCurrentTrack,
+        setAlbumTitle, setAlbumArtist, setLinkBack, setAlbumArt, setAudioSrc,
+        setAudioDuration } = useContext(PlayerContext);
+
+    // modal state hooks
+    const [showModal, setShowModal] = useState({
+        'open': false,
+        'heading': null,
+        'body': null,
+        'buttons': null,
+    });
 
     // api endpoint -- same domain, port 5000
     let API = window.location.origin;
@@ -142,23 +163,119 @@ const PlaylistPage = props => {
         return success;
     };
 
-    // TODO: implement the following
-    /*
-    const deletePlaylist = () => {
+    // function to generate track data from track array
+    // picked from TrackList.js
+    const getTrackData = (data) => {
+        return {
+            'trackId': data[3],
+            'audioSrc': data[3],
+            'audioDuration': data[2],
+            'track': data[0],
+            'albumArt': albumArt(String(data[4]).replace('%2F', '/')),
+            'albumTitle': data[4],
+            'albumArtist': data[1],
+            'isPlaylist': true,
+            'playlistTitle': tracks.playlistTitle,
+            'linkBack': `/playlist/${tracks.playlistTitle}`,
+        };
+    };
 
+    // taken from PlayerButton and PlayerBar
+    const setTheTrack = (data) => {
+        //////// copied from play button {
+
+        const getDominantColorAlbumArt = async (thisAlbumArt) => {
+            let imgEle = document.createElement('img');
+
+            imgEle.onerror = () => imgEle.src = AlbumArt;
+            imgEle.onload = () => {
+                let colorThief = new ColorThief();
+                let rgb = colorThief.getColor(imgEle, 1);
+                setAcrylicColor(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.6)`);
+            };
+
+
+            imgEle.crossOrigin = "Anonymous";
+            imgEle.src = thisAlbumArt;
+        };
+
+
+        setAudioSrc(data.audioSrc);
+
+        let duration = data.audioDuration.split(":");
+        setAudioDuration(parseFloat(duration[0]) * 60 + parseFloat(duration[1]));
+
+        setAlbumArt(data.albumArt);
+
+        setAlbumArtist(data.albumArtist);
+        setCurrentTrack(data.track);
+        setAlbumTitle(data.albumTitle);
+
+        getDominantColorAlbumArt(data.albumArt);
+
+        setLinkBack(data.linkBack);
+
+        //////// } copied from play button 
+    };
+
+    const deletePlaylist = async () => {
+        let success = false;
+        await axios.delete(
+            `${API}/playlists/${playlistPageName.replace('%2F', '/')}`
+        )
+            .then(resp => {
+                if (resp.status === 200)
+                    success = true;
+                else
+                    console.log(resp);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+        // if successful, clear playlists cache and navigate back
+        if (success) {
+            localStorage.removeItem('all-playlists');
+            PersistentStorage.MainPagePlaylistCards = [];
+            history.goBack();
+        }
+        else
+            return false;
     };
 
     const addPlaylistToQueue = () => {
-
+        let trackDataList = tracks.tracks.map(data => getTrackData(data));
+        QueueManager.addTracksMany(playerQueue, trackDataList, setPlayerQueue);
     };
 
     const playPlaylist = () => {
-
+        // clear the queue and add many
+        let trackDataList = tracks.tracks.map(data => getTrackData(data));
+        QueueManager.addTracksMany([], trackDataList, setPlayerQueue);
+        // start the play
+        setTheTrack(getTrackData(tracks.tracks[0]));
+        setPlayPause('play');
     };
-    */
 
     return (
         <>
+            {
+                showModal.open
+                    ? <Modal
+                        heading={showModal.heading}
+                        body={showModal.body}
+                        buttons={showModal.buttons}
+                        close={() =>
+                            setShowModal({
+                                'open': false,
+                                'heading': null,
+                                'body': null,
+                                'buttons': null,
+                            })
+                        }
+                    />
+                    : null
+            }
             <div className={Styles.section}>
                 <div className={Styles.header}>
                     <img data-dark-mode-compatible
@@ -194,37 +311,47 @@ const PlaylistPage = props => {
                                 <td>Actions</td>
                                 <td>
                                     <button
-                                        onClick={() => {
-                                            console.log('play playlist');
-                                        }}
+                                        onClick={playPlaylist}
                                     >
                                         <img
                                             src={PlayIcon}
-                                            alt={""}
+                                            alt={"Play Playlist"}
                                             data-dark-mode-compatible
                                         />
                                         <span>Play Playlist</span>
                                     </button>
                                     <button
-                                        onClick={() => {
-                                            console.log('add to queue');
-                                        }}
+                                        onClick={addPlaylistToQueue}
                                     >
                                         <img
                                             src={PlusCircleIcon}
-                                            alt={""}
+                                            alt={"Add to Queue"}
                                             data-dark-mode-compatible
                                         />
                                         <span>Add to Queue</span>
                                     </button>
                                     <button
                                         onClick={() => {
-                                            console.log('delete playlist');
+                                            setShowModal({
+                                                'open': true,
+                                                'heading': 'Confirm',
+                                                'body': 'Do you want to delete the playlist?',
+                                                'buttons': [
+                                                    {
+                                                        'text': 'Yes',
+                                                        'function': deletePlaylist,
+                                                    },
+                                                    {
+                                                        'text': 'No',
+                                                        'function': () => { }
+                                                    }
+                                                ],
+                                            });
                                         }}
                                     >
                                         <img
                                             src={TrashIcon}
-                                            alt={""}
+                                            alt={"Delete Playlist"}
                                             data-dark-mode-compatible
                                         />
                                         <span>Delete Playlist</span>
@@ -237,6 +364,7 @@ const PlaylistPage = props => {
                 <div className={Styles.content}>
                     <TrackList
                         tracks={tracks}
+                        isPlaylist={true}
                         showRemoveOption={true}
                         removeTrack={(trackId) => removeTrack(trackId)}
                         showAddToQueueOption={true}
