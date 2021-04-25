@@ -11,7 +11,10 @@ import './../../components/commonstyles.scss';
 import Styles from './SearchPage.module.scss';
 
 import ThemeContext from './../../components/themecontext';
+import PlayerContext from './../../components/playercontext';
 import SearchContext from './../../components/searchcontext';
+
+import QueueManager from './../../components/queuemanager';
 
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg';
 import PlusIcon from './../../assets/buttonsvg/plus.svg';
@@ -23,6 +26,7 @@ const SearchPage = () => {
     const [trackList, setTrackList] = useState([]);
     const { acrylicColor, letAcrylicTints } = useContext(ThemeContext);
     const { searchTerm, setSearchTerm } = useContext(SearchContext);
+    const { playerQueue, setPlayerQueue } = useContext(PlayerContext);
     const [searchList, setSearchList] = useState([]);
 
     const [addToPlaylistModalVisible, setAddToPlaylistModalVisible] = useState(false);
@@ -104,7 +108,7 @@ const SearchPage = () => {
             .catch(err => {
                 console.log(err);
             })
-    }, [searchTerm]);
+    }, [searchTerm]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // build track list from search list
     useEffect(() => {
@@ -148,7 +152,9 @@ const SearchPage = () => {
                             isPlaylist={data.isPlaylist}
                             playlistTitle={data.playlistTitle}
                             linkBack={data.linkBack}
-                            addToQueue={() => { }}  // already in the queue
+                            addToQueue={() =>
+                                QueueManager.addTrack(playerQueue, data, setPlayerQueue)
+                            }
                         />
                     </td>
                     <td>{data.track}</td>
