@@ -1,29 +1,33 @@
 import { React, useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 
 import TrackLiker from './../../components/trackliker/TrackLiker';
 import TrackOptions from './../../components/trackoptions/TrackOptions';
 import PlayButton from './../../components/playbutton/PlayButton';
 import AddToPlaylistModal from '../../components/addtoplaylistmodal/AddToPlaylistModal';
 
-import QueueManager from './../../components/queuemanager';
-
 import './../../components/commonstyles.scss';
-import Styles from './PlayerQueue.module.scss';
+import Styles from './SearchPage.module.scss';
 
 import ThemeContext from './../../components/themecontext';
 import PlayerContext from './../../components/playercontext';
+import SearchContext from './../../components/searchcontext';
+
+import QueueManager from './../../components/queuemanager';
 
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg';
-import MinusIcon from './../../assets/buttonsvg/minus.svg';
 import PlusIcon from './../../assets/buttonsvg/plus.svg';
+import { albumArt } from '../../components/coverArtAPI';
 
-const PlayerQueue = () => {
+const SearchPage = () => {
     const [acrylicColorStyle, setAcrylicColorStyle] = useState({});
     const [tableAcrylicColorStyle, setTableAcrylicColorStyle] = useState({});
     const [trackList, setTrackList] = useState([]);
     const { acrylicColor, letAcrylicTints } = useContext(ThemeContext);
+    const { searchTerm, setSearchTerm } = useContext(SearchContext);
     const { playerQueue, setPlayerQueue } = useContext(PlayerContext);
+    const [searchList, setSearchList] = useState([]);
 
     const [addToPlaylistModalVisible, setAddToPlaylistModalVisible] = useState(false);
     const [addToPlaylistModalTrackId, setAddToPlaylistModalTrackId] = useState(null);
@@ -48,10 +52,68 @@ const PlayerQueue = () => {
 
     let history = useHistory();
 
-    // build queue on playerQueue change
+    // api endpoint -- same domain, port 5000
+    let API = window.location.origin;
+    API = API.substring(0, API.lastIndexOf(':'));
+    API += ':5000';
+
+    // picked from TrackList.js
+    const getTrackData = (data) => {
+        return {
+            'trackId': data[3],
+            'audioSrc': data[3],
+            'audioDuration': data[2],
+            'track': data[0],
+            'albumArt': (
+                albumArt(data[4])
+            ),
+            'albumTitle': (
+                data[4]
+            ),
+            'albumArtist': data[1],
+            'isPlaylist': false,
+            'playlistTitle': '',
+            'linkBack': (
+                `/album/${data[4]}`
+            ),
+        };
+    };
+
+    // create new search if new searchTerm is provided
+    useEffect(() => {
+        axios.get(`${API}/search/${searchTerm}`)
+            .then(resp => {
+                let trackList = resp.data.TrackList;
+                let newSearchList = trackList.map(trackInfo => {
+
+                    // code taken from album page
+                    const trackTitle = trackInfo.title;
+                    const trackAlbumArtist = trackInfo.albumArtist;
+                    const trackMins = Math.floor(trackInfo.length / 60);
+                    const trackSecs = Math.round(trackInfo.length % 60);
+                    const trackId = trackInfo._id;
+                    const albumTitle = trackInfo.album;
+
+                    return getTrackData([
+                        trackTitle,
+                        trackAlbumArtist,
+                        trackMins + ':' + (trackSecs < 10 ? '0' : '') + trackSecs,
+                        trackId,
+                        albumTitle
+                    ]);
+                });
+
+                setSearchList(newSearchList);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }, [searchTerm]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // build track list from search list
     useEffect(() => {
         let key = 0;
-        let _trackList = playerQueue.map((data) => {
+        let _trackList = searchList.map((data) => {
             ++key;
             return (
                 <tr key={key} className={Styles.trackEntry}>
@@ -90,34 +152,20 @@ const PlayerQueue = () => {
                             isPlaylist={data.isPlaylist}
                             playlistTitle={data.playlistTitle}
                             linkBack={data.linkBack}
-                            addToQueue={() => { }}  // already in the queue
+                            addToQueue={() =>
+                                QueueManager.addTrack(playerQueue, data, setPlayerQueue)
+                            }
                         />
                     </td>
                     <td>{data.track}</td>
                     <td>{data.albumArtist}</td>
                     <td>{data.audioDuration}</td>
-                    <td>
-                        <img
-                            data-dark-mode-compatible
-                            src={MinusIcon}
-                            onClick={() => removeItem(data.trackId)}
-                            alt={"Remove"}
-                        />
-                    </td>
                 </tr>
             );
         });
-        // oldest track would be at the bottom
-        // playing tracks would advance from down
-        // to top
-        _trackList.reverse();
 
         setTrackList(_trackList);
-    }, [playerQueue]); // eslint-disable-line react-hooks/exhaustive-deps
-
-    let removeItem = (trackId) => {
-        QueueManager.removeTrack(playerQueue, trackId, setPlayerQueue);
-    };
+    }, [searchList]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <>
@@ -137,9 +185,12 @@ const PlayerQueue = () => {
                         alt="Go Back"
                         className={Styles.back}
                         src={LeftIcon}
-                        onClick={() => history.goBack()}
+                        onClick={() => {
+                            setSearchTerm('');
+                            history.goBack();
+                        }}
                     />
-                    <h1 className={Styles.heading}>Queue</h1>
+                    <h1 className={Styles.heading}>{`Search: ${searchTerm}`}</h1>
                 </div>
                 <div className={Styles.content}>
                     <table
@@ -156,4 +207,4 @@ const PlayerQueue = () => {
     );
 };
 
-export default PlayerQueue;
+export default SearchPage;

@@ -112,10 +112,7 @@ const PlayerBar = props => {
 
         getDominantColorAlbumArt(data.albumArt);
 
-        if (data.isPlaylist)
-            setLinkBack(`/playlist/${data.playlistTitle}`);
-        else
-            setLinkBack(`/album/${data.albumTitle}`);
+        setLinkBack(data.linkBack);
 
         //////// } copied from play button 
     };
