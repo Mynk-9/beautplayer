@@ -5,12 +5,14 @@ import AlbumPage from './pages/albumpage/AlbumPage';
 import PlaylistPage from './pages/playlistpage/PlaylistPage';
 import SettingsPage from './pages/settingspage/SettingsPage';
 import PlayerQueue from './pages/playerqueue/PlayerQueue';
+import SearchPage from './pages/searchpage/SearchPage';
 
 import Navbar from './components/navbar/Navbar';
 import PlayerBar from './components/playerbar/PlayerBar';
 
 import ThemeContext from './components/themecontext';
 import PlayerContext from './components/playercontext';
+import SearchContext from './components/searchcontext';
 
 function App() {
 
@@ -34,6 +36,10 @@ function App() {
   const [audioVolume, setAudioVolume] = useState(1.0);
   const [linkBack, setLinkBack] = useState('');
   const [playerQueue, setPlayerQueue] = useState([]);
+  // }
+
+  // search context hooks {
+  const [searchTerm, setSearchTerm] = useState('');
   // }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -88,32 +94,38 @@ function App() {
             setLinkBack, setPlayerQueue
           }}
         >
-          <BrowserRouter>
-            <Navbar />
-            <Switch>
-              <Route exact
-                path="/"
-                render={props => <MainPage />}
-              />
-              <Route
-                path="/album/:albumName"
-                render={props => <AlbumPage {...props} />}
-              />
-              <Route
-                path="/playlist/:playlistName"
-                render={props => <PlaylistPage {...props} />}
-              />
-              <Route
-                path="/settings"
-                render={props => <SettingsPage />}
-              />
-              <Route
-                path="/queue"
-                render={props => <PlayerQueue />}
-              />
-            </Switch>
-            <PlayerBar />
-          </BrowserRouter>
+          <SearchContext.Provider value={{ searchTerm, setSearchTerm }}>
+            <BrowserRouter>
+              <Navbar />
+              <Switch>
+                <Route exact
+                  path="/"
+                  render={props => <MainPage />}
+                />
+                <Route
+                  path="/album/:albumName"
+                  render={props => <AlbumPage {...props} />}
+                />
+                <Route
+                  path="/playlist/:playlistName"
+                  render={props => <PlaylistPage {...props} />}
+                />
+                <Route
+                  path="/settings"
+                  render={props => <SettingsPage />}
+                />
+                <Route
+                  path="/queue"
+                  render={props => <PlayerQueue />}
+                />
+                <Route
+                  path="/search"
+                  render={props => <SearchPage />}
+                />
+              </Switch>
+              <PlayerBar />
+            </BrowserRouter>
+          </SearchContext.Provider>
         </PlayerContext.Provider>
       </ThemeContext.Provider>
     </>
