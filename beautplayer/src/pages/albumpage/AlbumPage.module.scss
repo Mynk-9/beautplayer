@@ -1,13 +1,17 @@
 .section {
-   padding-top: 6rem;
+   // padding-top: 6rem;
    padding-bottom: 6.25rem;
 
    .header {
       --albumArtHeight: 30vh;
       padding: 3rem;
+      padding-top: calc(6rem + 3rem);
+      // top padding + inner padding
+      padding-bottom: 1.5rem;
 
       @media only screen and (max-width: 540px) {
          padding: 1rem;
+         padding-top: calc(6rem + 1rem);
       }
 
       .back {
@@ -83,7 +87,7 @@
    }
 
    .content {
-      padding: 0 8rem 1.5rem 8rem;
+      padding: 1.5rem 8rem 1.5rem 8rem;
 
       @media only screen and (max-width: 540px) {
          padding: 1rem;
