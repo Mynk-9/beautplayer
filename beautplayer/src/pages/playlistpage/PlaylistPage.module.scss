@@ -3,6 +3,57 @@
 // simply import album page styles, no need to rewrite
 
 // overloads:
+
+// blur backdrop
+.section .headerBackgroundWrapper {
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.section .header {
+    backdrop-filter: blur(1rem) brightness(0.5);
+    
+    transition: backdrop-filter var(--std-color-transition-time) ease,
+}
+.section .header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(transparent, white);
+
+    z-index: -1;
+    opacity: 0;
+    transition: opacity var(--std-color-transition-time) ease;
+}
+.section .header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(transparent, black);
+
+    z-index: -1;
+    opacity: 1;
+    transition: opacity var(--std-color-transition-time) ease;
+}
+:global(body.light-mode) .section .header {
+    backdrop-filter: blur(1rem) brightness(1);
+}
+:global(body.light-mode) .section .header::before {
+    opacity: 1;
+}
+:global(body.light-mode) .section .header::after {
+    opacity: 0;
+}
+
+// table mods
+.section .header table {
+    table-layout: fixed;
+}
 .section .header table tr {
     td * {
         vertical-align: middle;
@@ -10,26 +61,34 @@
     }
 
     // action buttons
-    button {
-        margin: 0.5rem;
-        outline: 0;
-        border: 0;
-        padding: 0.5rem;
+    .actionButtonWrapper {
+        display: inline-block;
 
-        color: var(--primary-color);
-        border-radius: var(--border-radius);
-        background-color: var(--non-transparent-acrylic-like-color);
+        * {
+            display: block;
+        }
 
-        cursor: pointer;
+        .actionButton {
+            outline: 0;
+            border: 0;
+            padding: 0.5rem;
 
-        transition: background-color var(--std-color-transition-time) ease;
+            color: var(--primary-color);
+            border-radius: var(--border-radius);
+            background-color: var(--non-transparent-acrylic-like-color);
+
+            cursor: pointer;
+
+            transition: background-color var(--std-color-transition-time) ease;
+        }
 
         span {
-            margin-left: 0.5rem;
-
-            @media only screen and (max-width: 540px) {
-                display: none;
-            }
+            padding-top: 0.25rem;
+            font-size: x-small;
         }
+    }
+
+    .actionButtonWrapper + .actionButtonWrapper {
+        margin-left: 0.5rem;
     }
 }

@@ -1,13 +1,17 @@
 .section {
-   padding-top: 6rem;
+   // padding-top: 6rem;
    padding-bottom: 6.25rem;
 
    .header {
       --albumArtHeight: 30vh;
       padding: 3rem;
+      padding-top: calc(6rem + 3rem);
+      // top padding + inner padding
+      padding-bottom: 1.5rem;
 
-      @media only screen and (max-width: 540px) {
+      @media only screen and (max-width: 768px) {
          padding: 1rem;
+         padding-top: calc(6rem + 1rem);
       }
 
       .back {
@@ -18,7 +22,7 @@
          margin-left: -1rem;
          cursor: pointer;
 
-         @media only screen and (max-width: 540px) {
+         @media only screen and (max-width: 768px) {
             position: relative;
             display: block;
             margin: 0;
@@ -33,7 +37,7 @@
          border-radius: var(--border-radius);
          object-fit: cover;
 
-         @media only screen and (max-width: 540px) {
+         @media only screen and (max-width: 768px) {
             position: relative;
             display: block;
             margin-left: 0;
@@ -60,7 +64,7 @@
                font-family: "Lato-LightItalic";
             }
             td {
-               @media only screen and (max-width: 540px) {
+               @media only screen and (max-width: 768px) {
                   border-top: 1rem solid transparent;
                   border-bottom: 1rem solid transparent;
                }
@@ -68,13 +72,13 @@
          }
          tr:last-child {
             td {
-               @media only screen and (max-width: 540px) {
+               @media only screen and (max-width: 768px) {
                   border-bottom: 0;
                }
             }
          }
 
-         @media only screen and (max-width: 540px) {
+         @media only screen and (max-width: 768px) {
             padding-right: 2rem; // same as left padding
             width: auto;
             height: auto;
@@ -83,9 +87,9 @@
    }
 
    .content {
-      padding: 0 8rem 1.5rem 8rem;
+      padding: 1.5rem 8rem 1.5rem 8rem;
 
-      @media only screen and (max-width: 540px) {
+      @media only screen and (max-width: 768px) {
          padding: 1rem;
       }
    }

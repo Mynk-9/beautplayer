@@ -16,6 +16,7 @@ import LeftIcon from './../../assets/buttonsvg/chevron-left.svg'
 import PlayIcon from './../../assets/buttonsvg/play.svg';
 import TrashIcon from './../../assets/buttonsvg/trash-2.svg';
 import PlusCircleIcon from './../../assets/buttonsvg/plus-circle.svg';
+// import ListIcon from './../../assets/buttonsvg/list.svg';
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
 import { playlistArt } from './../../components/coverArtAPI';
@@ -277,89 +278,108 @@ const PlaylistPage = props => {
                     : null
             }
             <div className={Styles.section}>
-                <div className={Styles.header}>
-                    <img data-dark-mode-compatible
-                        alt="Go Back"
-                        className={Styles.back}
-                        src={LeftIcon}
-                        onClick={() => history.goBack()}
-                    />
-                    <img
-                        alt="Album Art"
-                        className={Styles.albumArt}
-                        onError={(img) => {
-                            img.target.src = AlbumArt;
-                        }}
-                        src={playlistPageArt || AlbumArt}
-                        ref={imgRef}
-                    />
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Playlist</td>
-                                <td>{playlistPageName.replace('%2F', '/')}</td>
-                            </tr>
-                            <tr>
-                                <td>Years</td>
-                                <td>{playlistPageYear}</td>
-                            </tr>
-                            <tr>
-                                <td>Genres</td>
-                                <td>{playlistPageGenre}</td>
-                            </tr>
-                            <tr>
-                                <td>Actions</td>
-                                <td>
-                                    <button
-                                        onClick={playPlaylist}
-                                    >
-                                        <img
-                                            src={PlayIcon}
-                                            alt={"Play Playlist"}
-                                            data-dark-mode-compatible
-                                        />
-                                        <span>Play Playlist</span>
-                                    </button>
-                                    <button
-                                        onClick={addPlaylistToQueue}
-                                    >
-                                        <img
-                                            src={PlusCircleIcon}
-                                            alt={"Add to Queue"}
-                                            data-dark-mode-compatible
-                                        />
-                                        <span>Add to Queue</span>
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            setShowModal({
-                                                'open': true,
-                                                'heading': 'Confirm',
-                                                'body': 'Do you want to delete the playlist?',
-                                                'buttons': [
-                                                    {
-                                                        'text': 'Yes',
-                                                        'function': deletePlaylist,
-                                                    },
-                                                    {
-                                                        'text': 'No',
-                                                        'function': () => { }
-                                                    }
-                                                ],
-                                            });
-                                        }}
-                                    >
-                                        <img
-                                            src={TrashIcon}
-                                            alt={"Delete Playlist"}
-                                            data-dark-mode-compatible
-                                        />
-                                        <span>Delete Playlist</span>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div
+                    className={Styles.headerBackgroundWrapper}
+                    style={{ backgroundImage: `url(${playlistPageArt})` }}
+                >
+                    <div
+                        className={Styles.header}
+                    >
+                        <img data-dark-mode-compatible
+                            alt="Go Back"
+                            className={Styles.back}
+                            src={LeftIcon}
+                            onClick={() => history.goBack()}
+                        />
+                        <img
+                            alt="Album Art"
+                            className={Styles.albumArt}
+                            onError={(img) => {
+                                img.target.src = AlbumArt;
+                            }}
+                            src={playlistPageArt || AlbumArt}
+                            ref={imgRef}
+                        />
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Playlist</td>
+                                    <td>{playlistPageName.replace('%2F', '/')}</td>
+                                </tr>
+                                <tr>
+                                    <td>Years</td>
+                                    <td>{playlistPageYear}</td>
+                                </tr>
+                                <tr>
+                                    <td>Genres</td>
+                                    <td>{playlistPageGenre}</td>
+                                </tr>
+                                <tr>
+                                    <td>Actions</td>
+                                    <td>
+                                        <span className={Styles.actionButtonWrapper}>
+                                            <button
+                                                className={Styles.actionButton}
+                                                data-action={"Play Playlist"}
+                                                onClick={playPlaylist}
+                                            >
+                                                <img
+                                                    src={PlayIcon}
+                                                    alt={"Play Playlist"}
+                                                    data-dark-mode-compatible
+                                                />
+                                            </button>
+                                            <span>Play Playlist</span>
+                                        </span>
+                                        <span className={Styles.actionButtonWrapper}>
+                                            <button
+                                                className={Styles.actionButton}
+                                                data-action={"Add to Queue"}
+                                                onClick={addPlaylistToQueue}
+                                            >
+                                                <img
+                                                    src={PlusCircleIcon}
+                                                    alt={"Add to Queue"}
+                                                    data-dark-mode-compatible
+                                                />
+                                            </button>
+                                            <span>Add to Queue</span>
+                                        </span>
+                                        <span className={Styles.actionButtonWrapper}>
+                                            <button
+                                                className={Styles.actionButton}
+                                                data-action={"Delete Playlist"}
+                                                onClick={() => {
+                                                    setShowModal({
+                                                        'open': true,
+                                                        'heading': 'Confirm',
+                                                        'body': 'Do you want to delete the playlist?',
+                                                        'buttons': [
+                                                            {
+                                                                'text': 'Yes',
+                                                                'function': deletePlaylist,
+                                                            },
+                                                            {
+                                                                'text': 'No',
+                                                                'function': () => { }
+                                                            }
+                                                        ],
+                                                    });
+                                                }}
+                                            >
+                                                <img
+                                                    src={TrashIcon}
+                                                    alt={"Delete Playlist"}
+                                                    data-dark-mode-compatible
+                                                />
+                                            </button>
+                                            <span>Delete Playlist</span>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div className={Styles.content}>
                     <TrackList

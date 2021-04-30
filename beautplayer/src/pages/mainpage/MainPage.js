@@ -22,6 +22,12 @@ const MainPage = (props) => {
             : []
     );
 
+    // set sorting method from localStorage if PersistentStorage is empty
+    PersistentStorage.MainPageAlbumsSort =
+        PersistentStorage.MainPageAlbumsSort
+        || localStorage.getItem('album-sortBy')
+        || 'name';
+
     // api endpoint -- same domain, port 5000
     let API = window.location.origin;
     API = API.substring(0, API.lastIndexOf(':'));
@@ -102,7 +108,14 @@ const MainPage = (props) => {
                     />
                 );
             }
-            albumCards.sort(albumsSortFunctions.default);
+
+            let sortBy =
+                PersistentStorage.MainPageAlbumsSort
+                || localStorage.getItem('album-sortBy')
+                || 'name';
+            albumCards.sort(albumsSortFunctions[sortBy]);
+            PersistentStorage.MainPageAlbumsSort = sortBy;
+
             PersistentStorage.MainPageAllAlbumCards = albumCards;
             setAllAlbums(albumCards);
         }
@@ -244,6 +257,7 @@ const MainPage = (props) => {
         setAllAlbums(_allAlbums);
         PersistentStorage.MainPageAllAlbumCards = _allAlbums;
         PersistentStorage.MainPageAlbumsSort = sortBy;
+        localStorage.setItem('album-sortBy', sortBy);
     };
 
     return (
