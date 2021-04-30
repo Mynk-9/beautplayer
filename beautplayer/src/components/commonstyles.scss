@@ -78,7 +78,7 @@ body {
       transition: filter ease var(--std-color-transition-time);
    }
 
-   @media only screen and (max-width: 540px) {
+   @media only screen and (max-width: 768px) {
       --std-color-transition-time: 0;
    }
 }
@@ -115,7 +115,7 @@ body::before {
    transition: opacity var(--std-color-transition-time) ease;
    z-index: -1;
 
-   @media only screen and (max-width: 540px) {
+   @media only screen and (max-width: 768px) {
       transition: none;
    }
 }
@@ -127,21 +127,21 @@ body.light-mode::before {
 .cursor-pointer {
    cursor: pointer;
 
-   @media only screen and (max-width: 540px) {
+   @media only screen and (max-width: 768px) {
       cursor: initial;
    }
 }
 
 .display-mobile-only {
-    @media only screen and (min-width: 540px) {
+    @media only screen and (min-width: 768px) {
         display: none;
     }
-    @media only screen and (width: 540px) {
+    @media only screen and (width: 768px) {
         display: initial;
     }
 }
 .display-desktop-only {
-    @media only screen and (max-width: 540px) {
+    @media only screen and (max-width: 768px) {
         display: none;
     }
 }

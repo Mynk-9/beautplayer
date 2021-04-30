@@ -47,7 +47,7 @@
    }
 }
 
-@media only screen and (max-width: 540px) {
+@media only screen and (max-width: 768px) {
    .nav .openNav {
       display: initial;
    }
@@ -67,7 +67,7 @@
     padding: 0 1rem;
     margin: auto;
 
-    @media only screen and (max-width: 540px) {
+    @media only screen and (max-width: 768px) {
         padding: 1rem 1rem;
     }
 }
