@@ -21,7 +21,7 @@
             }
         }
         td:nth-child(4) {
-            @media only screen and (max-width: 540px) {
+            @media only screen and (max-width: 768px) {
                 display: none;
             }
         }
@@ -62,7 +62,7 @@
     .trackEntry:hover {
         background-color: var(--tint-level2-color);
 
-        @media only screen and (max-width: 540px) {
+        @media only screen and (max-width: 768px) {
             background-color: initial;
         }
     }
@@ -76,7 +76,7 @@ body[class~="dark-mode"] {
         .trackEntry:hover {
             background-color: var(--tint-level1-color);
 
-            @media only screen and (max-width: 540px) {
+            @media only screen and (max-width: 768px) {
                 background-color: initial;
             }
         }

@@ -9,7 +9,7 @@
 
    transition: background-color var(--std-color-transition-time) ease;
 
-   @media only screen and (max-width: 540px) {
+   @media only screen and (max-width: 768px) {
       transition: none;
       margin: 0.5rem 0 0.5rem 0;
       width: 100%;
@@ -30,7 +30,7 @@
    .searchBox:focus {
       --box-width: 20rem;
 
-      @media only screen and (max-width: 540px) {
+      @media only screen and (max-width: 768px) {
          --box-width: 15rem;
       }
    }

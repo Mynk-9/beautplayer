@@ -26,7 +26,7 @@
       // flex: 1;
       padding: 0;
 
-      @media only screen and (max-width: 540px) {
+      @media only screen and (max-width: 768px) {
          display: block;
          flex: 1;
       }
@@ -50,7 +50,7 @@
             border-radius: 50%;
             background-color: rgba(100, 100, 100, 0.5);
 
-            @media only screen and (max-width: 540px) {
+            @media only screen and (max-width: 768px) {
                display: block;
             }
          }
@@ -76,18 +76,18 @@
 
             padding-left: 1rem;
 
-            @media only screen and (max-width: 540px) {
+            @media only screen and (max-width: 768px) {
                display: block;
                padding-left: 0.5rem;
             }
          }
 
-         @media only screen and (max-width: 540px) {
+         @media only screen and (max-width: 768px) {
             display: block;
          }
       }
       .albumInfo[data-visible="false"] {
-         @media only screen and (max-width: 540px) {
+         @media only screen and (max-width: 768px) {
             display: none;
          }
       }
@@ -104,7 +104,7 @@
    .left:hover {
       background-color: var(--tint-level2-color);
 
-      @media only screen and (max-width: 540px) {
+      @media only screen and (max-width: 768px) {
          background-color: initial;
       }
    }
@@ -115,7 +115,7 @@
       // thanks: https://stackoverflow.com/a/17967969/6262571
       transform: translate3D(0, 0, 0);
 
-      @media only screen and (max-width: 540px) {
+      @media only screen and (max-width: 768px) {
          display: none;
       }
    }
@@ -131,7 +131,7 @@
       // 3 x play-button + 2 x padding
       // play-button = width + 2 x padding + 2 x border + 2 x margin
 
-      @media only screen and (max-width: 540px) {
+      @media only screen and (max-width: 768px) {
          flex: 1;
       }
    }
@@ -164,7 +164,7 @@
       }
    }
    .buttonSmall[data-visible="false"] {
-      @media only screen and (max-width: 540px) {
+      @media only screen and (max-width: 768px) {
          display: none;
       }
    }
@@ -176,7 +176,7 @@
    button:hover {
       background-color: var(--tint-level2-color);
 
-      @media only screen and (max-width: 540px) {
+      @media only screen and (max-width: 768px) {
          background-color: var(--tint-level1-color);
       }
    }

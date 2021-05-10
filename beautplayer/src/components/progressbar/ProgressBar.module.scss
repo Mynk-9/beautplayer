@@ -15,7 +15,7 @@
    background-color: var(--acrylic-color);
    border-radius: var(--border-radius);
 
-   @media only screen and (max-width: 540px) {
+   @media only screen and (max-width: 768px) {
       width: 7em;
    }
 
@@ -34,7 +34,7 @@
       right: 0;
       top: -300%;
 
-      @media only screen and (max-width: 540px) {
+      @media only screen and (max-width: 768px) {
          display: none;
       }
    }
