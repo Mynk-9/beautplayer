@@ -124,6 +124,7 @@ const TrackList = props => {
                 <td>
                     <PlayButton
                         audioSrc={trackData.audioSrc}
+                        trackId={trackData.trackId}
                         audioDuration={trackData.audioDuration}
                         track={trackData.track}
                         albumArt={trackData.albumArt}

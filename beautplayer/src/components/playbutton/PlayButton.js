@@ -8,6 +8,7 @@ import PlayIcon from './../../assets/buttonsvg/play.svg';
 import PauseIcon from './../../assets/buttonsvg/pause.svg';
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
+import PlayerManager from '../playermanager';
 
 const ColorThief = require('color-thief');
 
@@ -18,6 +19,8 @@ const PlayButton = props => {
     const { setAcrylicColor } = useContext(ThemeContext);
 
     const [playButtonState, setPlayButtonState] = useState('play-button');
+
+    const playerManager = PlayerManager.getInstance();
 
     // INFO:
     // following code is also copied to PlayerBar.js under minor modifications
@@ -35,22 +38,20 @@ const PlayButton = props => {
             setAcrylicColor(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.6)`);
         };
 
-
         imgEle.crossOrigin = "Anonymous";
         imgEle.src = props.albumArt;
-
-        // let colorThief = new ColorThief();
-        // let rgb = colorThief.getColor(artContext.current);
-        // setAcrylicColor(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.6)`);
     };
 
     // play/pause toggle
     const play = () => {
         if (audioSrc === props.audioSrc) {
-            if (playPause === 'play')
+            if (playPause === 'play') {
                 setPlayPause('pause');
-            else
+                playerManager.pause();
+            } else {
                 setPlayPause('play');
+                playerManager.play();
+            }
         } else {
             setAudioSrc(props.audioSrc);
             // let duration = 0;
@@ -70,6 +71,8 @@ const PlayButton = props => {
             props.addToQueue(); // add the track to queue
 
             setPlayPause('play');
+            playerManager.setCurrentTrack(props.trackId);
+            playerManager.play();
         }
     };
 
