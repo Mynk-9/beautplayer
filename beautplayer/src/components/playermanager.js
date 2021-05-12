@@ -1,87 +1,140 @@
+import QueueManager from './queuemanager';
+
 var PlayerManager = (() => {
     var instance;
     function init() {
 
         // prev track, current track, next track
-        let players = [new Audio(), new Audio(), new Audio()];
+        let players = [
+            {
+                player: new Audio(),
+                trackId: null,
+            },
+            {
+                player: new Audio(),
+                trackId: null,
+            },
+            {
+                player: new Audio(),
+                trackId: null,
+            },
+        ];
         let _current = 0;
-        let getCurrentPlayer = () => players[_current];
-        let getNextPlayer = () => players[_current < 2 ? _current + 1 : 0];
-        let getPrevPlayer = () => players[_current > 0 ? _current - 1 : 2];
-        let updateCurrent = (moveAhead = true) => {
+        let _next = 1;
+        let _prev = 2;
+        let shuffle = false;
+        const updateCurrentIndex = (moveAhead = true) => {
             if (moveAhead)
                 _current = _current < 2 ? _current + 1 : 0;
             else
                 _current = _current > 0 ? _current - 1 : 2;
+
+            _next = _current < 2 ? _current + 1 : 0;
+            _prev = _current > 0 ? _current - 1 : 2;
+        };
+
+        // temporary setup of API link /////////////////////////
+        let API = window.location.origin;                     //
+        API = API.substring(0, API.lastIndexOf(':'));         //
+        API += ':5000';                                       //
+        ////////////////////////////////////////////////////////
+
+        const prefetchNextTrack = () => {
+            let nextTrackId =
+                QueueManager.getNextTrack(players[_current].trackId, shuffle);
+            if (nextTrackId) {
+                players[_next].trackId = nextTrackId;
+                players[_next].player.src = `${API}/tracks/${nextTrackId}/stream`;
+                players[_next].player.pause();
+            }
+        };
+        const prefetchPrevTrack = () => {
+            let prevTrackId =
+                QueueManager.getPrevTrack(players[_current].trackId);
+            if (prevTrackId) {
+                players[_prev].trackId = prevTrackId;
+                players[_prev].player.src = `${API}/tracks/${prevTrackId}/stream`;
+                players[_prev].player.pause();
+            }
         };
 
 
         return {
             /**
-             * Sets the next song streaming url
-             * @param {String} url stream url of next song
+             * Force prefetch next track if not yet prefetched
              */
-            setNext: (url) => {
-                getNextPlayer().src = url;
-                _nextSet = true;
+            forcePrefetch: () => {
+                if (players[_next].player.src
+                    && players[_next].player.src !== '')
+                    prefetchNextTrack();
             },
             /**
              * Go to next track
              * @returns true if next playing, false if next not set
              */
             next: () => {
-                getCurrentPlayer().pause();
-                if (!getNextPlayer().src) return false;
+                players[_current].player.pause();
+                if (!players[_next].player.src
+                    || players[_next].player.src === '')
+                    return false;
 
-                getNextPlayer().play();
-                updateCurrent(true);
+                players[_next].player.play();
+                updateCurrentIndex(true);
+                prefetchNextTrack();
+
                 return true;
             },
             /**
              * Go to prev track
              */
             prev: () => {
-                getCurrentPlayer().pause();
-                if (!getPrevPlayer().src) return false;
+                players[_current].player.pause();
+                if (!players[_prev].player.src
+                    || players[_prev].player.src === '')
+                    return false;
 
-                getPrevPlayer().play();
-                updateCurrent(false);
+                players[_prev].player.play();
+                updateCurrentIndex(false);
+                prefetchPrevTrack();
+
                 return true;
             },
             /**
              * Play track
              */
             play: () => {
-                getCurrentPlayer().play();
+                if (players[_current].player.src
+                    && players[_current].player.src !== '')
+                    players[_current].player.play();
             },
             /**
              * Pause track
              */
             pause: () => {
-                getCurrentPlayer().pause();
+                players[_current].player.pause();
             },
             /**
              * Check if player playing or paused
              * @returns true if playing, false if paused
              */
             getPlayPause: () => {
-                return !getCurrentPlayer().paused;
+                return !players[_current].player.paused;
             },
             /**
              * Sets the volume for the player
              * @param {Number} volume number between 0.0 to 1.0 for audio volume
              */
             setVolume: (volume) => {
-                getCurrentPlayer().volume = volume;
-                getNextPlayer().volume = volume;
-                getPrevPlayer().volume = volume;
+                players[_current].player.volume = volume;
+                players[_next].player.volume = volume;
+                players[_prev].player.volume = volume;
             },
             /**
              * Gets the current player
              * @returns current player instance
              */
             getPlayer: () => {
-                return getCurrentPlayer();
+                return players[_current].player;
             },
         };
 
