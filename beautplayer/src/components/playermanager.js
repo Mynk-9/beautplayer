@@ -100,6 +100,29 @@ var PlayerManager = (() => {
                 return true;
             },
             /**
+             * Sets current track of player and begins prefetch of previous and
+             * next tracks in the queue
+             * @param {String} trackId 
+             * @returns false if trackId is null or empty, true otherwise
+             */
+            setCurrentTrack: (trackId) => {
+                if (!trackId || trackId === '')
+                    return false;
+
+                let playState = !players[_current].player.paused;
+                players[_current].trackId = trackId;
+                players[_current].player.src = `${API}/tracks/${trackId}/stream`;
+                if (playState)
+                    players[_current].player.play();
+                else
+                    players[_current].player.pause();
+
+                prefetchNextTrack();
+                prefetchPrevTrack();
+
+                return true;
+            },
+            /**
              * Play track
              */
             play: () => {
