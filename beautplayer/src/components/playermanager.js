@@ -103,10 +103,13 @@ var PlayerManager = (() => {
              * Sets current track of player and begins prefetch of previous and
              * next tracks in the queue
              * @param {String} trackId 
-             * @returns false if trackId is null or empty, true otherwise
+             * @returns false if trackId is null or empty, false if track is
+             *          absent in queue, true otherwise
              */
             setCurrentTrack: (trackId) => {
                 if (!trackId || trackId === '')
+                    return false;
+                if (!QueueManager.checkQueue(trackId))
                     return false;
 
                 let playState = !players[_current].player.paused;
