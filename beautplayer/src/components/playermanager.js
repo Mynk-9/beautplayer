@@ -23,6 +23,7 @@ var PlayerManager = (() => {
         let _next = 1;
         let _prev = 2;
         let shuffle = false;
+        let playState = false;
         const updateCurrentIndex = (moveAhead = true) => {
             if (moveAhead)
                 _current = _current < 2 ? _current + 1 : 0;
@@ -64,8 +65,8 @@ var PlayerManager = (() => {
              * Force prefetch next track if not yet prefetched
              */
             forcePrefetch: () => {
-                if (players[_next].player.src
-                    && players[_next].player.src !== '')
+                if (!players[_next].player.src
+                    || players[_next].player.src === '')
                     prefetchNextTrack();
             },
             /**
@@ -73,12 +74,12 @@ var PlayerManager = (() => {
              * @returns true if next playing, false if next not set
              */
             next: () => {
-                let playState = !players[_current].player.paused;
                 players[_current].player.pause();
                 if (!players[_next].player.src
                     || players[_next].player.src === '')
                     return false;
 
+                players[_current].player.currentTime = 0;
                 if (playState)
                     players[_next].player.play();
                 updateCurrentIndex(true);
@@ -90,12 +91,12 @@ var PlayerManager = (() => {
              * Go to prev track
              */
             prev: () => {
-                let playState = !players[_current].player.paused;
                 players[_current].player.pause();
                 if (!players[_prev].player.src
                     || players[_prev].player.src === '')
                     return false;
 
+                players[_current].player.currentTime = 0;
                 if (playState)
                     players[_prev].player.play();
                 updateCurrentIndex(false);
@@ -124,6 +125,9 @@ var PlayerManager = (() => {
                 else
                     players[_current].player.pause();
 
+                if (playState)
+                    players[_current].player.play();
+
                 prefetchNextTrack();
                 prefetchPrevTrack();
 
@@ -134,14 +138,17 @@ var PlayerManager = (() => {
              */
             play: () => {
                 if (players[_current].player.src
-                    && players[_current].player.src !== '')
+                    && players[_current].player.src !== '') {
                     players[_current].player.play();
+                    playState = true;
+                }
             },
             /**
              * Pause track
              */
             pause: () => {
                 players[_current].player.pause();
+                playState = false;
             },
             /**
              * Check if player playing or paused
@@ -165,6 +172,13 @@ var PlayerManager = (() => {
              */
             getPlayer: () => {
                 return players[_current].player;
+            },
+            /**
+             * Sets shuffle parameter for player.
+             * @param {Boolean} _shuffle 
+             */
+            setShuffle: (_shuffle) => {
+                shuffle = _shuffle;
             },
         };
 

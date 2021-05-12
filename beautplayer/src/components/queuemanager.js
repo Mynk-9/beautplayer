@@ -1,50 +1,50 @@
-import queue from './queue';
+import BeautPlayerQueue from "./queue";
 
 const QueueManager = {
     /**
-     * Adds a new track to player queue.
+     * Adds a new track to player BeautPlayerQueue.queue.
      * 
      * @param {{}} trackData data of the track, definition found in 
      *                      PlayerContext or TrackList
      */
     addTrack: (trackData) => {
         // remove the track from previous position to be added to front
-        for (let i = 0; i < queue.length; ++i) {
-            let track = queue[i];
+        for (let i = 0; i < BeautPlayerQueue.queue.length; ++i) {
+            let track = BeautPlayerQueue.queue[i];
             if (track.trackId === trackData.trackId) {
-                queue.splice(i, 1);
+                BeautPlayerQueue.queue.splice(i, 1);
                 break;
             }
         }
-        queue.push(trackData);
+        BeautPlayerQueue.queue.push(trackData);
     },
 
     /**
-     * Adds a list of new tracks to player queue.
+     * Adds a list of new tracks to player BeautPlayerQueue.queue.
      * 
      * @param {[]} trackDataList array of data of the tracks, definition found in 
      *                      PlayerContext or TrackList
-     * @returns updated queue
+     * @returns updated BeautPlayerQueue.queue
      */
     addTracksMany: (trackDataList) => {
-        let newData = [...queue, ...trackDataList];
+        let newData = [...BeautPlayerQueue.queue, ...trackDataList];
         let newDataSet = new Set(newData);
-        queue = [...newDataSet];
+        BeautPlayerQueue.queue = [...newDataSet];
     },
 
     /**
-     * Removes a track from player queue.
+     * Removes a track from player BeautPlayerQueue.queue.
      * 
      * @param {String} trackId trackId of the track
      */
     removeTrack: (trackId) => {
         let i = 0;
-        for (; i < queue.length; ++i)
-            if (trackId === queue[i].trackId)
+        for (; i < BeautPlayerQueue.queue.length; ++i)
+            if (trackId === BeautPlayerQueue.queue[i].trackId)
                 break;
-        if (i >= queue.length)
+        if (i >= BeautPlayerQueue.queue.length)
             return;
-        queue.splice(i, 1);
+        BeautPlayerQueue.queue.splice(i, 1);
     },
 
     /**
@@ -61,25 +61,25 @@ const QueueManager = {
         // get current track position
         let i = 0;
         let nextIndex = -1;
-        for (i = 0; i < queue.length; ++i)
-            if (queue[i].trackId === currentTrack)
+        for (i = 0; i < BeautPlayerQueue.queue.length; ++i)
+            if (BeautPlayerQueue.queue[i].trackId === currentTrack)
                 break;
         nextIndex = i + 1;
 
-        if (nextIndex >= queue.length) // check
+        if (nextIndex >= BeautPlayerQueue.queue.length) // check
             return null;
 
         if (shuffle) {  // shuffle
-            let unplayedTracks = queue.length - nextIndex;
+            let unplayedTracks = BeautPlayerQueue.queue.length - nextIndex;
             let randomIndex =
                 nextIndex + Math.floor(Math.random() * unplayedTracks);
             // swap positions of next and the random track
-            let tmp = queue[nextIndex];
-            queue[nextIndex] = queue[randomIndex];
-            queue[randomIndex] = tmp;
+            let tmp = BeautPlayerQueue.queue[nextIndex];
+            BeautPlayerQueue.queue[nextIndex] = BeautPlayerQueue.queue[randomIndex];
+            BeautPlayerQueue.queue[randomIndex] = tmp;
         }
 
-        return queue[nextIndex];
+        return BeautPlayerQueue.queue[nextIndex];
     },
 
     /**
@@ -91,31 +91,31 @@ const QueueManager = {
      */
     getPrevTrack: (currentTrack) => {
         let i = 0;
-        for (i = 0; i < queue.length; ++i)
-            if (queue[i].trackId === currentTrack)
+        for (i = 0; i < BeautPlayerQueue.queue.length; ++i)
+            if (BeautPlayerQueue.queue[i].trackId === currentTrack)
                 break;
         --i; // prev track
-        if (i < 0 || i >= queue.length) // check
+        if (i < 0 || i >= BeautPlayerQueue.queue.length) // check
             return null;
-        return queue[i];
+        return BeautPlayerQueue.queue[i];
     },
 
     /**
-     * Clears the player queue.
+     * Clears the player BeautPlayerQueue.queue.
      */
     clearQueue: () => {
-        queue = [];
+        BeautPlayerQueue.queue = [];
     },
 
     /**
-     * Check if track is present in the queue
+     * Check if track is present in the BeautPlayerQueue.queue
      * 
      * @param {String} trackId 
-     * @returns true if track is present in the queue, false otherwise
+     * @returns true if track is present in the BeautPlayerQueue.queue, false otherwise
      */
     checkQueue: (trackId) => {
-        for (let i = 0; i < queue.length; ++i)
-            if (trackId === queue[i].trackId)
+        for (let i = 0; i < BeautPlayerQueue.queue.length; ++i)
+            if (trackId === BeautPlayerQueue.queue[i].trackId)
                 return true;
         return false;
     },

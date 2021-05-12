@@ -122,11 +122,11 @@ const PlayerBar = props => {
         //////// } copied from play button 
     };
     let nextTrack = () => {
-        setPlayPause('pause');      // temporary pause
-        playerManager.pause();
+        // setPlayPause('pause');      // temporary pause
+        // playerManager.pause();
 
         let trackId = audioSrc;     // both are same
-        let trackData = QueueManager.getNextTrack(trackId, shuffle);
+        let trackData = QueueManager.getNextTrack(trackId);
         if (!trackData) return;
         setTheTrack(trackData);
 
@@ -137,8 +137,8 @@ const PlayerBar = props => {
         // go to prev track if current time < 5s
         // else set current time to 0s
         if (playerManager.getPlayer().currentTime < 5) {
-            setPlayPause('pause');      // temporary pause
-            playerManager.pause();
+            // setPlayPause('pause');      // temporary pause
+            // playerManager.pause();
 
             let trackId = audioSrc;     // both are same
             let trackData = QueueManager.getPrevTrack(trackId);
@@ -187,6 +187,10 @@ const PlayerBar = props => {
     useEffect(() => {
         playerManager.getPlayer().loop = loopTrack;
     }, [loopTrack]);
+
+    useEffect(() => {
+        playerManager.setShuffle(shuffle);
+    }, [shuffle]);
 
     useEffect(() => {
         document.title = 'BeautPlayer'

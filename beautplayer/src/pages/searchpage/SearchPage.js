@@ -153,7 +153,7 @@ const SearchPage = () => {
                             playlistTitle={data.playlistTitle}
                             linkBack={data.linkBack}
                             addToQueue={() =>
-                                QueueManager.addTrack(playerQueue, data, setPlayerQueue)
+                                QueueManager.addTrack(data)
                             }
                         />
                     </td>

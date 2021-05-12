@@ -1,4 +1,6 @@
-var BeautPlayerQueue = [];
+class BeautPlayerQueue {
+    static queue = [];
+}
 
 // see components/tracklist/TrackList.js for more info
 // [
