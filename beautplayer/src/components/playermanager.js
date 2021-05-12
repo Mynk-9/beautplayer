@@ -41,8 +41,8 @@ var PlayerManager = (() => {
 
         const prefetchNextTrack = () => {
             let nextTrackId =
-                QueueManager.getNextTrack(players[_current].trackId, shuffle);
-            if (nextTrackId) {
+                QueueManager.getNextTrack(players[_current].trackId, shuffle)?.trackId;
+            if (nextTrackId && players[_next].trackId !== nextTrackId) {
                 players[_next].trackId = nextTrackId;
                 players[_next].player.src = `${API}/tracks/${nextTrackId}/stream`;
                 players[_next].player.pause();
@@ -50,8 +50,8 @@ var PlayerManager = (() => {
         };
         const prefetchPrevTrack = () => {
             let prevTrackId =
-                QueueManager.getPrevTrack(players[_current].trackId);
-            if (prevTrackId) {
+                QueueManager.getPrevTrack(players[_current].trackId)?.trackId;
+            if (prevTrackId && players[_prev].trackId !== prevTrackId) {
                 players[_prev].trackId = prevTrackId;
                 players[_prev].player.src = `${API}/tracks/${prevTrackId}/stream`;
                 players[_prev].player.pause();
@@ -73,12 +73,14 @@ var PlayerManager = (() => {
              * @returns true if next playing, false if next not set
              */
             next: () => {
+                let playState = !players[_current].player.paused;
                 players[_current].player.pause();
                 if (!players[_next].player.src
                     || players[_next].player.src === '')
                     return false;
 
-                players[_next].player.play();
+                if (playState)
+                    players[_next].player.play();
                 updateCurrentIndex(true);
                 prefetchNextTrack();
 
@@ -88,12 +90,14 @@ var PlayerManager = (() => {
              * Go to prev track
              */
             prev: () => {
+                let playState = !players[_current].player.paused;
                 players[_current].player.pause();
                 if (!players[_prev].player.src
                     || players[_prev].player.src === '')
                     return false;
 
-                players[_prev].player.play();
+                if (playState)
+                    players[_prev].player.play();
                 updateCurrentIndex(false);
                 prefetchPrevTrack();
 
