@@ -106,6 +106,19 @@ const QueueManager = {
     clearQueue: () => {
         queue = [];
     },
+
+    /**
+     * Check if track is present in the queue
+     * 
+     * @param {String} trackId 
+     * @returns true if track is present in the queue, false otherwise
+     */
+    checkQueue: (trackId) => {
+        for (let i = 0; i < queue.length; ++i)
+            if (trackId === queue[i].trackId)
+                return true;
+        return false;
+    },
 };
 
 export default QueueManager;
