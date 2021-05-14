@@ -151,6 +151,7 @@ const PlayerBar = props => {
             playerManager.getPlayer().currentTime = 0;
         }
     };
+    playerManager.setOnTrackEnd(nextTrack);
 
     // useEffect(() => {
 
@@ -185,7 +186,7 @@ const PlayerBar = props => {
     }, [audioVolume]);
 
     useEffect(() => {
-        playerManager.getPlayer().loop = loopTrack;
+        playerManager.setLoop(loopTrack);
     }, [loopTrack]);
 
     useEffect(() => {
@@ -207,15 +208,6 @@ const PlayerBar = props => {
         if (audioVolume < 1)
             setAudioVolume(
                 parseFloat(playerManager.getPlayer().volume + 0.1).toFixed(2));
-    };
-
-    // let audioPlayerOnEndedHandler = () => {
-    //     if (!loopTrack)
-    //         nextTrack();
-    // }
-    playerManager.getPlayer().onended = () => {
-        if (!loopTrack)
-            nextTrack();
     };
 
     return (
