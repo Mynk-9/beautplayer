@@ -123,7 +123,10 @@ const PlayerBar = props => {
 
         let trackId = audioSrc;     // both are same
         let trackData = QueueManager.getNextTrack(trackId);
-        if (!trackData) return;
+        if (!trackData) {
+            setPlayPause('pause');
+            return;
+        }
         setTheTrack(trackData);
 
         // setPlayPause('play');
@@ -138,7 +141,10 @@ const PlayerBar = props => {
 
             let trackId = audioSrc;     // both are same
             let trackData = QueueManager.getPrevTrack(trackId);
-            if (!trackData) return;
+            if (!trackData) {
+                setPlayPause('pause');
+                return;
+            }
             setTheTrack(trackData);
 
             // setPlayPause('play');
