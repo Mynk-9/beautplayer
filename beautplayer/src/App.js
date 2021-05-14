@@ -10,11 +10,15 @@ import SearchPage from './pages/searchpage/SearchPage';
 import Navbar from './components/navbar/Navbar';
 import PlayerBar from './components/playerbar/PlayerBar';
 
+import PlayerManager from './components/playermanager';
+
 import ThemeContext from './components/themecontext';
 import PlayerContext from './components/playercontext';
 import SearchContext from './components/searchcontext';
 
 function App() {
+
+  let playerManager = PlayerManager.getInstance();
 
   // navbar acrylic color state
   const [acrylicColor, setAcrylicColor] = useState('--acrylic-color');
@@ -26,7 +30,7 @@ function App() {
   // }
 
   // player context hooks {
-  const [playPause, setPlayPause] = useState('pause');
+  const [playPause, _setPlayPause] = useState('pause');
   const [albumArt, setAlbumArt] = useState();           // AlbumArt           ---|
   const [albumTitle, setAlbumTitle] = useState('');     // Awesome Album      ---| these were the original testing values uwu
   const [albumArtist, setAlbumArtist] = useState('');   // Human              ---|
@@ -36,6 +40,15 @@ function App() {
   const [audioVolume, setAudioVolume] = useState(1.0);
   const [linkBack, setLinkBack] = useState('');
   const [playerQueue, setPlayerQueue] = useState([]);
+
+  const setPlayPause = (newState) => {
+    if (newState === 'play')
+      playerManager.play();
+    else
+      playerManager.pause();
+    _setPlayPause(newState);
+  };
+
   // }
 
   // search context hooks {
@@ -82,19 +95,28 @@ function App() {
   return (
     <>
       <ThemeContext.Provider value={{
-        colorConfig, setColorConfig, acrylicColor, setAcrylicColor,
-        letAcrylicTints, setLetAcrylicTints, artContext, setArtContext
+        colorConfig: colorConfig, setColorConfig: setColorConfig,
+        acrylicColor: acrylicColor, setAcrylicColor: setAcrylicColor,
+        letAcrylicTints: letAcrylicTints, setLetAcrylicTints: setLetAcrylicTints,
+        artContext: artContext, setArtContext: setArtContext
       }}>
         <PlayerContext.Provider
           value={{
-            playPause, albumArt, albumTitle, albumArtist, currentTrack,
-            audioSrc, audioDuration, audioVolume, linkBack, playerQueue,
-            setPlayPause, setAlbumArt, setAlbumTitle, setAlbumArtist,
-            setCurrentTrack, setAudioSrc, setAudioDuration, setAudioVolume,
-            setLinkBack, setPlayerQueue
+            playPause: playPause, setPlayPause: setPlayPause,
+            albumArt: albumArt, setAlbumArt: setAlbumArt,
+            albumTitle: albumTitle, setAlbumTitle: setAlbumTitle,
+            albumArtist: albumArtist, setAlbumArtist: setAlbumArtist,
+            currentTrack: currentTrack, setCurrentTrack: setCurrentTrack,
+            audioSrc: audioSrc, setAudioSrc: setAudioSrc,
+            audioDuration: audioDuration, setAudioDuration: setAudioDuration,
+            audioVolume: audioVolume, setAudioVolume: setAudioVolume,
+            linkBack: linkBack, setLinkBack: setLinkBack,
+            playerQueue: playerQueue, setPlayerQueue: setPlayerQueue
           }}
         >
-          <SearchContext.Provider value={{ searchTerm, setSearchTerm }}>
+          <SearchContext.Provider
+            value={{ searchTerm: searchTerm, setSearchTerm: setSearchTerm }}
+          >
             <BrowserRouter>
               <Navbar />
               <Switch>

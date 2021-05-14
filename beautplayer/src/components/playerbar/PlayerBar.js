@@ -71,14 +71,10 @@ const PlayerBar = props => {
     API += ':5000';
 
     let togglePlay = () => {
-        if (playPause === 'play') {
+        if (playPause === 'play')
             setPlayPause('pause');
-            playerManager.pause();
-        }
-        else {
+        else
             setPlayPause('play');
-            playerManager.play();
-        }
     };
 
     // advance on the playlist
@@ -130,7 +126,7 @@ const PlayerBar = props => {
         if (!trackData) return;
         setTheTrack(trackData);
 
-        setPlayPause('play');
+        // setPlayPause('play');
         playerManager.next();
     };
     let prevTrack = () => {
@@ -145,7 +141,7 @@ const PlayerBar = props => {
             if (!trackData) return;
             setTheTrack(trackData);
 
-            setPlayPause('play');
+            // setPlayPause('play');
             playerManager.prev();
         } else {
             playerManager.getPlayer().currentTime = 0;

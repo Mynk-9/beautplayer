@@ -47,10 +47,8 @@ const PlayButton = props => {
         if (audioSrc === props.audioSrc) {
             if (playPause === 'play') {
                 setPlayPause('pause');
-                playerManager.pause();
             } else {
                 setPlayPause('play');
-                playerManager.play();
             }
         } else {
             setAudioSrc(props.audioSrc);
@@ -70,9 +68,8 @@ const PlayButton = props => {
 
             props.addToQueue(); // add the track to queue
 
-            setPlayPause('play');
             playerManager.setCurrentTrack(props.trackId);
-            playerManager.play();
+            setPlayPause('play');
         }
     };
 
