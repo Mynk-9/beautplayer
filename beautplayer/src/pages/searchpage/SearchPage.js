@@ -18,6 +18,8 @@ import QueueManager from './../../components/queuemanager';
 
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg';
 import PlusIcon from './../../assets/buttonsvg/plus.svg';
+import PlusCircleIcon from './../../assets/buttonsvg/plus-circle.svg';
+import CheckIcon from './../../assets/buttonsvg/check.svg';
 import { albumArt } from '../../components/coverArtAPI';
 
 const SearchPage = () => {
@@ -125,6 +127,25 @@ const SearchPage = () => {
                                     'text': 'Like',
                                 },
                                 {
+                                    'text': 'Add to Queue',
+                                    'component': (
+                                        <img
+                                            alt={""}
+                                            src={PlusCircleIcon}
+                                            data-dark-mode-compatible
+                                        />
+                                    ),
+                                    'successComponent': (
+                                        <img
+                                            alt={"Done"}
+                                            src={CheckIcon}
+                                            data-dark-mode-compatible
+                                        />
+                                    ),
+                                    'onClick': () =>
+                                        QueueManager.addTrack(data),
+                                },
+                                {
                                     'component':
                                         <img
                                             alt={""}
@@ -144,6 +165,7 @@ const SearchPage = () => {
                     <td>
                         <PlayButton
                             audioSrc={data.audioSrc}
+                            trackId={data.trackId}
                             audioDuration={data.audioDuration}
                             track={data.track}
                             albumArt={data.albumArt}
