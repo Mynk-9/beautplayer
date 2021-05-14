@@ -23,6 +23,7 @@ var PlayerManager = (() => {
         let _next = 1;
         let _prev = 2;
         let shuffle = false;
+        let loop = false;
         let playState = false;
         const updateCurrentIndex = (moveAhead = true) => {
             if (moveAhead)
@@ -82,6 +83,10 @@ var PlayerManager = (() => {
                 players[_current].player.currentTime = 0;
                 if (playState)
                     players[_next].player.play();
+
+                players[_next].player.onended = players[_current].player.onended;
+                players[_current].player.onended = () => { };
+
                 updateCurrentIndex(true);
                 prefetchNextTrack();
 
@@ -99,6 +104,10 @@ var PlayerManager = (() => {
                 players[_current].player.currentTime = 0;
                 if (playState)
                     players[_prev].player.play();
+
+                players[_prev].player.onended = players[_current].player.onended;
+                players[_current].player.onended = () => { };
+
                 updateCurrentIndex(false);
                 prefetchPrevTrack();
 
@@ -162,9 +171,7 @@ var PlayerManager = (() => {
              * @param {Number} volume number between 0.0 to 1.0 for audio volume
              */
             setVolume: (volume) => {
-                players[_current].player.volume = volume;
-                players[_next].player.volume = volume;
-                players[_prev].player.volume = volume;
+                players.forEach(({ player }) => player.volume = volume);
             },
             /**
              * Gets the current player
@@ -179,6 +186,31 @@ var PlayerManager = (() => {
              */
             setShuffle: (_shuffle) => {
                 shuffle = _shuffle;
+            },
+            /**
+             * Shuffle true/false
+             * @returns bool
+             */
+            getShuffle: () => shuffle,
+            /**
+             * Sets loop parameter for player.
+             * @param {Boolean} _loop 
+             */
+            setLoop: (_loop) => {
+                loop = _loop;
+                players.forEach(({ player }) => player.loop = _loop);
+            },
+            /**
+             * Loop true/false
+             * @returns bool
+             */
+            getLoop: () => loop,
+            /**
+             * On track end event function call.
+             * @param {Function} func 
+             */
+            setOnTrackEnd: (func) => {
+                players[_current].player.onended = func;
             },
         };
 
