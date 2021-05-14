@@ -82,6 +82,7 @@ const PlayerQueue = () => {
                     <td>
                         <PlayButton
                             audioSrc={data.audioSrc}
+                            trackId={data.trackId}
                             audioDuration={data.audioDuration}
                             track={data.track}
                             albumArt={data.albumArt}
