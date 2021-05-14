@@ -255,6 +255,7 @@ const PlaylistPage = props => {
     const playPlaylist = () => {
         // clear the queue and add many
         let trackDataList = tracks.tracks.map(data => getTrackData(data));
+        QueueManager.clearQueue();
         QueueManager.addTracksMany(trackDataList);
         // start the play
         setTheTrack(getTrackData(tracks.tracks[0]));
