@@ -24,7 +24,10 @@ var PlayerManager = (() => {
         let _prev = 2;
         let shuffle = false;
         let loop = false;
+        let volume = 1.0;
         let playState = false;
+        let crossFade = false;
+        let crossFadeDuration = 500;
         const updateCurrentIndex = (moveAhead = true) => {
             if (moveAhead)
                 _current = _current < 2 ? _current + 1 : 0;
@@ -60,6 +63,44 @@ var PlayerManager = (() => {
             }
         };
 
+        const handlePlayerPause = async (player, _crossFade = crossFade) => {
+            if (_crossFade) {
+                let steps = (crossFadeDuration / 20) - 1;
+                let delta = (player.volume - 0) * 20 / crossFadeDuration;
+                for (let i = 0; i < steps; ++i) {
+                    let newVol = player.volume - delta;
+                    if (newVol <= 1.0 && newVol >= 0.0)
+                        player.volume = newVol;
+                    await new Promise(r => setTimeout(r, 20));
+                }
+                player.volume = 0;
+            }
+            player.pause();
+            player.volume = volume;
+
+            return player;
+        };
+        const handlePlayerPlay = async (player, _crossFade = crossFade) => {
+            if (_crossFade) {
+                player.volume = 0;
+                player.play();
+                let steps = (crossFadeDuration / 20) - 1;
+                let delta = (volume - player.volume) * 20 / crossFadeDuration;
+                for (let i = 0; i < steps; ++i) {
+                    let newVol = player.volume + delta;
+                    if (newVol <= 1.0 && newVol >= 0.0)
+                        player.volume = newVol;
+                    await new Promise(r => setTimeout(r, 20));
+                }
+                player.volume = volume;
+            } else {
+                player.volume = volume;
+                player.play();
+            }
+
+            return player;
+        };
+
 
         return {
             /**
@@ -74,14 +115,17 @@ var PlayerManager = (() => {
              * @returns true if next playing, false if next not set
              */
             next: () => {
-                players[_current].player.pause();
                 if (!players[_next].player.src
-                    || players[_next].player.src === '')
+                    || players[_next].player.src === '') {
+                    handlePlayerPause(players[_current].player, false);
                     return false;
+                }
 
-                players[_current].player.currentTime = 0;
+                handlePlayerPause(players[_current].player).then(player => {
+                    player.currentTime = 0;
+                });
                 if (playState)
-                    players[_next].player.play();
+                    handlePlayerPlay(players[_next].player);
 
                 players[_next].player.onended = players[_current].player.onended;
                 players[_current].player.onended = () => { };
@@ -95,14 +139,17 @@ var PlayerManager = (() => {
              * Go to prev track
              */
             prev: () => {
-                players[_current].player.pause();
                 if (!players[_prev].player.src
-                    || players[_prev].player.src === '')
+                    || players[_prev].player.src === '') {
+                    handlePlayerPause(players[_current].player, false);
                     return false;
+                }
 
-                players[_current].player.currentTime = 0;
+                handlePlayerPause(players[_current].player).then(player => {
+                    player.currentTime = 0;
+                });
                 if (playState)
-                    players[_prev].player.play();
+                    handlePlayerPlay(players[_prev].player);
 
                 players[_prev].player.onended = players[_current].player.onended;
                 players[_current].player.onended = () => { };
@@ -147,7 +194,7 @@ var PlayerManager = (() => {
             play: () => {
                 if (players[_current].player.src
                     && players[_current].player.src !== '') {
-                    players[_current].player.play();
+                    handlePlayerPlay(players[_current].player, false);
                     playState = true;
                 }
             },
@@ -155,7 +202,7 @@ var PlayerManager = (() => {
              * Pause track
              */
             pause: () => {
-                players[_current].player.pause();
+                handlePlayerPause(players[_current].player, false);
                 playState = false;
             },
             /**
@@ -169,8 +216,9 @@ var PlayerManager = (() => {
              * Sets the volume for the player
              * @param {Number} volume number between 0.0 to 1.0 for audio volume
              */
-            setVolume: (volume) => {
-                players.forEach(({ player }) => player.volume = volume);
+            setVolume: (_volume) => {
+                players.forEach(({ player }) => player.volume = _volume);
+                volume = _volume;
             },
             /**
              * Gets the current player

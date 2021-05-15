@@ -37,7 +37,7 @@ function App() {
   const [currentTrack, setCurrentTrack] = useState('');
   const [audioSrc, setAudioSrc] = useState('');
   const [audioDuration, setAudioDuration] = useState('');
-  const [audioVolume, setAudioVolume] = useState(1.0);
+  const [audioVolume, _setAudioVolume] = useState(1.0);
   const [linkBack, setLinkBack] = useState('');
   const [playerQueue, setPlayerQueue] = useState([]);
 
@@ -47,6 +47,15 @@ function App() {
     else
       playerManager.pause();
     _setPlayPause(newState);
+  };
+  const setAudioVolume = (newState) => {
+    if (newState > 1.0)
+      newState = 1.0;
+    else if (newState < 0.0)
+      newState = 0.0;
+    newState = parseFloat(newState).toFixed(2);
+    playerManager.setVolume(newState);
+    _setAudioVolume(newState);
   };
 
   // }
