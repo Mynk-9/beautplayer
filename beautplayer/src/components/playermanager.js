@@ -66,9 +66,8 @@ var PlayerManager = (() => {
              * Force prefetch next track if not yet prefetched
              */
             forcePrefetch: () => {
-                if (!players[_next].player.src
-                    || players[_next].player.src === '')
-                    prefetchNextTrack();
+                prefetchNextTrack();
+                prefetchPrevTrack();
             },
             /**
              * Go to next track

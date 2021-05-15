@@ -69,6 +69,7 @@ const PlayButton = props => {
             props.addToQueue(); // add the track to queue
 
             playerManager.setCurrentTrack(props.trackId);
+            playerManager.forcePrefetch();
             setPlayPause('play');
         }
     };

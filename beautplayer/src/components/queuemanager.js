@@ -1,4 +1,5 @@
 import BeautPlayerQueue from "./queue";
+import PlayerManager from "./playermanager";
 
 const QueueManager = {
     /**
@@ -17,6 +18,7 @@ const QueueManager = {
             }
         }
         BeautPlayerQueue.queue.push(trackData);
+        PlayerManager.getInstance().forcePrefetch();
     },
 
     /**
@@ -30,6 +32,7 @@ const QueueManager = {
         let newData = [...BeautPlayerQueue.queue, ...trackDataList];
         let newDataSet = new Set(newData);
         BeautPlayerQueue.queue = [...newDataSet];
+        PlayerManager.getInstance().forcePrefetch();
     },
 
     /**
@@ -45,6 +48,7 @@ const QueueManager = {
         if (i >= BeautPlayerQueue.queue.length)
             return;
         BeautPlayerQueue.queue.splice(i, 1);
+        PlayerManager.getInstance().forcePrefetch();
     },
 
     /**
