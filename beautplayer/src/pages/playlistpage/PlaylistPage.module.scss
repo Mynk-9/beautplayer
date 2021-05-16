@@ -11,6 +11,7 @@
 }
 .section .header {
     backdrop-filter: blur(1rem) brightness(0.5);
+    position: relative;     // https://stackoverflow.com/a/37318487/6262571
     
     transition: backdrop-filter var(--std-color-transition-time) ease,
 }
