@@ -16,6 +16,9 @@
    font-family: "Lato-LightItalic";
    src: url(./../assets/fonts/Lato/Lato-LightItalic.ttf) format("truetype");
 }
+* {
+    box-sizing: border-box;
+}
 body {
    // background-image: url("https://upload.wikimedia.org/wikipedia/commons/c/c9/Rainbow-diagram-ROYGBIV.svg");
    font-family: "Lato";
