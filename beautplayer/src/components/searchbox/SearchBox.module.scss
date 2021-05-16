@@ -16,7 +16,7 @@
    }
 
    .searchBox {
-      --box-width: 15rem;
+      --box-width: calc(20vw - 5rem);
 
       padding: 0.5rem;
       margin: 0;
@@ -26,12 +26,16 @@
       width: var(--box-width);
 
       transition: width 0.3s ease;
-   }
-   .searchBox:focus {
-      --box-width: 20rem;
 
       @media only screen and (max-width: 768px) {
-         --box-width: 15rem;
+         --box-width: calc(100vw - 6rem - 24px - 2rem);
+      }
+   }
+   .searchBox:focus {
+      --box-width: 20vw;
+
+      @media only screen and (max-width: 768px) {
+         --box-width: calc(100vw - 6rem - 24px);
       }
    }
 }
