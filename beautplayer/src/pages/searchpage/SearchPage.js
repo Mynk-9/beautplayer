@@ -11,7 +11,6 @@ import './../../components/commonstyles.scss';
 import Styles from './SearchPage.module.scss';
 
 import ThemeContext from './../../components/themecontext';
-import PlayerContext from './../../components/playercontext';
 import SearchContext from './../../components/searchcontext';
 
 import QueueManager from './../../components/queuemanager';
@@ -28,7 +27,6 @@ const SearchPage = () => {
     const [trackList, setTrackList] = useState([]);
     const { acrylicColor, letAcrylicTints } = useContext(ThemeContext);
     const { searchTerm, setSearchTerm } = useContext(SearchContext);
-    const { playerQueue, setPlayerQueue } = useContext(PlayerContext);
     const [searchList, setSearchList] = useState([]);
 
     const [addToPlaylistModalVisible, setAddToPlaylistModalVisible] = useState(false);

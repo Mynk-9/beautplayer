@@ -47,7 +47,7 @@ const PlayerQueue = () => {
 
     let history = useHistory();
 
-    // build queue on playerQueue change
+    // build queue on player queue change
     useEffect(() => {
         console.log('trigger player queue rebuild');
         let key = 0;

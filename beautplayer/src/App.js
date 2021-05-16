@@ -39,7 +39,6 @@ function App() {
   const [audioDuration, setAudioDuration] = useState('');
   const [audioVolume, _setAudioVolume] = useState(1.0);
   const [linkBack, setLinkBack] = useState('');
-  const [playerQueue, setPlayerQueue] = useState([]);
 
   const setPlayPause = (newState) => {
     if (newState === 'play')
@@ -120,7 +119,6 @@ function App() {
             audioDuration: audioDuration, setAudioDuration: setAudioDuration,
             audioVolume: audioVolume, setAudioVolume: setAudioVolume,
             linkBack: linkBack, setLinkBack: setLinkBack,
-            playerQueue: playerQueue, setPlayerQueue: setPlayerQueue
           }}
         >
           <SearchContext.Provider

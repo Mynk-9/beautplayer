@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useContext, useRef } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import { useHistory, useLocation } from 'react-router-dom'
 import ProgressBar from './../progressbar/ProgressBar';
 import './../commonstyles.scss';
@@ -65,11 +65,6 @@ const PlayerBar = props => {
     // player manager instance
     const playerManager = PlayerManager.getInstance();
 
-    // api endpoint -- same domain, port 5000
-    let API = window.location.origin;
-    API = API.substring(0, API.lastIndexOf(':'));
-    API += ':5000';
-
     let togglePlay = () => {
         if (playPause === 'play')
             setPlayPause('pause');
@@ -118,9 +113,6 @@ const PlayerBar = props => {
         //////// } copied from play button 
     };
     let nextTrack = () => {
-        // setPlayPause('pause');      // temporary pause
-        // playerManager.pause();
-
         let trackId = audioSrc;     // both are same
         let trackData = QueueManager.getNextTrack(trackId);
         if (!trackData) {
@@ -129,16 +121,12 @@ const PlayerBar = props => {
         }
         setTheTrack(trackData);
 
-        // setPlayPause('play');
         playerManager.next();
     };
     let prevTrack = () => {
         // go to prev track if current time < 5s
         // else set current time to 0s
         if (playerManager.getPlayer().currentTime < 5) {
-            // setPlayPause('pause');      // temporary pause
-            // playerManager.pause();
-
             let trackId = audioSrc;     // both are same
             let trackData = QueueManager.getPrevTrack(trackId);
             if (!trackData) {
@@ -147,32 +135,12 @@ const PlayerBar = props => {
             }
             setTheTrack(trackData);
 
-            // setPlayPause('play');
             playerManager.prev();
         } else {
             playerManager.getPlayer().currentTime = 0;
         }
     };
     playerManager.setOnTrackEnd(nextTrack);
-
-    // useEffect(() => {
-
-    //     let audioSource = API + '/tracks/' + audioSrc + '/stream';
-    //     audioPlayerRef.current.src = audioSource;
-
-    //     if (playPause === 'pause') audioPlayerRef.current.pause();
-    //     else audioPlayerRef.current.play();
-
-    // }, [audioSrc]); // eslint-disable-line react-hooks/exhaustive-deps
-    // // linter recommendation here is inaccurate, 
-    // // so disabled message for this line
-
-    // useEffect(() => {
-    //     if (playPause === 'play')
-    //         audioPlayerRef.current.play();
-    //     else
-    //         audioPlayerRef.current.pause();
-    // }, [playPause]);
 
     useEffect(() => {
         playerManager.setVolume(audioVolume);
@@ -217,12 +185,6 @@ const PlayerBar = props => {
             className={`${Styles.playerBar} acrylic`}
             style={acrylicColorStyle}
         >
-            {/* Audio Player */}
-            {/* <audio
-                onEnded={audioPlayerOnEndedHandler}
-                ref={audioPlayerRef}
-            /> */}
-
             <div className={Styles.left}>
                 <div
                     className={Styles.albumArt}
