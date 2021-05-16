@@ -11,10 +11,10 @@
    // transition: height 1s ease;
 
    > * {
-      display: block;
-      padding: 1rem;
-
-      width: calc(100% / 3);
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      padding: 1rem 0;
    }
 
    audio {
@@ -22,9 +22,10 @@
    }
 
    .left {
-      display: inline-table;
+      display: flex;
       flex: 1;
       padding: 0;
+      padding-right: 1rem;
 
       @media only screen and (max-width: 768px) {
          display: block;
@@ -32,7 +33,7 @@
       }
 
       .albumArt {
-         display: table-cell;
+         display: table;
          background-size: cover;
          background-repeat: no-repeat;
          // height = width = image-height
@@ -59,31 +60,21 @@
          }
       }
       .albumInfo {
-         display: table-cell;
-         vertical-align: middle;
-
-         height: 100%;
-         // copied from .albumArt
-         // max-width: calc(24px + 2 * 1rem + 2 * 1px + 2 * 0.3rem + 2 * 1rem);
-         // this was removed as longer names are adjusting automatically and restriction
-         // on its width is only creating problems for UI.
-
-         > span {
-            display: flex;
-            height: auto;
-            flex-direction: column;
-            justify-content: center;
-
-            padding-left: 1rem;
-
-            @media only screen and (max-width: 768px) {
-               display: block;
-               padding-left: 0.5rem;
-            }
-         }
-
+         display: flex;
+         flex-direction: column;
+         justify-content: space-evenly;
+         
+         padding-left: 1rem;
+         padding-right: 1rem;
+         
          @media only screen and (max-width: 768px) {
             display: block;
+            padding-left: 0.5rem;
+         }
+
+         span {
+            position: relative;
+            overflow-wrap: break-word;
          }
       }
       .albumInfo[data-visible="false"] {
@@ -110,7 +101,9 @@
    }
    .right {
       flex: 1;
-      text-align: right;
+      justify-content: flex-end;
+      align-items: center;
+      padding-right: 1rem;
 
       // thanks: https://stackoverflow.com/a/17967969/6262571
       transform: translate3D(0, 0, 0);
@@ -121,6 +114,7 @@
    }
    .center {
       flex: 1;
+      flex-direction: column;
       text-align: center;
       padding-top: 0.3rem;
       padding-bottom: 0.3rem;
@@ -138,6 +132,14 @@
             3 * (24px + (2 * 1rem) + (2 * 1px) + (2 * 0.3rem)) + 2 * (1rem)
          );
          // just remove the width of small-buttons
+         padding-right: 1rem;
+      }
+
+      .controlsWrapper {
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         justify-content: center;
       }
    }
 

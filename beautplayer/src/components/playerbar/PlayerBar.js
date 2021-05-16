@@ -248,24 +248,21 @@ const PlayerBar = props => {
                             : 'false'
                     }
                 >
-                    <span>
-                        <span
-                            className={Styles.albumLinker}
-                            onClick={() => {
-                                history.push(linkBack);
-                            }}
-                        >
-                            {currentTrack}
-                        </span>
-                        <br />
-                        <span className={Styles.albumArtistInfo}>
-                            {albumArtist}
-                        </span>
-                    </span>
+                    <div
+                        className={Styles.albumLinker}
+                        onClick={() => {
+                            history.push(linkBack);
+                        }}
+                    >
+                        {currentTrack}
+                    </div>
+                    <div className={Styles.albumArtistInfo}>
+                        {albumArtist}
+                    </div>
                 </div>
             </div>
             <div className={Styles.center}>
-                <div>
+                <div className={Styles.controlsWrapper}>
                     <button
                         className={`${Styles.buttonSmall} cursor-pointer display-desktop-only`}
                         data-visible={mobileOpenAlbumDetails}
@@ -303,6 +300,18 @@ const PlayerBar = props => {
                             src={NextIcon}
                         />
                     </button>
+                    <button
+                        className={`${Styles.buttonSmall} cursor-pointer display-desktop-only`}
+                        data-visible={mobileOpenAlbumDetails}
+                        data-active={loopTrack}
+                        onClick={
+                            () => setLoopTrack(!loopTrack)
+                        }
+                    >
+                        <img data-dark-mode-compatible alt="Repeat" src={RepeatIcon} />
+                    </button>
+                </div>
+                <div>
                     {/* cloned above shuffle button for mobile displays */}
                     <button
                         className={`${Styles.buttonSmall} cursor-pointer display-mobile-only`}
@@ -319,7 +328,7 @@ const PlayerBar = props => {
                         />
                     </button>
                     <button
-                        className={`${Styles.buttonSmall} cursor-pointer`}
+                        className={`${Styles.buttonSmall} cursor-pointer display-mobile-only`}
                         data-visible={mobileOpenAlbumDetails}
                         data-active={loopTrack}
                         onClick={
