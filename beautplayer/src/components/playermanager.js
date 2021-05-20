@@ -8,7 +8,10 @@ var PlayerManager = (() => {
         let AudioContext = window.AudioContext;// || window.webkitAudioContext;
         if (!AudioContext)
             AudioContext = window.webkitAudioContext;
-        const audioContext = new AudioContext();
+        const audioContext = new AudioContext({
+            latencyHint: 'playback',
+        });
+
 
         // prev track, current track, next track
         let players = [
