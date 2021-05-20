@@ -4,21 +4,40 @@ var PlayerManager = (() => {
     var instance;
     function init() {
 
+        // audio context
+        const AudioContext = window.AudioContext;
+        const audioContext = new AudioContext();
+
         // prev track, current track, next track
         let players = [
             {
-                player: new Audio(),
                 trackId: null,
+                sourceNode: audioContext.createMediaElementSource(new Audio()),
+                gainNode: audioContext.createGain(),
             },
             {
-                player: new Audio(),
                 trackId: null,
+                sourceNode: audioContext.createMediaElementSource(new Audio()),
+                gainNode: audioContext.createGain(),
             },
             {
-                player: new Audio(),
                 trackId: null,
+                sourceNode: audioContext.createMediaElementSource(new Audio()),
+                gainNode: audioContext.createGain(),
             },
         ];
+
+        // init the nodes
+        players.forEach(({ sourceNode, gainNode }) => {
+            sourceNode.mediaElement.volume = 1;
+            sourceNode.mediaElement.crossOrigin = 'anonymous';
+            gainNode.gain.value = 1;
+
+            sourceNode
+                .connect(gainNode)
+                .connect(audioContext.destination);
+        });
+
         let _current = 0;
         let _next = 1;
         let _prev = 2;
@@ -49,8 +68,9 @@ var PlayerManager = (() => {
                 QueueManager.getNextTrack(players[_current].trackId, shuffle)?.trackId;
             if (nextTrackId && players[_next].trackId !== nextTrackId) {
                 players[_next].trackId = nextTrackId;
-                players[_next].player.src = `${API}/tracks/${nextTrackId}/stream`;
-                players[_next].player.pause();
+                players[_next].sourceNode.mediaElement.src =
+                    `${API}/tracks/${nextTrackId}/stream`;
+                players[_next].sourceNode.mediaElement.pause();
             }
         };
         const prefetchPrevTrack = () => {
@@ -58,47 +78,23 @@ var PlayerManager = (() => {
                 QueueManager.getPrevTrack(players[_current].trackId)?.trackId;
             if (prevTrackId && players[_prev].trackId !== prevTrackId) {
                 players[_prev].trackId = prevTrackId;
-                players[_prev].player.src = `${API}/tracks/${prevTrackId}/stream`;
-                players[_prev].player.pause();
+                players[_prev].sourceNode.mediaElement.src =
+                    `${API}/tracks/${prevTrackId}/stream`;
+                players[_prev].sourceNode.mediaElement.pause();
             }
         };
 
         const handlePlayerPause = async (player, _crossFade = crossFade) => {
-            if (_crossFade) {
-                let steps = (crossFadeDuration / 20) - 1;
-                let delta = (player.volume - 0) * 20 / crossFadeDuration;
-                for (let i = 0; i < steps; ++i) {
-                    let newVol = player.volume - delta;
-                    if (newVol <= 1.0 && newVol >= 0.0)
-                        player.volume = newVol;
-                    await new Promise(r => setTimeout(r, 20));
-                }
-                player.volume = 0;
-            }
-            player.pause();
-            player.volume = volume;
+            // TODO: Implement crossfade
+            player.sourceNode.mediaElement.pause();
 
             return player;
         };
         const handlePlayerPlay = async (player, _crossFade = crossFade) => {
-            if (_crossFade) {
-                player.volume = 0;
-                player.play();
-                let steps = (crossFadeDuration / 20) - 1;
-                let delta = (volume - player.volume) * 20 / crossFadeDuration;
-                for (let i = 0; i < steps; ++i) {
-                    let newVol = player.volume + delta;
-                    if (newVol <= 1.0 && newVol >= 0.0)
-                        player.volume = newVol;
-                    await new Promise(r => setTimeout(r, 20));
-                }
-                player.volume = volume;
-            } else {
-                player.volume = volume;
-                player.play();
-            }
+            // TODO: Implement crossfade
+            player.sourceNode.mediaElement.play();
 
-            return player;
+            return player.sourceNode.mediaElement;
         };
 
 
@@ -115,20 +111,21 @@ var PlayerManager = (() => {
              * @returns true if next playing, false if next not set
              */
             next: () => {
-                if (!players[_next].player.src
-                    || players[_next].player.src === '') {
-                    handlePlayerPause(players[_current].player, false);
+                if (!players[_next].sourceNode.mediaElement.src
+                    || players[_next].sourceNode.mediaElement.src === '') {
+                    handlePlayerPause(players[_current], false);
                     return false;
                 }
 
-                handlePlayerPause(players[_current].player).then(player => {
-                    player.currentTime = 0;
+                handlePlayerPause(players[_current]).then(audioElement => {
+                    audioElement.currentTime = 0;
                 });
                 if (playState)
-                    handlePlayerPlay(players[_next].player);
+                    handlePlayerPlay(players[_next]);
 
-                players[_next].player.onended = players[_current].player.onended;
-                players[_current].player.onended = () => { };
+                players[_next].sourceNode.mediaElement.onended =
+                    players[_current].sourceNode.mediaElement.onended;
+                players[_current].sourceNode.mediaElement.onended = () => { };
 
                 updateCurrentIndex(true);
                 prefetchNextTrack();
@@ -139,20 +136,21 @@ var PlayerManager = (() => {
              * Go to prev track
              */
             prev: () => {
-                if (!players[_prev].player.src
-                    || players[_prev].player.src === '') {
-                    handlePlayerPause(players[_current].player, false);
+                if (!players[_prev].sourceNode.mediaElement.src
+                    || players[_prev].sourceNode.mediaElement.src === '') {
+                    handlePlayerPause(players[_current], false);
                     return false;
                 }
 
-                handlePlayerPause(players[_current].player).then(player => {
-                    player.currentTime = 0;
+                handlePlayerPause(players[_current]).then(audioElement => {
+                    audioElement.currentTime = 0;
                 });
                 if (playState)
-                    handlePlayerPlay(players[_prev].player);
+                    handlePlayerPlay(players[_prev]);
 
-                players[_prev].player.onended = players[_current].player.onended;
-                players[_current].player.onended = () => { };
+                players[_prev].sourceNode.mediaElement.onended =
+                    players[_current].sourceNode.mediaElement.onended;
+                players[_current].sourceNode.mediaElement.onended = () => { };
 
                 updateCurrentIndex(false);
                 prefetchPrevTrack();
@@ -172,16 +170,16 @@ var PlayerManager = (() => {
                 if (!QueueManager.checkQueue(trackId))
                     return false;
 
-                let playState = !players[_current].player.paused;
+                let playState = !players[_current].sourceNode.mediaElement.paused;
                 players[_current].trackId = trackId;
-                players[_current].player.src = `${API}/tracks/${trackId}/stream`;
+                players[_current].sourceNode.mediaElement.src = `${API}/tracks/${trackId}/stream`;
                 if (playState)
-                    players[_current].player.play();
+                    players[_current].sourceNode.mediaElement.play();
                 else
-                    players[_current].player.pause();
+                    players[_current].sourceNode.mediaElement.pause();
 
                 if (playState)
-                    players[_current].player.play();
+                    players[_current].sourceNode.mediaElement.play();
 
                 prefetchNextTrack();
                 prefetchPrevTrack();
@@ -192,9 +190,13 @@ var PlayerManager = (() => {
              * Play track
              */
             play: () => {
-                if (players[_current].player.src
-                    && players[_current].player.src !== '') {
-                    handlePlayerPlay(players[_current].player, false);
+                // due to autoplay policy
+                if (audioContext.state === 'suspended')
+                    audioContext.resume();
+
+                if (players[_current].sourceNode.mediaElement.src
+                    && players[_current].sourceNode.mediaElement.src !== '') {
+                    handlePlayerPlay(players[_current], false);
                     playState = true;
                 }
             },
@@ -202,7 +204,7 @@ var PlayerManager = (() => {
              * Pause track
              */
             pause: () => {
-                handlePlayerPause(players[_current].player, false);
+                handlePlayerPause(players[_current], false);
                 playState = false;
             },
             /**
@@ -210,14 +212,16 @@ var PlayerManager = (() => {
              * @returns true if playing, false if paused
              */
             getPlayPause: () => {
-                return !players[_current].player.paused;
+                return !players[_current].sourceNode.mediaElement.paused;
             },
             /**
              * Sets the volume for the player
              * @param {Number} volume number between 0.0 to 1.0 for audio volume
              */
             setVolume: (_volume) => {
-                players.forEach(({ player }) => player.volume = _volume);
+                players.forEach(({ gainNode }) =>
+                    gainNode.gain.value = _volume
+                );
                 volume = _volume;
             },
             /**
@@ -225,7 +229,7 @@ var PlayerManager = (() => {
              * @returns current player instance
              */
             getPlayer: () => {
-                return players[_current].player;
+                return players[_current].sourceNode.mediaElement;
             },
             /**
              * Sets shuffle parameter for player.
@@ -245,7 +249,9 @@ var PlayerManager = (() => {
              */
             setLoop: (_loop) => {
                 loop = _loop;
-                players.forEach(({ player }) => player.loop = _loop);
+                players.forEach(({ sourceNode }) =>
+                    sourceNode.mediaElement.loop = _loop
+                );
             },
             /**
              * Loop true/false
@@ -257,7 +263,7 @@ var PlayerManager = (() => {
              * @param {Function} func 
              */
             setOnTrackEnd: (func) => {
-                players[_current].player.onended = func;
+                players[_current].sourceNode.mediaElement.onended = func;
             },
         };
 
