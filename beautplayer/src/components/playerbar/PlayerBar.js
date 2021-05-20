@@ -143,8 +143,6 @@ const PlayerBar = props => {
     playerManager.setOnTrackEnd(nextTrack);
 
     useEffect(() => {
-        playerManager.setVolume(audioVolume);
-
         if (audioVolume >= 0.8)
             setVolumeStatus('high');
         else if (parseFloat(audioVolume) === 0.0)
@@ -152,7 +150,7 @@ const PlayerBar = props => {
         else
             setVolumeStatus('normal');
 
-        setVolumeDisplay(audioVolume * 100);
+        setVolumeDisplay(parseFloat(audioVolume).toFixed(2) * 100);
     }, [audioVolume]);
 
     useEffect(() => {
@@ -170,14 +168,28 @@ const PlayerBar = props => {
     }, [currentTrack, location]);
 
     let reduceVolume = () => {
-        if (audioVolume > 0)
-            setAudioVolume(
-                parseFloat(playerManager.getPlayer().volume - 0.1).toFixed(2));
+        setAudioVolume(prevVal => {
+            let newVol = parseFloat(parseFloat(prevVal).toFixed(2));
+            newVol -= 0.1;
+            if (newVol < 0.0)
+                newVol = 0.0;
+            else if (newVol > 1.0)
+                newVol = 1.0;
+            playerManager.setVolume(newVol);
+            return newVol;
+        });
     };
     let increaseVolume = () => {
-        if (audioVolume < 1)
-            setAudioVolume(
-                parseFloat(playerManager.getPlayer().volume + 0.1).toFixed(2));
+        setAudioVolume(prevVal => {
+            let newVol = parseFloat(parseFloat(prevVal).toFixed(2));
+            newVol += 0.1;
+            if (newVol < 0.0)
+                newVol = 0.0;
+            else if (newVol > 1.0)
+                newVol = 1.0;
+            playerManager.setVolume(newVol);
+            return newVol;
+        });
     };
 
     return (
