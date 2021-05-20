@@ -5,7 +5,9 @@ var PlayerManager = (() => {
     function init() {
 
         // audio context
-        const AudioContext = window.AudioContext;
+        let AudioContext = window.AudioContext;// || window.webkitAudioContext;
+        if (!AudioContext)
+            AudioContext = window.webkitAudioContext;
         const audioContext = new AudioContext();
 
         // prev track, current track, next track
@@ -31,6 +33,7 @@ var PlayerManager = (() => {
         players.forEach(({ sourceNode, gainNode }) => {
             sourceNode.mediaElement.volume = 1;
             sourceNode.mediaElement.crossOrigin = 'anonymous';
+            sourceNode.mediaElement.preload = 'auto';
             gainNode.gain.value = 1;
 
             sourceNode
@@ -84,17 +87,17 @@ var PlayerManager = (() => {
             }
         };
 
-        const handlePlayerPause = async (player, _crossFade = crossFade) => {
+        const handlePlayerPause = async (player = players[_current], _crossFade = crossFade) => {
             // TODO: Implement crossfade
             player.sourceNode.mediaElement.pause();
 
-            return player;
+            return player.sourceNode;
         };
-        const handlePlayerPlay = async (player, _crossFade = crossFade) => {
+        const handlePlayerPlay = async (player = players[_current], _crossFade = crossFade) => {
             // TODO: Implement crossfade
             player.sourceNode.mediaElement.play();
 
-            return player.sourceNode.mediaElement;
+            return player.sourceNode;
         };
 
 
@@ -117,8 +120,8 @@ var PlayerManager = (() => {
                     return false;
                 }
 
-                handlePlayerPause(players[_current]).then(audioElement => {
-                    audioElement.currentTime = 0;
+                handlePlayerPause(players[_current]).then(({ mediaElement }) => {
+                    mediaElement.currentTime = 0;
                 });
                 if (playState)
                     handlePlayerPlay(players[_next]);
@@ -142,8 +145,8 @@ var PlayerManager = (() => {
                     return false;
                 }
 
-                handlePlayerPause(players[_current]).then(audioElement => {
-                    audioElement.currentTime = 0;
+                handlePlayerPause(players[_current]).then(({ mediaElement }) => {
+                    mediaElement.currentTime = 0;
                 });
                 if (playState)
                     handlePlayerPlay(players[_prev]);
