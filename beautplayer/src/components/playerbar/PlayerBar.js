@@ -112,7 +112,7 @@ const PlayerBar = props => {
 
         //////// } copied from play button 
     };
-    let nextTrack = () => {
+    let nextTrack = (autoSwitch = false) => {
         let trackId = audioSrc;     // both are same
         let trackData = QueueManager.getNextTrack(trackId);
         if (!trackData) {
@@ -121,7 +121,11 @@ const PlayerBar = props => {
         }
         setTheTrack(trackData);
 
-        playerManager.next();
+        // if nextTrack is triggered from button press then autoSwitch is an 
+        // Event, in that case make sure autoSwitch is made false (Boolean)
+        if (autoSwitch !== true || autoSwitch !== false)
+            autoSwitch = false;
+        playerManager.next(autoSwitch);
     };
     let prevTrack = () => {
         // go to prev track if current time < 5s
@@ -140,7 +144,7 @@ const PlayerBar = props => {
             playerManager.getPlayer().currentTime = 0;
         }
     };
-    playerManager.setOnTrackEnd(nextTrack);
+    playerManager.setOnTrackEnd(() => nextTrack(true));
 
     useEffect(() => {
         if (audioVolume >= 0.8)
