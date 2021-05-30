@@ -37,7 +37,7 @@ function App() {
   const [currentTrack, setCurrentTrack] = useState('');
   const [audioSrc, setAudioSrc] = useState('');
   const [audioDuration, setAudioDuration] = useState('');
-  const [audioVolume, _setAudioVolume] = useState(1.0);
+  const [audioVolume, setAudioVolume] = useState(1.0);
   const [linkBack, setLinkBack] = useState('');
 
   const setPlayPause = (newState) => {
@@ -47,16 +47,6 @@ function App() {
       playerManager.pause();
     _setPlayPause(newState);
   };
-  const setAudioVolume = (newState) => {
-    if (newState > 1.0)
-      newState = 1.0;
-    else if (newState < 0.0)
-      newState = 0.0;
-    newState = parseFloat(newState).toFixed(2);
-    playerManager.setVolume(newState);
-    _setAudioVolume(newState);
-  };
-
   // }
 
   // search context hooks {
@@ -70,15 +60,23 @@ function App() {
   useEffect(() => {
     const lat = (localStorage.getItem('config-letAcrylicTints') === 'true');
     const cc = localStorage.getItem('config-colorConfig');
-    const av = parseFloat(localStorage.getItem('config-audioVolume')) || 1.0;
+    let av = parseFloat(parseFloat(localStorage.getItem('config-audioVolume')).toFixed(2));
 
     if (cc === 'light')
       document.body.classList.add('light-mode');
     else
       document.body.classList.remove('light-mode');
 
+    if (isNaN(av))
+      av = 1.0;
+    else if (av > 1.0)
+      av = 1.0;
+    else if (av < 0.0)
+      av = 0.0;
+
     setLetAcrylicTints(lat);
     setColorConfig(cc);
+    playerManager.setVolume(av);
     setAudioVolume(av);
   }, []);
 

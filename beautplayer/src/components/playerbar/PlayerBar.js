@@ -112,7 +112,7 @@ const PlayerBar = props => {
 
         //////// } copied from play button 
     };
-    let nextTrack = () => {
+    let nextTrack = (autoSwitch = false) => {
         let trackId = audioSrc;     // both are same
         let trackData = QueueManager.getNextTrack(trackId);
         if (!trackData) {
@@ -121,7 +121,11 @@ const PlayerBar = props => {
         }
         setTheTrack(trackData);
 
-        playerManager.next();
+        // if nextTrack is triggered from button press then autoSwitch is an 
+        // Event, in that case make sure autoSwitch is made false (Boolean)
+        if (autoSwitch !== true || autoSwitch !== false)
+            autoSwitch = false;
+        playerManager.next(autoSwitch);
     };
     let prevTrack = () => {
         // go to prev track if current time < 5s
@@ -140,11 +144,9 @@ const PlayerBar = props => {
             playerManager.getPlayer().currentTime = 0;
         }
     };
-    playerManager.setOnTrackEnd(nextTrack);
+    playerManager.setOnTrackEnd(() => nextTrack(true));
 
     useEffect(() => {
-        playerManager.setVolume(audioVolume);
-
         if (audioVolume >= 0.8)
             setVolumeStatus('high');
         else if (parseFloat(audioVolume) === 0.0)
@@ -152,7 +154,7 @@ const PlayerBar = props => {
         else
             setVolumeStatus('normal');
 
-        setVolumeDisplay(audioVolume * 100);
+        setVolumeDisplay(parseFloat(audioVolume).toFixed(2) * 100);
     }, [audioVolume]);
 
     useEffect(() => {
@@ -170,14 +172,28 @@ const PlayerBar = props => {
     }, [currentTrack, location]);
 
     let reduceVolume = () => {
-        if (audioVolume > 0)
-            setAudioVolume(
-                parseFloat(playerManager.getPlayer().volume - 0.1).toFixed(2));
+        setAudioVolume(prevVal => {
+            let newVol = parseFloat(parseFloat(prevVal).toFixed(2));
+            newVol -= 0.1;
+            if (newVol < 0.0)
+                newVol = 0.0;
+            else if (newVol > 1.0)
+                newVol = 1.0;
+            playerManager.setVolume(newVol);
+            return newVol;
+        });
     };
     let increaseVolume = () => {
-        if (audioVolume < 1)
-            setAudioVolume(
-                parseFloat(playerManager.getPlayer().volume + 0.1).toFixed(2));
+        setAudioVolume(prevVal => {
+            let newVol = parseFloat(parseFloat(prevVal).toFixed(2));
+            newVol += 0.1;
+            if (newVol < 0.0)
+                newVol = 0.0;
+            else if (newVol > 1.0)
+                newVol = 1.0;
+            playerManager.setVolume(newVol);
+            return newVol;
+        });
     };
 
     return (

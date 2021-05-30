@@ -258,9 +258,12 @@ const PlaylistPage = props => {
         QueueManager.clearQueue();
         QueueManager.addTracksMany(trackDataList);
         // start the play
-        setTheTrack(getTrackData(tracks.tracks[0]));
+        let track0Data = getTrackData(tracks.tracks[0]);
+        let track0DurationSplit = track0Data.audioDuration.split(":");
+        let track0Duration = parseFloat(track0DurationSplit[0]) * 60 + parseFloat(track0DurationSplit[1]);
+        setTheTrack(track0Data);
         setPlayPause('play');
-        playerManager.setCurrentTrack(getTrackData(tracks.tracks[0]).trackId);
+        playerManager.setCurrentTrack(track0Data.trackId, track0Duration);
         playerManager.play();
         playerManager.forcePrefetch();
     };
