@@ -67,7 +67,9 @@ function App() {
     else
       document.body.classList.remove('light-mode');
 
-    if (av > 1.0)
+    if (isNaN(av))
+      av = 1.0;
+    else if (av > 1.0)
       av = 1.0;
     else if (av < 0.0)
       av = 0.0;
