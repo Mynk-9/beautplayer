@@ -1,0 +1,47 @@
+.details {
+   overflow: hidden;
+
+   .summary {
+      padding: 1rem;
+      border-radius: 1rem;
+      background-color: var(--non-transparent-acrylic-like-color);
+      transition: background-color var(--std-color-transition-time) ease;
+      vertical-align: middle;
+      cursor: pointer;
+
+      span {
+         vertical-align: middle;
+
+         img {
+            height: 1rem;
+            transform: rotateZ(90deg);
+            transition: transform var(--std-color-transition-time) ease;
+         }
+      }
+      span + span {
+         margin-left: 1rem;
+      }
+   }
+   .p {
+      opacity: 0;
+      height: 0;
+      transition: opacity var(--std-color-transition-time) ease,
+         height var(--std-color-transition-time) ease;
+   }
+}
+.details[data-open="true"] {
+   .summary {
+      background-color: var(--acrylic-color);
+
+      span img {
+         transform: rotateZ(180deg);
+      }
+   }
+   .p {
+      opacity: 1;
+      height: var(--table-height);
+   }
+}
+.details + .details {
+   margin-top: 1rem;
+}
