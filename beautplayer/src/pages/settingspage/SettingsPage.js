@@ -113,16 +113,12 @@ const SettingsPage = props => {
                                 'option': 'Enable Acrylic Color Tint',
                                 'brief': 'The tint which top and bottom bars get according to current playing track',
                                 'component':
-                                    <button
-                                        onClick={() => setLetAcrylicTints(!letAcrylicTints)}
-                                        className={Styles.button}
-                                    >
-                                        {
-                                            letAcrylicTints
-                                                ? "Yes"
-                                                : "No"
-                                        }
-                                    </button>,
+                                    <Switcher
+                                        state={letAcrylicTints}
+                                        onChange={(state) => {
+                                            setLetAcrylicTints(state);
+                                        }}
+                                    />
                             },
                             {
                                 'option': 'Refresh Library',
