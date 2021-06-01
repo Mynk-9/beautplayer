@@ -1,17 +1,31 @@
-import { React, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import ColorModeSwitcher from '../../components/colormodeswitch/ColorModeSwitch';
+
+import AccordionSection from '../../components/accordionsection/AccordionSection';
+import Switcher from '../../components/switcher/Switcher';
+
 import './../../components/commonstyles.scss';
 import Styles from './SettingsPage.module.scss';
 
 import ThemeContext from './../../components/themecontext';
-
+import PlayerContext from '../../components/playercontext';
 import PersistentStorage from './../persistentstorage';
-import LeftIcon from './../../assets/buttonsvg/chevron-left.svg'
 
-const AlbumPage = props => {
+import LeftIcon from './../../assets/buttonsvg/chevron-left.svg';
+import PlusIcon from './../../assets/buttonsvg/plus.svg';
+import MinusIcon from './../../assets/buttonsvg/minus.svg';
+
+const SettingsPage = props => {
     const { letAcrylicTints, setLetAcrylicTints } = useContext(ThemeContext);
+    const {
+        crossfadeEnable, setCrossfadeEnable,
+        crossfadePlaylist, setCrossfadePlaylist,
+        crossfadeNextPrev, setCrossfadeNextPrev,
+        crossfadeDuration, setCrossfadeDuration
+    } = useContext(PlayerContext);
+    // const crossfadeDurationComponentRef = useRef(null);
 
     let history = useHistory();
 
@@ -72,7 +86,7 @@ const AlbumPage = props => {
 
                 messageLabel.innerHTML = 'Error :(';
             });
-    }
+    };
 
     return (
         <>
@@ -87,18 +101,18 @@ const AlbumPage = props => {
                     <h1 className={Styles.heading}>Settings</h1>
                 </div>
                 <div className={Styles.content}>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td><b>Color Mode</b></td>
-                                <td><ColorModeSwitcher /></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <b>Enable Acrylic Color Tint</b><br />
-                                    <i>The tint which top and bottom bars get according to current playing track</i>
-                                </td>
-                                <td>
+                    <AccordionSection
+                        title="General Settings"
+                        opened={true}
+                        options={[
+                            {
+                                'option': 'Color Mode',
+                                'component': <ColorModeSwitcher />,
+                            },
+                            {
+                                'option': 'Enable Acrylic Color Tint',
+                                'brief': 'The tint which top and bottom bars get according to current playing track',
+                                'component':
                                     <button
                                         onClick={() => setLetAcrylicTints(!letAcrylicTints)}
                                         className={Styles.button}
@@ -108,25 +122,105 @@ const AlbumPage = props => {
                                                 ? "Yes"
                                                 : "No"
                                         }
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><b>Refresh Library</b></td>
-                                <td>
+                                    </button>,
+                            },
+                            {
+                                'option': 'Refresh Library',
+                                'component':
                                     <button
                                         className={Styles.button}
                                         onClick={refreshLibrary}
                                     >
-                                        Refresh Media Library
-                                    </button>
-                                    <br />
-                                    <br />
-                                    <label></label>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                        {'Refresh Media Library'}
+                                    </button>,
+                            },
+                        ]}
+                    />
+                    <AccordionSection
+                        title="Experimental Settings"
+                        options={[
+                            {
+                                'option': 'Enable Crossfade',
+                                'brief': 'Make a track be heard gradually as another becomes silent',
+                                'component':
+                                    <Switcher
+                                        state={crossfadeEnable}
+                                        onChange={(state) => {
+                                            setCrossfadeEnable(state);
+                                        }}
+                                    />,
+                            },
+                            {
+                                'option': 'Crossfade for Playlist',
+                                'component':
+                                    <Switcher
+                                        state={crossfadePlaylist}
+                                        onChange={(state) => {
+                                            setCrossfadePlaylist(state);
+                                        }}
+                                        enabled={crossfadeEnable}
+                                    />,
+                            },
+                            {
+                                'option': 'Enable Crossfade Next/Prev',
+                                'component':
+                                    <Switcher
+                                        state={crossfadeNextPrev}
+                                        onChange={(state) => {
+                                            setCrossfadeNextPrev(state);
+                                        }}
+                                        enabled={crossfadeEnable}
+                                    />,
+                            },
+                            {
+                                'option': 'Set Crossfade Duration',
+                                'component':
+                                    <>
+                                        <button
+                                            onClick={() => {
+                                                if (crossfadeDuration === 0)
+                                                    return;
+                                                setCrossfadeDuration(crossfadeDuration - 1);
+                                            }}
+                                            className={Styles.button}
+                                            disabled={!crossfadeEnable}
+                                            style={{
+                                                marginRight: '1rem',
+                                                borderRadius: '50%',
+                                                padding: 0,
+                                            }}
+                                        >
+                                            <img
+                                                src={MinusIcon}
+                                                style={{ verticalAlign: 'middle' }}
+                                                data-dark-mode-compatible
+                                            />
+                                        </button>
+                                        {`${crossfadeDuration} sec`}
+                                        <button
+                                            onClick={() => {
+                                                if (crossfadeDuration === 10)
+                                                    return;
+                                                setCrossfadeDuration(crossfadeDuration + 1);
+                                            }}
+                                            className={Styles.button}
+                                            disabled={!crossfadeEnable}
+                                            style={{
+                                                marginLeft: '1rem',
+                                                borderRadius: '50%',
+                                                padding: 0,
+                                            }}
+                                        >
+                                            <img
+                                                src={PlusIcon}
+                                                style={{ verticalAlign: 'middle' }}
+                                                data-dark-mode-compatible
+                                            />
+                                        </button>
+                                    </>,
+                            },
+                        ]}
+                    />
                     <hr />
                     <p className={Styles.credits}>
                         Made with ❤ by Mayank.<br />
@@ -138,4 +232,4 @@ const AlbumPage = props => {
     );
 }
 
-export default AlbumPage;
+export default SettingsPage;
