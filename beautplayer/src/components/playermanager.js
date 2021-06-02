@@ -177,11 +177,20 @@ var PlayerManager = (() => {
          * @returns {MediaElementAudioSourceNode} source node of player object
          */
         const handlePlayerPause = async (conf) => {
-            let player = conf['player'] || players[_current];
+            const getValOrDefault = (val, def) => {
+                // catch both null and undefined
+                if (val == null)
+                    return def;
+                return val;
+            };
+
+            let player = getValOrDefault(conf['player'], players[_current]);
             makeLog('pause', player.sourceNode.mediaElement.getAttribute('data-duration'));
-            let autoSwitch = conf['autoSwitch'] || false;
-            let _crossfade = conf['crossfade']
-                || (crossfade && (crossfadeNextPrev || (autoSwitch && crossfadePlaylist)));
+            let autoSwitch = getValOrDefault(conf['autoSwitch'], false);
+            let _crossfade = getValOrDefault(
+                conf['crossfade'],
+                (crossfade && (crossfadeNextPrev || (autoSwitch && crossfadePlaylist)))
+            );
 
             let localPlayState = setLocalPlayState(player);
 
@@ -228,11 +237,20 @@ var PlayerManager = (() => {
          * @returns {MediaElementAudioSourceNode} source node of player object
          */
         const handlePlayerPlay = async (conf) => {
-            let player = conf['player'] || players[_current];
+            const getValOrDefault = (val, def) => {
+                // catch both null and undefined
+                if (val == null)
+                    return def;
+                return val;
+            };
+
+            let player = getValOrDefault(conf['player'], players[_current]);
             makeLog('play', player.sourceNode.mediaElement.getAttribute('data-duration'));
-            let autoSwitch = conf['autoSwitch'] || false;
-            let _crossfade = conf['crossfade']
-                || (crossfade && (crossfadeNextPrev || (autoSwitch && crossfadePlaylist)));
+            let autoSwitch = getValOrDefault(conf['autoSwitch'], false);
+            let _crossfade = getValOrDefault(
+                conf['crossfade'],
+                (crossfade && (crossfadeNextPrev || (autoSwitch && crossfadePlaylist)))
+            );
 
             let localPlayState = setLocalPlayState(player);
 
