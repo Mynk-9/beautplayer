@@ -60,6 +60,7 @@ var PlayerManager = (() => {
         let crossfadeDuration = 5;
         let onTimeUpdateHandler = () => { };
         let onTimeUpdateHandlerExec = false;
+        let verboseLog = false;
         const updateCurrentIndex = (moveAhead = true) => {
             if (moveAhead)
                 _current = _current < 2 ? _current + 1 : 0;
@@ -75,6 +76,13 @@ var PlayerManager = (() => {
         API = API.substring(0, API.lastIndexOf(':'));         //
         API += ':5000';                                       //
         ////////////////////////////////////////////////////////
+
+        // logging function
+        const makeLog = (...log) => {
+            if (!verboseLog) return;
+            let prefix = 'Player Manager:';
+            console.log(prefix, ...log);
+        };
 
         // tracks prefetch management functions
         /**
@@ -151,7 +159,7 @@ var PlayerManager = (() => {
          * @returns {Boolean} true if states are same, false otherwise
          */
         const compareCurrentLocalState = (player = players[_current], oldState) => {
-            console.log('newState:', getLocalPlayState(player), 'oldState:', oldState);
+            makeLog('newState:', getLocalPlayState(player), 'oldState:', oldState);
             return (getLocalPlayState(player) === oldState);
         };
 
@@ -170,7 +178,7 @@ var PlayerManager = (() => {
          */
         const handlePlayerPause = async (conf) => {
             let player = conf['player'] || players[_current];
-            console.log('pause', player.sourceNode.mediaElement.getAttribute('data-duration'));
+            makeLog('pause', player.sourceNode.mediaElement.getAttribute('data-duration'));
             let autoSwitch = conf['autoSwitch'] || false;
             let _crossfade = conf['crossfade']
                 || (crossfade && (crossfadeNextPrev || (autoSwitch && crossfadePlaylist)));
@@ -190,7 +198,7 @@ var PlayerManager = (() => {
                 await new Promise(r => setTimeout(r, crossfadeDuration * 1000));
             }
             if (compareCurrentLocalState(player, localPlayState)) {
-                console.log('pausing for:',
+                makeLog('pausing for:',
                     'autoSwitch:', autoSwitch,
                     'playState:', localPlayState,
                     'player:', player.sourceNode.mediaElement.getAttribute('data-duration')
@@ -198,7 +206,7 @@ var PlayerManager = (() => {
 
                 player.sourceNode.mediaElement.pause();
             } else {
-                console.log('NOT pausing for:',
+                makeLog('NOT pausing for:',
                     'autoSwitch:', autoSwitch,
                     'playState:', localPlayState,
                     'player:', player.sourceNode.mediaElement.getAttribute('data-duration')
@@ -221,7 +229,7 @@ var PlayerManager = (() => {
          */
         const handlePlayerPlay = async (conf) => {
             let player = conf['player'] || players[_current];
-            console.log('play', player.sourceNode.mediaElement.getAttribute('data-duration'));
+            makeLog('play', player.sourceNode.mediaElement.getAttribute('data-duration'));
             let autoSwitch = conf['autoSwitch'] || false;
             let _crossfade = conf['crossfade']
                 || (crossfade && (crossfadeNextPrev || (autoSwitch && crossfadePlaylist)));
@@ -244,7 +252,7 @@ var PlayerManager = (() => {
                     );
                 player.sourceNode.mediaElement.play();
                 await new Promise(r => setTimeout(r, crossfadeDuration * 1000));
-                console.log('final vol:', player.gainNode.gain.value);
+                makeLog('final vol:', player.gainNode.gain.value);
             } else {
             }
 
@@ -517,7 +525,7 @@ var PlayerManager = (() => {
                     if (isFinite(val)) return val;
                     return defVal;
                 };
-                console.log(
+                makeLog(
                     getNotNullElseDefault(_crossfade, crossfade),
                     getNotNullElseDefault(_crossfadePlaylist, crossfadePlaylist),
                     getNotNullElseDefault(_crossfadeNextPrev, crossfadeNextPrev),
@@ -550,6 +558,19 @@ var PlayerManager = (() => {
                     crossfadeDuration: crossfadeDuration,
                 };
             },
+            /**
+             * Sets verbose logging
+             * @param {Boolean} verbose enable/disable
+             */
+            setVerbose: (verbose) => {
+                if (verbose === true || verbose === false)
+                    verboseLog = verbose;
+            },
+            /**
+             * Gets verbose logging
+             * @returns {Boolean} verbose logging enabled/disabled
+             */
+            getVerbose: () => verboseLog,
         };
 
     };

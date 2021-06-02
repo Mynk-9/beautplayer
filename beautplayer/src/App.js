@@ -103,6 +103,7 @@ function App() {
     const cfP = (localStorage.getItem('config-crossfade-playlists') === 'true');
     const cfNp = (localStorage.getItem('config-crossfade-nextPrev') === 'true');
     let cfD = parseInt(localStorage.getItem('config-crossfade-duration'));
+    const pmV = (localStorage.getItem('config-playermanager-verbose') === 'true');
 
     if (cc === 'light')
       document.body.classList.add('light-mode');
@@ -127,6 +128,7 @@ function App() {
     setCrossfadePlaylist(cfP);
     setCrossfadeNextPrev(cfNp);
     setCrossfadeDuration(cfD);
+    playerManager.setVerbose(pmV);
   }, []);
 
   // save audioVolume
