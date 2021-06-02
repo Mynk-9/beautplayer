@@ -28,6 +28,8 @@ const PlayerContext = createContext({
     linkBack: '',
     setLinkBack: () => { },
 
+    playPauseFadeEnable: true,
+    setPlayPauseFadeEnable: () => { },
 
     crossfadeEnable: true,
     setCrossfadeEnable: () => { },

@@ -23,7 +23,8 @@ const SettingsPage = props => {
         crossfadeEnable, setCrossfadeEnable,
         crossfadePlaylist, setCrossfadePlaylist,
         crossfadeNextPrev, setCrossfadeNextPrev,
-        crossfadeDuration, setCrossfadeDuration
+        crossfadeDuration, setCrossfadeDuration,
+        playPauseFadeEnable, setPlayPauseFadeEnable,
     } = useContext(PlayerContext);
     // const crossfadeDurationComponentRef = useRef(null);
 
@@ -136,7 +137,17 @@ const SettingsPage = props => {
                         title="Experimental Settings"
                         options={[
                             {
-                                'option': 'Enable Crossfade',
+                                'option': 'Track fade on play/pause',
+                                'component':
+                                    <Switcher
+                                        state={playPauseFadeEnable}
+                                        onChange={(state) => {
+                                            setPlayPauseFadeEnable(state);
+                                        }}
+                                    />,
+                            },
+                            {
+                                'option': 'Crossfade',
                                 'brief': 'Make a track be heard gradually as another becomes silent',
                                 'component':
                                     <Switcher
@@ -158,7 +169,7 @@ const SettingsPage = props => {
                                     />,
                             },
                             {
-                                'option': 'Enable Crossfade Next/Prev',
+                                'option': 'Crossfade when pressed Next/Prev',
                                 'component':
                                     <Switcher
                                         state={crossfadeNextPrev}
@@ -169,7 +180,7 @@ const SettingsPage = props => {
                                     />,
                             },
                             {
-                                'option': 'Set Crossfade Duration',
+                                'option': 'Set Crossfade/Fade Duration',
                                 'component':
                                     <>
                                         <button

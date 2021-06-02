@@ -57,6 +57,7 @@ var PlayerManager = (() => {
         let crossfade = true;
         let crossfadePlaylist = true;
         let crossfadeNextPrev = true;
+        let playPauseFade = true;
         let crossfadeDuration = 5;
         let onTimeUpdateHandler = () => { };
         let onTimeUpdateHandlerExec = false;
@@ -177,11 +178,20 @@ var PlayerManager = (() => {
          * @returns {MediaElementAudioSourceNode} source node of player object
          */
         const handlePlayerPause = async (conf) => {
-            let player = conf['player'] || players[_current];
+            const getValOrDefault = (val, def) => {
+                // catch both null and undefined
+                if (val == null)
+                    return def;
+                return val;
+            };
+
+            let player = getValOrDefault(conf['player'], players[_current]);
             makeLog('pause', player.sourceNode.mediaElement.getAttribute('data-duration'));
-            let autoSwitch = conf['autoSwitch'] || false;
-            let _crossfade = conf['crossfade']
-                || (crossfade && (crossfadeNextPrev || (autoSwitch && crossfadePlaylist)));
+            let autoSwitch = getValOrDefault(conf['autoSwitch'], false);
+            let _crossfade = getValOrDefault(
+                conf['crossfade'],
+                (crossfade && (crossfadeNextPrev || (autoSwitch && crossfadePlaylist)))
+            );
 
             let localPlayState = setLocalPlayState(player);
 
@@ -228,11 +238,20 @@ var PlayerManager = (() => {
          * @returns {MediaElementAudioSourceNode} source node of player object
          */
         const handlePlayerPlay = async (conf) => {
-            let player = conf['player'] || players[_current];
+            const getValOrDefault = (val, def) => {
+                // catch both null and undefined
+                if (val == null)
+                    return def;
+                return val;
+            };
+
+            let player = getValOrDefault(conf['player'], players[_current]);
             makeLog('play', player.sourceNode.mediaElement.getAttribute('data-duration'));
-            let autoSwitch = conf['autoSwitch'] || false;
-            let _crossfade = conf['crossfade']
-                || (crossfade && (crossfadeNextPrev || (autoSwitch && crossfadePlaylist)));
+            let autoSwitch = getValOrDefault(conf['autoSwitch'], false);
+            let _crossfade = getValOrDefault(
+                conf['crossfade'],
+                (crossfade && (crossfadeNextPrev || (autoSwitch && crossfadePlaylist)))
+            );
 
             let localPlayState = setLocalPlayState(player);
 
@@ -401,7 +420,10 @@ var PlayerManager = (() => {
 
                 if (players[_current].sourceNode.mediaElement.src
                     && players[_current].sourceNode.mediaElement.src !== '') {
-                    handlePlayerPlay({ player: players[_current] })
+                    handlePlayerPlay({
+                        player: players[_current],
+                        crossfade: playPauseFade,
+                    })
                         .then(({ mediaElement }) => {
                             mediaElement.ontimeupdate = onTimeUpdateHandler;
                             onTimeUpdateHandlerExec = false;
@@ -413,7 +435,10 @@ var PlayerManager = (() => {
              * Pause track
              */
             pause: () => {
-                handlePlayerPause({ player: players[_current] })
+                handlePlayerPause({
+                    player: players[_current],
+                    crossfade: playPauseFade,
+                })
                     .then(({ mediaElement }) => {
                         mediaElement.ontimeupdate = () => { };
                     });
@@ -558,6 +583,20 @@ var PlayerManager = (() => {
                     crossfadeDuration: crossfadeDuration,
                 };
             },
+            /**
+             * Sets if track should fade when pressed play/pause button. Fade 
+             * duration is same as crossfade duration.
+             * @param {Boolean} _playPauseFade Boolean for enable/disable
+             */
+            setPlayPauseFade: (_playPauseFade) => {
+                if (_playPauseFade === true || _playPauseFade === false)
+                    playPauseFade = _playPauseFade;
+            },
+            /**
+             * Gets current state of play/pause fade.
+             * @returns {Boolean} true if enabled, false otherwise
+             */
+            getPlayPauseFade: () => playPauseFade,
             /**
              * Sets verbose logging
              * @param {Boolean} verbose enable/disable
