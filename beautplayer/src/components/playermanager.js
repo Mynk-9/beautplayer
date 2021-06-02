@@ -123,13 +123,13 @@ var PlayerManager = (() => {
             return parseInt(player.sourceNode.mediaElement.getAttribute('play-state'));
         };
         const compareCurrentLocalState = (player = players[_current], oldState) => {
-            console.log('newState:', getLocalPlayState(player), 'oldState:', oldState);
+            // console.log('newState:', getLocalPlayState(player), 'oldState:', oldState);
             return (getLocalPlayState(player) === oldState);
         };
 
         const handlePlayerPause = async (conf) => {
             let player = conf['player'] || players[_current];
-            console.log('pause', player.sourceNode.mediaElement.getAttribute('data-duration'));
+            // console.log('pause', player.sourceNode.mediaElement.getAttribute('data-duration'));
             let autoSwitch = conf['autoSwitch'] || false;
             let _crossfade = conf['crossfade']
                 || (crossfade && (crossfadeNextPrev || (autoSwitch && crossfadePlaylist)));
@@ -152,23 +152,22 @@ var PlayerManager = (() => {
                 await new Promise(r => setTimeout(r, crossfadeDuration * 1000));
             }
             if (compareCurrentLocalState(player, localPlayState)) {
-                console.log('pausing for:',
-                    'autoSwitch:', autoSwitch,
-                    'playState:', localPlayState,
-                    'player:', player.sourceNode.mediaElement.getAttribute('data-duration')
-                );
-                // player.gainNode.gain.cancelScheduledValues(0);
+                // console.log('pausing for:',
+                //     'autoSwitch:', autoSwitch,
+                //     'playState:', localPlayState,
+                //     'player:', player.sourceNode.mediaElement.getAttribute('data-duration')
+                // );
+                
                 player.sourceNode.mediaElement.pause();
-                // player.sourceNode.mediaElement.currentTime = 0;
             } else {
-                console.log('NOT pausing for:', 'autoSwitch:', autoSwitch, 'playState:', localPlayState);
+                // console.log('NOT pausing for:', 'autoSwitch:', autoSwitch, 'playState:', localPlayState);
             }
 
             return player.sourceNode;
         };
         const handlePlayerPlay = async (conf) => {
             let player = conf['player'] || players[_current];
-            console.log('play', player.sourceNode.mediaElement.getAttribute('data-duration'));
+            // console.log('play', player.sourceNode.mediaElement.getAttribute('data-duration'));
             let autoSwitch = conf['autoSwitch'] || false;
             let _crossfade = conf['crossfade']
                 || (crossfade && (crossfadeNextPrev || (autoSwitch && crossfadePlaylist)));
@@ -176,7 +175,6 @@ var PlayerManager = (() => {
             let localPlayState = setLocalPlayState(player);
 
             if (_crossfade) {
-                // console.log(player.sourceNode.mediaElement.currentTime);
                 if (player.sourceNode.mediaElement.currentTime === 0)
                     player.gainNode.gain.value = 0.0;
 
@@ -195,10 +193,10 @@ var PlayerManager = (() => {
                     );
                 player.sourceNode.mediaElement.play();
                 await new Promise(r => setTimeout(r, crossfadeDuration * 1000));
-                console.log('final vol:', player.gainNode.gain.value);
+                // console.log('final vol:', player.gainNode.gain.value);
             } else {
             }
-            
+
             if (compareCurrentLocalState(player, localPlayState)) {
                 // player.gainNode.gain.cancelScheduledValues(0);
                 player.gainNode.gain.value = volume;
@@ -455,8 +453,9 @@ var PlayerManager = (() => {
              * @param {Number} _crossfadeDuration if crossfade is enabled, set 
              *                duration of crossfade, default 1.0 sec
              */
-            setCrossfade: (_crossfade = true, _crossfadeNextPrev = true, _crossfadePlaylist = true, _crossfadeDuration = 1.0) => {
-                _crossfadeDuration = parseFloat(_crossfadeDuration);
+            setCrossfade: (_crossfade = true, _crossfadePlaylist = true, _crossfadeNextPrev = true, _crossfadeDuration = 1.0) => {
+                // console.log(_crossfade, _crossfadePlaylist, _crossfadeNextPrev, _crossfadeDuration);
+                crossfadeDuration = parseFloat(_crossfadeDuration);
                 crossfade = _crossfade;
                 crossfadeNextPrev = _crossfadeNextPrev;
                 crossfadePlaylist = _crossfadePlaylist;

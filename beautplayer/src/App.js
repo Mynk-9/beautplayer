@@ -39,6 +39,10 @@ function App() {
   const [audioDuration, setAudioDuration] = useState('');
   const [audioVolume, setAudioVolume] = useState(1.0);
   const [linkBack, setLinkBack] = useState('');
+  const [crossfadeEnable, _setCrossfadeEnable] = useState(true);
+  const [crossfadePlaylist, _setCrossfadePlaylist] = useState(true);
+  const [crossfadeNextPrev, _setCrossfadeNextPrev] = useState(false);
+  const [crossfadeDuration, _setCrossfadeDuration] = useState(1);
 
   const setPlayPause = (newState) => {
     if (newState === 'play')
@@ -46,6 +50,32 @@ function App() {
     else
       playerManager.pause();
     _setPlayPause(newState);
+  };
+  const setCrossfadeEnable = (newState) => {
+    let state = (newState === true);
+    playerManager.setCrossfade(state, crossfadePlaylist, crossfadeNextPrev, crossfadeDuration);
+    localStorage.setItem('config-crossfade', state);
+    _setCrossfadeEnable(state);
+  };
+  const setCrossfadePlaylist = (newState) => {
+    let state = (newState === true);
+    playerManager.setCrossfade(crossfadeEnable, state, crossfadeNextPrev, crossfadeDuration);
+    localStorage.setItem('config-crossfade-playlists', state);
+    _setCrossfadePlaylist(state);
+  };
+  const setCrossfadeNextPrev = (newState) => {
+    let state = (newState === true);
+    playerManager.setCrossfade(crossfadeEnable, crossfadePlaylist, state, crossfadeDuration);
+    localStorage.setItem('config-crossfade-nextPrev', state);
+    _setCrossfadeNextPrev(state);
+  };
+  const setCrossfadeDuration = (newState) => {
+    let state = parseInt(newState);
+    if (isNaN(state))
+      state = 1;
+    playerManager.setCrossfade(crossfadeEnable, crossfadePlaylist, crossfadeNextPrev, state);
+    localStorage.setItem('config-crossfade-duration', state);
+    _setCrossfadeDuration(state);
   };
   // }
 
@@ -61,6 +91,10 @@ function App() {
     const lat = (localStorage.getItem('config-letAcrylicTints') === 'true');
     const cc = localStorage.getItem('config-colorConfig');
     let av = parseFloat(parseFloat(localStorage.getItem('config-audioVolume')).toFixed(2));
+    const cf = (localStorage.getItem('config-crossfade') === 'true');
+    const cfP = (localStorage.getItem('config-crossfade-playlists') === 'true');
+    const cfNp = (localStorage.getItem('config-crossfade-nextPrev') === 'true');
+    let cfD = parseInt(localStorage.getItem('config-crossfade-duration'));
 
     if (cc === 'light')
       document.body.classList.add('light-mode');
@@ -74,10 +108,17 @@ function App() {
     else if (av < 0.0)
       av = 0.0;
 
+    if (isNaN(cfD))
+      cfD = 5;
+
     setLetAcrylicTints(lat);
     setColorConfig(cc);
     playerManager.setVolume(av);
     setAudioVolume(av);
+    setCrossfadeEnable(cf);
+    setCrossfadePlaylist(cfP);
+    setCrossfadeNextPrev(cfNp);
+    setCrossfadeDuration(cfD);
   }, []);
 
   // save audioVolume
@@ -117,6 +158,10 @@ function App() {
             audioDuration: audioDuration, setAudioDuration: setAudioDuration,
             audioVolume: audioVolume, setAudioVolume: setAudioVolume,
             linkBack: linkBack, setLinkBack: setLinkBack,
+            crossfadeEnable: crossfadeEnable, setCrossfadeEnable: setCrossfadeEnable,
+            crossfadePlaylist: crossfadePlaylist, setCrossfadePlaylist: setCrossfadePlaylist,
+            crossfadeNextPrev: crossfadeNextPrev, setCrossfadeNextPrev: setCrossfadeNextPrev,
+            crossfadeDuration: crossfadeDuration, setCrossfadeDuration: setCrossfadeDuration,
           }}
         >
           <SearchContext.Provider

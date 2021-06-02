@@ -46,6 +46,14 @@
          padding: 1rem;
       }
 
+      input[type="number"] {
+         color: var(--primary-color);
+         background-color: var(--secondary-color);
+
+         outline: none;
+         border: 1px solid var(--primary-color);
+      }
+
       table {
          width: 100%;
 
@@ -66,6 +74,10 @@
                   border-radius: var(--border-radius);
                   color: var(--primary-color);
                   cursor: pointer;
+
+                  transition: background-color var(--std-color-transition-time)
+                        ease,
+                     color var(--std-color-transition-time) ease;
                }
             }
             td:first-child {
