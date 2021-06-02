@@ -53,19 +53,25 @@ function App() {
   };
   const setCrossfadeEnable = (newState) => {
     let state = (newState === true);
-    playerManager.setCrossfade(state, crossfadePlaylist, crossfadeNextPrev, crossfadeDuration);
+    playerManager.setCrossfade({
+      _crossfade: state
+    });
     localStorage.setItem('config-crossfade', state);
     _setCrossfadeEnable(state);
   };
   const setCrossfadePlaylist = (newState) => {
     let state = (newState === true);
-    playerManager.setCrossfade(crossfadeEnable, state, crossfadeNextPrev, crossfadeDuration);
+    playerManager.setCrossfade({
+      _crossfadePlaylist: state
+    });
     localStorage.setItem('config-crossfade-playlists', state);
     _setCrossfadePlaylist(state);
   };
   const setCrossfadeNextPrev = (newState) => {
     let state = (newState === true);
-    playerManager.setCrossfade(crossfadeEnable, crossfadePlaylist, state, crossfadeDuration);
+    playerManager.setCrossfade({
+      _crossfadeNextPrev: state
+    });
     localStorage.setItem('config-crossfade-nextPrev', state);
     _setCrossfadeNextPrev(state);
   };
@@ -73,7 +79,9 @@ function App() {
     let state = parseInt(newState);
     if (isNaN(state))
       state = 1;
-    playerManager.setCrossfade(crossfadeEnable, crossfadePlaylist, crossfadeNextPrev, state);
+    playerManager.setCrossfade({
+      _crossfadeDuration: state
+    });
     localStorage.setItem('config-crossfade-duration', state);
     _setCrossfadeDuration(state);
   };

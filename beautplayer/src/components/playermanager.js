@@ -453,12 +453,33 @@ var PlayerManager = (() => {
              * @param {Number} _crossfadeDuration if crossfade is enabled, set 
              *                duration of crossfade, default 1.0 sec
              */
-            setCrossfade: (_crossfade = true, _crossfadePlaylist = true, _crossfadeNextPrev = true, _crossfadeDuration = 1.0) => {
-                // console.log(_crossfade, _crossfadePlaylist, _crossfadeNextPrev, _crossfadeDuration);
-                crossfadeDuration = parseFloat(_crossfadeDuration);
-                crossfade = _crossfade;
-                crossfadeNextPrev = _crossfadeNextPrev;
-                crossfadePlaylist = _crossfadePlaylist;
+            setCrossfade: ({
+                _crossfade,
+                _crossfadePlaylist,
+                _crossfadeNextPrev,
+                _crossfadeDuration,
+            }) => {
+                const getNotNullElseDefault = (val, defVal) => {
+                    if (val === true || val === false) return val;
+                    if (isFinite(val)) return val;
+                    return defVal;
+                };
+                console.log(
+                    getNotNullElseDefault(_crossfade, crossfade),
+                    getNotNullElseDefault(_crossfadePlaylist, crossfadePlaylist),
+                    getNotNullElseDefault(_crossfadeNextPrev, crossfadeNextPrev),
+                    getNotNullElseDefault(_crossfadeDuration, crossfadeDuration)
+                );
+
+                const isBool = (val) => (val === true || val === false);
+                if (isBool(_crossfade))
+                    crossfade = _crossfade;
+                if (isBool(_crossfadePlaylist))
+                    crossfadePlaylist = _crossfadePlaylist;
+                if (isBool(_crossfadeNextPrev))
+                    crossfadeNextPrev = _crossfadeNextPrev;
+                if (isFinite(_crossfadeDuration))
+                    crossfadeDuration = parseFloat(_crossfadeDuration);
             },
             /**
              * Gets the crossfade parameters
