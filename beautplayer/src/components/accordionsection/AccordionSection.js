@@ -19,7 +19,7 @@ const AccordionSection = ({ title, options, opened }) => {
                 '--table-height': `${tableRef.current.scrollHeight}px`,
             });
         }
-    }, [setTableHeight]);
+    }, [setTableHeight, options]);
 
     useEffect(() => {
         if (!letAcrylicTints) {
