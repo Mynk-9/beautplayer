@@ -134,7 +134,7 @@ const SettingsPage = props => {
                         ]}
                     />
                     <AccordionSection
-                        title="Experimental Settings"
+                        title="Advanced Settings"
                         options={[
                             {
                                 'option': 'Track fade on play/pause',
@@ -170,6 +170,7 @@ const SettingsPage = props => {
                             },
                             {
                                 'option': 'Crossfade when pressed Next/Prev',
+                                'brief': 'Crossfade when clicked on next or previous buttons',
                                 'component':
                                     <Switcher
                                         state={crossfadeNextPrev}
@@ -181,6 +182,10 @@ const SettingsPage = props => {
                             },
                             {
                                 'option': 'Set Crossfade/Fade Duration',
+                                'brief':
+                                    (crossfadeDuration > 5 || crossfadeDuration < 1)
+                                        ? 'It is advised to keep duration between 1 to 5 seconds for best experience'
+                                        : '',
                                 'component':
                                     <>
                                         <button
@@ -200,6 +205,7 @@ const SettingsPage = props => {
                                             <img
                                                 src={MinusIcon}
                                                 style={{ verticalAlign: 'middle' }}
+                                                alt={''}
                                                 data-dark-mode-compatible
                                             />
                                         </button>
@@ -220,6 +226,7 @@ const SettingsPage = props => {
                                         >
                                             <img
                                                 src={PlusIcon}
+                                                alt={''}
                                                 style={{ verticalAlign: 'middle' }}
                                                 data-dark-mode-compatible
                                             />
@@ -230,8 +237,8 @@ const SettingsPage = props => {
                     />
                     <hr />
                     <p className={Styles.credits}>
-                        Made with ❤ by Mayank.<br />
-                        See the source <a href="https://github.com/Mynk-9/beautplayer">here</a>.
+                        {'Made with ❤ by Mayank.'}<br />
+                        {'See the source '}<a href="https://github.com/Mynk-9/beautplayer">{'here'}</a>{'.'}
                     </p>
                 </div>
             </div>
