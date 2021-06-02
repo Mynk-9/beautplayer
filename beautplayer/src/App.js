@@ -53,19 +53,25 @@ function App() {
   };
   const setCrossfadeEnable = (newState) => {
     let state = (newState === true);
-    playerManager.setCrossfade(state, crossfadePlaylist, crossfadeNextPrev, crossfadeDuration);
+    playerManager.setCrossfade({
+      _crossfade: state
+    });
     localStorage.setItem('config-crossfade', state);
     _setCrossfadeEnable(state);
   };
   const setCrossfadePlaylist = (newState) => {
     let state = (newState === true);
-    playerManager.setCrossfade(crossfadeEnable, state, crossfadeNextPrev, crossfadeDuration);
+    playerManager.setCrossfade({
+      _crossfadePlaylist: state
+    });
     localStorage.setItem('config-crossfade-playlists', state);
     _setCrossfadePlaylist(state);
   };
   const setCrossfadeNextPrev = (newState) => {
     let state = (newState === true);
-    playerManager.setCrossfade(crossfadeEnable, crossfadePlaylist, state, crossfadeDuration);
+    playerManager.setCrossfade({
+      _crossfadeNextPrev: state
+    });
     localStorage.setItem('config-crossfade-nextPrev', state);
     _setCrossfadeNextPrev(state);
   };
@@ -73,7 +79,9 @@ function App() {
     let state = parseInt(newState);
     if (isNaN(state))
       state = 1;
-    playerManager.setCrossfade(crossfadeEnable, crossfadePlaylist, crossfadeNextPrev, state);
+    playerManager.setCrossfade({
+      _crossfadeDuration: state
+    });
     localStorage.setItem('config-crossfade-duration', state);
     _setCrossfadeDuration(state);
   };
@@ -95,6 +103,7 @@ function App() {
     const cfP = (localStorage.getItem('config-crossfade-playlists') === 'true');
     const cfNp = (localStorage.getItem('config-crossfade-nextPrev') === 'true');
     let cfD = parseInt(localStorage.getItem('config-crossfade-duration'));
+    const pmV = (localStorage.getItem('config-playermanager-verbose') === 'true');
 
     if (cc === 'light')
       document.body.classList.add('light-mode');
@@ -119,6 +128,7 @@ function App() {
     setCrossfadePlaylist(cfP);
     setCrossfadeNextPrev(cfNp);
     setCrossfadeDuration(cfD);
+    playerManager.setVerbose(pmV);
   }, []);
 
   // save audioVolume

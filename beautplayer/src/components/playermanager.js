@@ -4,8 +4,10 @@ var PlayerManager = (() => {
     var instance;
     function init() {
 
+        // private members
+
         // audio context
-        let AudioContext = window.AudioContext;// || window.webkitAudioContext;
+        let AudioContext = window.AudioContext;
         if (!AudioContext)
             AudioContext = window.webkitAudioContext;
         const audioContext = new AudioContext({
@@ -44,6 +46,7 @@ var PlayerManager = (() => {
                 .connect(audioContext.destination);
         });
 
+        // private variables for player state
         let _current = 0;
         let _next = 1;
         let _prev = 2;
@@ -57,6 +60,7 @@ var PlayerManager = (() => {
         let crossfadeDuration = 5;
         let onTimeUpdateHandler = () => { };
         let onTimeUpdateHandlerExec = false;
+        let verboseLog = false;
         const updateCurrentIndex = (moveAhead = true) => {
             if (moveAhead)
                 _current = _current < 2 ? _current + 1 : 0;
@@ -73,6 +77,17 @@ var PlayerManager = (() => {
         API += ':5000';                                       //
         ////////////////////////////////////////////////////////
 
+        // logging function
+        const makeLog = (...log) => {
+            if (!verboseLog) return;
+            let prefix = 'Player Manager:';
+            console.log(prefix, ...log);
+        };
+
+        // tracks prefetch management functions
+        /**
+         * Prefetch the next track. Track details fetched from player queue.
+         */
         const prefetchNextTrack = () => {
             let nextTrack = QueueManager.getNextTrack(players[_current].trackId, shuffle);
             let nextTrackId = nextTrack?.trackId;
@@ -90,6 +105,9 @@ var PlayerManager = (() => {
                 players[_next].sourceNode.mediaElement.pause();
             }
         };
+        /**
+         * Prefetch the previous track. Track details fetched from player queue.
+         */
         const prefetchPrevTrack = () => {
             let prevTrack = QueueManager.getPrevTrack(players[_current].trackId);
             let prevTrackId = prevTrack?.trackId;
@@ -108,6 +126,13 @@ var PlayerManager = (() => {
             }
         };
 
+        // HTMLAudioElement play state management functions for 
+        // working with async calls
+        /**
+         * Sets and returns play state of individual player
+         * @param {{}} player object as present in players array
+         * @returns {Number} stateId
+         */
         const setLocalPlayState = (player = players[_current]) => {
             let stateId = parseInt(
                 player.sourceNode.mediaElement.getAttribute('play-state')
@@ -119,17 +144,41 @@ var PlayerManager = (() => {
             player.sourceNode.mediaElement.setAttribute('play-state', String(stateId));
             return stateId;
         };
+        /**
+         * Gets play state of individual player
+         * @param {{}} player object as present in players array
+         * @returns {Number} stateId
+         */
         const getLocalPlayState = (player = players[_current]) => {
             return parseInt(player.sourceNode.mediaElement.getAttribute('play-state'));
         };
+        /**
+         * Compares current state with a previous stateId
+         * @param {{}} player object as present in players array
+         * @param {Number} oldState previous stateId
+         * @returns {Boolean} true if states are same, false otherwise
+         */
         const compareCurrentLocalState = (player = players[_current], oldState) => {
-            // console.log('newState:', getLocalPlayState(player), 'oldState:', oldState);
+            makeLog('newState:', getLocalPlayState(player), 'oldState:', oldState);
             return (getLocalPlayState(player) === oldState);
         };
 
+        // player play/pause management functions
+        /**
+         * Pauses the player
+         * @param {{}} conf Object with the following properties: 
+         *        player: denotes the player object as present in players array
+         *                  defaults to current player if not provided
+         *        autoSwitch: denotes that operation is part of playlist auto
+         *                  next, defaults to false
+         *        crossfade: denotes crossfade enable/disable boolean for this 
+         *                  operation, if not provided, it will set according 
+         *                  existing settings of crossfade
+         * @returns {MediaElementAudioSourceNode} source node of player object
+         */
         const handlePlayerPause = async (conf) => {
             let player = conf['player'] || players[_current];
-            // console.log('pause', player.sourceNode.mediaElement.getAttribute('data-duration'));
+            makeLog('pause', player.sourceNode.mediaElement.getAttribute('data-duration'));
             let autoSwitch = conf['autoSwitch'] || false;
             let _crossfade = conf['crossfade']
                 || (crossfade && (crossfadeNextPrev || (autoSwitch && crossfadePlaylist)));
@@ -137,9 +186,6 @@ var PlayerManager = (() => {
             let localPlayState = setLocalPlayState(player);
 
             if (_crossfade) {
-                // let _v = player.gainNode.gain.value;
-                // player.gainNode.gain.cancelScheduledValues(0);
-                // player.gainNode.gain.value = _v;
                 player.gainNode.gain.cancelAndHoldAtTime(audioContext.currentTime);
                 player
                     .gainNode
@@ -147,27 +193,43 @@ var PlayerManager = (() => {
                     .setTargetAtTime(
                         0,
                         audioContext.currentTime,
-                        crossfadeDuration / 3
+                        crossfadeDuration / 5
                     );
                 await new Promise(r => setTimeout(r, crossfadeDuration * 1000));
             }
             if (compareCurrentLocalState(player, localPlayState)) {
-                // console.log('pausing for:',
-                //     'autoSwitch:', autoSwitch,
-                //     'playState:', localPlayState,
-                //     'player:', player.sourceNode.mediaElement.getAttribute('data-duration')
-                // );
-                
+                makeLog('pausing for:',
+                    'autoSwitch:', autoSwitch,
+                    'playState:', localPlayState,
+                    'player:', player.sourceNode.mediaElement.getAttribute('data-duration')
+                );
+
                 player.sourceNode.mediaElement.pause();
             } else {
-                // console.log('NOT pausing for:', 'autoSwitch:', autoSwitch, 'playState:', localPlayState);
+                makeLog('NOT pausing for:',
+                    'autoSwitch:', autoSwitch,
+                    'playState:', localPlayState,
+                    'player:', player.sourceNode.mediaElement.getAttribute('data-duration')
+                );
             }
 
             return player.sourceNode;
         };
+        /**
+         * Plays/Resumes the player
+         * @param {{}} conf Object with the following properties: 
+         *        player: denotes the player object as present in players array
+         *                  defaults to current player if not provided
+         *        autoSwitch: denotes that operation is part of playlist auto
+         *                  next, defaults to false
+         *        crossfade: denotes crossfade enable/disable boolean for this 
+         *                  operation, if not provided, it will set according 
+         *                  existing settings of crossfade
+         * @returns {MediaElementAudioSourceNode} source node of player object
+         */
         const handlePlayerPlay = async (conf) => {
             let player = conf['player'] || players[_current];
-            // console.log('play', player.sourceNode.mediaElement.getAttribute('data-duration'));
+            makeLog('play', player.sourceNode.mediaElement.getAttribute('data-duration'));
             let autoSwitch = conf['autoSwitch'] || false;
             let _crossfade = conf['crossfade']
                 || (crossfade && (crossfadeNextPrev || (autoSwitch && crossfadePlaylist)));
@@ -178,9 +240,6 @@ var PlayerManager = (() => {
                 if (player.sourceNode.mediaElement.currentTime === 0)
                     player.gainNode.gain.value = 0.0;
 
-                // let _v = player.gainNode.gain.value;
-                // player.gainNode.gain.cancelScheduledValues(0);
-                // player.gainNode.gain.value = _v;
                 player.gainNode.gain.cancelAndHoldAtTime(audioContext.currentTime);
 
                 player
@@ -189,23 +248,25 @@ var PlayerManager = (() => {
                     .setTargetAtTime(
                         volume,
                         audioContext.currentTime,
-                        crossfadeDuration / 3
+                        crossfadeDuration / 5
                     );
                 player.sourceNode.mediaElement.play();
                 await new Promise(r => setTimeout(r, crossfadeDuration * 1000));
-                // console.log('final vol:', player.gainNode.gain.value);
+                makeLog('final vol:', player.gainNode.gain.value);
             } else {
             }
 
             if (compareCurrentLocalState(player, localPlayState)) {
                 // player.gainNode.gain.cancelScheduledValues(0);
-                player.gainNode.gain.value = volume;
+                // player.gainNode.gain.value = volume;
                 player.sourceNode.mediaElement.play();
             }
 
             return player.sourceNode;
         };
 
+
+        // public members
 
         return {
             /**
@@ -453,12 +514,33 @@ var PlayerManager = (() => {
              * @param {Number} _crossfadeDuration if crossfade is enabled, set 
              *                duration of crossfade, default 1.0 sec
              */
-            setCrossfade: (_crossfade = true, _crossfadePlaylist = true, _crossfadeNextPrev = true, _crossfadeDuration = 1.0) => {
-                // console.log(_crossfade, _crossfadePlaylist, _crossfadeNextPrev, _crossfadeDuration);
-                crossfadeDuration = parseFloat(_crossfadeDuration);
-                crossfade = _crossfade;
-                crossfadeNextPrev = _crossfadeNextPrev;
-                crossfadePlaylist = _crossfadePlaylist;
+            setCrossfade: ({
+                _crossfade,
+                _crossfadePlaylist,
+                _crossfadeNextPrev,
+                _crossfadeDuration,
+            }) => {
+                const getNotNullElseDefault = (val, defVal) => {
+                    if (val === true || val === false) return val;
+                    if (isFinite(val)) return val;
+                    return defVal;
+                };
+                makeLog(
+                    getNotNullElseDefault(_crossfade, crossfade),
+                    getNotNullElseDefault(_crossfadePlaylist, crossfadePlaylist),
+                    getNotNullElseDefault(_crossfadeNextPrev, crossfadeNextPrev),
+                    getNotNullElseDefault(_crossfadeDuration, crossfadeDuration)
+                );
+
+                const isBool = (val) => (val === true || val === false);
+                if (isBool(_crossfade))
+                    crossfade = _crossfade;
+                if (isBool(_crossfadePlaylist))
+                    crossfadePlaylist = _crossfadePlaylist;
+                if (isBool(_crossfadeNextPrev))
+                    crossfadeNextPrev = _crossfadeNextPrev;
+                if (isFinite(_crossfadeDuration))
+                    crossfadeDuration = parseFloat(_crossfadeDuration);
             },
             /**
              * Gets the crossfade parameters
@@ -476,6 +558,19 @@ var PlayerManager = (() => {
                     crossfadeDuration: crossfadeDuration,
                 };
             },
+            /**
+             * Sets verbose logging
+             * @param {Boolean} verbose enable/disable
+             */
+            setVerbose: (verbose) => {
+                if (verbose === true || verbose === false)
+                    verboseLog = verbose;
+            },
+            /**
+             * Gets verbose logging
+             * @returns {Boolean} verbose logging enabled/disabled
+             */
+            getVerbose: () => verboseLog,
         };
 
     };
