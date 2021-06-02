@@ -57,6 +57,7 @@ var PlayerManager = (() => {
         let crossfade = true;
         let crossfadePlaylist = true;
         let crossfadeNextPrev = true;
+        let playPauseFade = true;
         let crossfadeDuration = 5;
         let onTimeUpdateHandler = () => { };
         let onTimeUpdateHandlerExec = false;
@@ -419,7 +420,10 @@ var PlayerManager = (() => {
 
                 if (players[_current].sourceNode.mediaElement.src
                     && players[_current].sourceNode.mediaElement.src !== '') {
-                    handlePlayerPlay({ player: players[_current] })
+                    handlePlayerPlay({
+                        player: players[_current],
+                        crossfade: playPauseFade,
+                    })
                         .then(({ mediaElement }) => {
                             mediaElement.ontimeupdate = onTimeUpdateHandler;
                             onTimeUpdateHandlerExec = false;
@@ -431,7 +435,10 @@ var PlayerManager = (() => {
              * Pause track
              */
             pause: () => {
-                handlePlayerPause({ player: players[_current] })
+                handlePlayerPause({
+                    player: players[_current],
+                    crossfade: playPauseFade,
+                })
                     .then(({ mediaElement }) => {
                         mediaElement.ontimeupdate = () => { };
                     });
@@ -576,6 +583,20 @@ var PlayerManager = (() => {
                     crossfadeDuration: crossfadeDuration,
                 };
             },
+            /**
+             * Sets if track should fade when pressed play/pause button. Fade 
+             * duration is same as crossfade duration.
+             * @param {Boolean} _playPauseFade Boolean for enable/disable
+             */
+            setPlayPauseFade: (_playPauseFade) => {
+                if (_playPauseFade === true || _playPauseFade === false)
+                    playPauseFade = _playPauseFade;
+            },
+            /**
+             * Gets current state of play/pause fade.
+             * @returns {Boolean} true if enabled, false otherwise
+             */
+            getPlayPauseFade: () => playPauseFade,
             /**
              * Sets verbose logging
              * @param {Boolean} verbose enable/disable
