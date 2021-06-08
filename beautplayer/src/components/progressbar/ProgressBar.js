@@ -1,6 +1,7 @@
 import { React, useEffect, useState, useContext, useRef } from 'react';
 import Styles from './ProgressBar.module.scss';
 
+import PlayerManager from '../playermanager';
 import PlayerContext from './../playercontext';
 
 const ProgressBar = props => {
@@ -8,6 +9,8 @@ const ProgressBar = props => {
     const [progressVal, setProgressVal] = useState(0);
     const [progressInterval, setProgressInterval] = useState();
     const progressBarRef = useRef();
+
+    const playerManager = PlayerManager.getInstance();
 
     const convertSecondsToMinsSecs = (secs) => {
         if (isNaN(secs))
@@ -44,22 +47,22 @@ const ProgressBar = props => {
     useEffect(() => {
         if (playPause === 'play') {
             setProgressVal(
-                parseInt(props.playerRef?.current?.currentTime)
+                parseInt(playerManager.getPlayer().currentTime)
             );
             setProgressInterval(
                 setInterval(() => {
                     setProgressVal(
-                        parseInt(props.playerRef?.current?.currentTime)
+                        parseInt(playerManager.getPlayer().currentTime)
                     );
                 }, 1000)
             );
         } else {
             clearInterval(progressInterval);
             setProgressVal(
-                Math.round(props.playerRef?.current?.currentTime)
+                Math.round(playerManager.getPlayer().currentTime)
             );
         }
-    }, [playPause, props.playerRef]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [playPause]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleProgressBarInterrupt = (e) => {
         const cursorPosX = parseInt(e.clientX);
@@ -69,7 +72,7 @@ const ProgressBar = props => {
         const newTimeStamp = parseInt((offsetPosX / totalWidth) * audioDuration);
 
         setProgressVal(newTimeStamp);
-        props.playerRef.current.currentTime = newTimeStamp;
+        playerManager.getPlayer().currentTime = newTimeStamp;
     };
 
     return (

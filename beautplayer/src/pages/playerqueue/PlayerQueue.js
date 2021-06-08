@@ -7,12 +7,12 @@ import PlayButton from './../../components/playbutton/PlayButton';
 import AddToPlaylistModal from '../../components/addtoplaylistmodal/AddToPlaylistModal';
 
 import QueueManager from './../../components/queuemanager';
+import BeautPlayerQueue from '../../components/queue';
 
 import './../../components/commonstyles.scss';
 import Styles from './PlayerQueue.module.scss';
 
 import ThemeContext from './../../components/themecontext';
-import PlayerContext from './../../components/playercontext';
 
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg';
 import MinusIcon from './../../assets/buttonsvg/minus.svg';
@@ -23,7 +23,6 @@ const PlayerQueue = () => {
     const [tableAcrylicColorStyle, setTableAcrylicColorStyle] = useState({});
     const [trackList, setTrackList] = useState([]);
     const { acrylicColor, letAcrylicTints } = useContext(ThemeContext);
-    const { playerQueue, setPlayerQueue } = useContext(PlayerContext);
 
     const [addToPlaylistModalVisible, setAddToPlaylistModalVisible] = useState(false);
     const [addToPlaylistModalTrackId, setAddToPlaylistModalTrackId] = useState(null);
@@ -48,10 +47,11 @@ const PlayerQueue = () => {
 
     let history = useHistory();
 
-    // build queue on playerQueue change
+    // build queue on player queue change
     useEffect(() => {
+        console.log('trigger player queue rebuild');
         let key = 0;
-        let _trackList = playerQueue.map((data) => {
+        let _trackList = BeautPlayerQueue.queue.map((data) => {
             ++key;
             return (
                 <tr key={key} className={Styles.trackEntry}>
@@ -82,6 +82,7 @@ const PlayerQueue = () => {
                     <td>
                         <PlayButton
                             audioSrc={data.audioSrc}
+                            trackId={data.trackId}
                             audioDuration={data.audioDuration}
                             track={data.track}
                             albumArt={data.albumArt}
@@ -113,10 +114,10 @@ const PlayerQueue = () => {
         _trackList.reverse();
 
         setTrackList(_trackList);
-    }, [playerQueue]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [BeautPlayerQueue.queue]); // eslint-disable-line react-hooks/exhaustive-deps
 
     let removeItem = (trackId) => {
-        QueueManager.removeTrack(playerQueue, trackId, setPlayerQueue);
+        QueueManager.removeTrack(trackId);
     };
 
     return (

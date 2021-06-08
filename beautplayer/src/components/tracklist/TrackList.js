@@ -1,4 +1,4 @@
-import { React, useContext, useState } from 'react';
+import { React, useState } from 'react';
 import PlayButton from '../playbutton/PlayButton';
 import TrackOptions from '../trackoptions/TrackOptions';
 import TrackLiker from '../trackliker/TrackLiker';
@@ -9,8 +9,6 @@ import QueueManager from './../queuemanager';
 import './../commonstyles.scss';
 import Styles from './TrackList.module.scss';
 
-import PlayerContext from './../playercontext';
-
 import { albumArt } from '../coverArtAPI';
 
 import PlusIcon from './../../assets/buttonsvg/plus.svg';
@@ -20,8 +18,6 @@ import CheckIcon from './../../assets/buttonsvg/check.svg';
 
 // props: tracks, showRemoveOption, removeTrack(trackId)
 const TrackList = props => {
-    const { playerQueue, setPlayerQueue } = useContext(PlayerContext);
-
     const [addToPlaylistModalVisible, setAddToPlaylistModalVisible] = useState(false);
     const [addToPlaylistModalTrackId, setAddToPlaylistModalTrackId] = useState(null);
     const [addToPlaylistModalTrackName, setAddToPlaylistModalTrackName] = useState(null);
@@ -81,7 +77,7 @@ const TrackList = props => {
                     />
                 ),
                 'onClick': () =>
-                    QueueManager.addTrack(playerQueue, trackData, setPlayerQueue),
+                    QueueManager.addTrack(trackData),
             });
         }
         trackOptionsList.push({
@@ -128,6 +124,7 @@ const TrackList = props => {
                 <td>
                     <PlayButton
                         audioSrc={trackData.audioSrc}
+                        trackId={trackData.trackId}
                         audioDuration={trackData.audioDuration}
                         track={trackData.track}
                         albumArt={trackData.albumArt}
@@ -137,7 +134,7 @@ const TrackList = props => {
                         playlistTitle={trackData.playlistTitle}
                         linkBack={trackData.linkBack}
                         addToQueue={() =>
-                            QueueManager.addTrack(playerQueue, trackData, setPlayerQueue)
+                            QueueManager.addTrack(trackData)
                         }
                     />
                 </td>
