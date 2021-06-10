@@ -7,8 +7,7 @@ import PlayerContext from './../playercontext';
 const ProgressBar = props => {
     const { audioDuration, playPause } = useContext(PlayerContext);
     const [progressVal, setProgressVal] = useState(0);
-    const [progressInterval, setProgressInterval] = useState();
-    const progressBarRef = useRef();
+    const [progressInterval, setProgressInterval] = useState(null);
 
     const playerManager = PlayerManager.getInstance();
 
@@ -28,17 +27,13 @@ const ProgressBar = props => {
 
         return (mins_str + ':' + secs_str);
     };
-    const convertSecondsToMinsSecsWithSuffixes = (secs) => {
-        if (secs > 60)
-            return (
-                parseInt(secs / 60).toString(10) + 'm '
-                + (secs % 60).toString(10) + 's'
-            );
-        else
-            return (
-                secs.toString(10) + 's'
-            );
-    };
+
+    // garbage collection
+    useEffect(() => {
+        return () => {
+            clearInterval(progressInterval);
+        }
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         setProgressVal(0);
@@ -47,50 +42,46 @@ const ProgressBar = props => {
     useEffect(() => {
         if (playPause === 'play') {
             setProgressVal(
-                parseInt(playerManager.getPlayer().currentTime)
+                parseFloat(playerManager.getPlayer().currentTime / audioDuration * 100).toFixed(1)
             );
             setProgressInterval(
                 setInterval(() => {
                     setProgressVal(
-                        parseInt(playerManager.getPlayer().currentTime)
+                        parseFloat(playerManager.getPlayer().currentTime / audioDuration * 100).toFixed(1)
                     );
                 }, 1000)
             );
         } else {
             clearInterval(progressInterval);
-            setProgressVal(
-                Math.round(playerManager.getPlayer().currentTime)
-            );
+            let _progressVal = parseFloat(playerManager.getPlayer().currentTime / audioDuration * 100).toFixed(1);
+            if (isNaN(_progressVal))
+                _progressVal = 0;
+            setProgressVal(_progressVal);
         }
     }, [playPause]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleProgressBarInterrupt = (e) => {
-        const cursorPosX = parseInt(e.clientX);
-        const progressBarRect = progressBarRef.current.getBoundingClientRect();
-        let totalWidth = parseInt(progressBarRect.width);
-        let offsetPosX = cursorPosX - parseInt(progressBarRect.x);
-        const newTimeStamp = parseInt((offsetPosX / totalWidth) * audioDuration);
+        const val = e.target.value;
+        let newTimeStamp = parseInt((val / 100) * audioDuration);
 
-        setProgressVal(newTimeStamp);
+        setProgressVal(val);
         playerManager.getPlayer().currentTime = newTimeStamp;
     };
 
     return (
         <div className={Styles.progressBarContainer}>
             <span className={Styles.time}>
-                {convertSecondsToMinsSecs(progressVal)}
+                {convertSecondsToMinsSecs(parseInt(progressVal / 100 * audioDuration))}
             </span>
-            <div
-                className={Styles.progressBar}
-                onMouseDown={handleProgressBarInterrupt}
-                ref={progressBarRef}
-            >
-                <span
-                    className={Styles.progressValue}
-                    data-value={convertSecondsToMinsSecsWithSuffixes(progressVal)}
-                    style={{ width: ((progressVal / audioDuration) * 100) + '%' }}
-                />
-            </div>
+            <input
+                type={'range'}
+                onInput={handleProgressBarInterrupt}
+                step={0.01}
+                value={progressVal}
+                min={0}
+                max={100}
+                style={{ '--progress': `${progressVal}%` }}
+            />
             <span className={Styles.time}>
                 {convertSecondsToMinsSecs(parseInt(audioDuration))}
             </span>
