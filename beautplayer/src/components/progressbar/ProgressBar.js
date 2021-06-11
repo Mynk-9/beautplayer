@@ -50,7 +50,7 @@ const ProgressBar = props => {
         return () => {
             clearInterval(progressInterval);
         }
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [progressInterval]);
 
     useEffect(() => {
         setProgressVal(0);
