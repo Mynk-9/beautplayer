@@ -25,7 +25,7 @@
 .section {
    padding-top: 6rem;
    padding-bottom: 6.25rem;
-   min-height: calc(100vh - 12.25rem); // 100vh - 6rem - 6.25rem
+   min-height: 100vh;
 
    background-size: 150% 150%;
    background-image: linear-gradient(
