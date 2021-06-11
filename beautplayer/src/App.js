@@ -20,12 +20,10 @@ function App() {
 
   let playerManager = PlayerManager.getInstance();
 
-  // navbar acrylic color state
+  // theme context hooks {
   const [acrylicColor, setAcrylicColor] = useState('--acrylic-color');
   const [letAcrylicTints, setLetAcrylicTints] = useState(false);
   const [artContext, setArtContext] = useState(null);
-
-  // theme context hooks {
   const [colorConfig, setColorConfig] = useState('dark');
   // }
 
