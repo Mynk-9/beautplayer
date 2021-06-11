@@ -93,15 +93,19 @@ function App() {
 
   // load the configurations as the app loads
   useEffect(() => {
-    const lat = (localStorage.getItem('config-letAcrylicTints') === 'true');
+    let lat = localStorage.getItem('config-letAcrylicTints');
     const cc = localStorage.getItem('config-colorConfig');
     let av = parseFloat(parseFloat(localStorage.getItem('config-audioVolume')).toFixed(2));
     const cf = (localStorage.getItem('config-crossfade') === 'true');
-    const cfP = (localStorage.getItem('config-crossfade-playlists') === 'true');
-    const cfNp = (localStorage.getItem('config-crossfade-nextPrev') === 'true');
+    let cfP = localStorage.getItem('config-crossfade-playlists');
+    let cfNp = localStorage.getItem('config-crossfade-nextPrev');
     const ppF = (localStorage.getItem('config-fade-playpause') === 'true');
     let cfD = parseInt(localStorage.getItem('config-crossfade-duration'));
     const pmV = (localStorage.getItem('config-playermanager-verbose') === 'true');
+
+    // check for null and undefined
+    if (lat == null)
+      lat = 'true';
 
     if (cc === 'light')
       document.body.classList.add('light-mode');
@@ -115,8 +119,12 @@ function App() {
     else if (av < 0.0)
       av = 0.0;
 
+    if (cfP == null)
+      cfP = true;
+    if (cfNp == null)
+      cfNp = true;
     if (isNaN(cfD))
-      cfD = 5;
+      cfD = 3;
 
     setLetAcrylicTints(lat);
     setColorConfig(cc);
