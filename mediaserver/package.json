@@ -19,6 +19,7 @@
     "mongoose": "^5.11.12",
     "morgan": "^1.10.0",
     "music-metadata": "^7.6.4",
+    "nf-photo-collage": "^1.4.0",
     "nodemon": "^2.0.7"
   }
 }

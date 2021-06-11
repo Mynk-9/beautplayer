@@ -10,14 +10,31 @@
         td {
             padding: 1rem;
             border: 0;
+
+            > * {
+                vertical-align: middle;
+                vertical-align: -webkit-baseline-middle;
+            }
+            img {
+                vertical-align: middle;
+                vertical-align: -webkit-baseline-middle;
+            }
         }
         td:nth-child(4) {
-            @media only screen and (max-width: 540px) {
+            @media only screen and (max-width: 768px) {
                 display: none;
             }
         }
         td:nth-child(5) {
             text-align: right;
+        }
+
+        // taken from player queue styles at PlayerQueue.module.scss
+        td:nth-child(1),
+        td:nth-child(2),
+        td:last-child {
+            width: 1%;
+            white-space: nowrap;
         }
     }
     .trackEntry:first-child {
@@ -45,7 +62,7 @@
     .trackEntry:hover {
         background-color: var(--tint-level2-color);
 
-        @media only screen and (max-width: 540px) {
+        @media only screen and (max-width: 768px) {
             background-color: initial;
         }
     }
@@ -59,7 +76,7 @@ body[class~="dark-mode"] {
         .trackEntry:hover {
             background-color: var(--tint-level1-color);
 
-            @media only screen and (max-width: 540px) {
+            @media only screen and (max-width: 768px) {
                 background-color: initial;
             }
         }

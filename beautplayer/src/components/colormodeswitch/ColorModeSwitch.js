@@ -1,4 +1,4 @@
-import { React, useState, useContext } from 'react';
+import { React, useContext } from 'react';
 import './../commonstyles.scss';
 import Styles from './ColorModeSwitch.module.scss';
 import SunIcon from './../../assets/buttonsvg/sun.svg';
@@ -12,7 +12,6 @@ const ColorModeSwitch = props => {
 
     let getColorMode = () => document.body.classList.contains('light-mode');
     let setColorMode = e => {
-        console.log(getColorMode(), e);
         if (e) {
             document.body.classList.add('light-mode');
             setColorConfig('light');

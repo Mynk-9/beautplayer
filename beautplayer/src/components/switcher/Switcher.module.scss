@@ -1,0 +1,57 @@
+.switcherWrapper {
+   > * {
+      vertical-align: middle;
+   }
+   span {
+      margin-left: 1rem;
+   }
+}
+.switcherWrapper[data-enabled="false"] {
+   .switcher {
+      background-color: var(--non-transparent-acrylic-like-color);
+
+      .head {
+         background-color: var(--non-transparent-acrylic-like-color);
+      }
+   }
+   .switcher[data-enable="true"] {
+      background-color: var(--non-transparent-acrylic-like-color);
+   }
+}
+.switcher {
+   --padding: 0.3rem;
+
+   display: inline-block;
+   position: relative;
+   height: calc(1rem + 1 * var(--padding));
+   width: calc(2rem + 2 * var(--padding));
+   padding: var(--padding);
+
+   background-color: var(--acrylic-color);
+   border-radius: var(--border-radius);
+   cursor: pointer;
+
+   transition: background-color var(--std-color-transition-time) ease;
+
+   .head {
+      position: absolute;
+      top: 50%;
+      left: var(--padding);
+      height: 1rem;
+      width: 1rem;
+
+      background-color: var(--secondary-color);
+      border-radius: var(--border-radius);
+
+      transform: translateY(-50%);
+      transition: transform var(--std-color-transition-time) ease,
+         background-color var(--std-color-transition-time) ease;
+   }
+}
+.switcher[data-enable="true"] {
+   background-color: green;
+
+   .head {
+      transform: translateX(1rem) translateY(-50%);
+   }
+}

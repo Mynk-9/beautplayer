@@ -13,6 +13,7 @@
       width: var(--albumCard-width);
       height: var(--albumCard-width);
 
+      object-fit: cover;
       cursor: pointer;
    }
    span {

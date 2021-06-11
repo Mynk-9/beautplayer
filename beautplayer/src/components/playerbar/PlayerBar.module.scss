@@ -8,24 +8,32 @@
    border-radius: var(--border-radius) var(--border-radius) 0 0;
 
    z-index: 10;
-   transition: height 1s ease;
+   // transition: height 1s ease;
 
    > * {
-      display: block;
-      padding: 1rem;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      padding: 1rem 0;
+   }
+
+   audio {
+      display: revert;
    }
 
    .left {
-      display: inline-table;
+      display: flex;
       flex: 1;
       padding: 0;
+      padding-right: 1rem;
 
-      @media only screen and (max-width: 540px) {
+      @media only screen and (max-width: 768px) {
          display: block;
+         flex: 1;
       }
 
       .albumArt {
-         display: table-cell;
+         display: table;
          background-size: cover;
          background-repeat: no-repeat;
          // height = width = image-height
@@ -43,7 +51,7 @@
             border-radius: 50%;
             background-color: rgba(100, 100, 100, 0.5);
 
-            @media only screen and (max-width: 540px) {
+            @media only screen and (max-width: 768px) {
                display: block;
             }
          }
@@ -52,71 +60,87 @@
          }
       }
       .albumInfo {
-         position: relative;
-         top: 50%;
-         transform: translateY(-50%);
-
-         display: inline-table;
-         height: 100%;
-         // copied from .albumArt
-         // max-width: calc(24px + 2 * 1rem + 2 * 1px + 2 * 0.3rem + 2 * 1rem);
-         // this was removed as longer names are adjusting automatically and restriction
-         // on its width is only creating problems for UI.
-
-         span {
-            display: flex;
-            height: 100%;
-            flex-direction: column;
-            justify-content: center;
-
-            @media only screen and (max-width: 540px) {
-               display: block;
-            }
+         display: flex;
+         flex-direction: column;
+         justify-content: space-evenly;
+         
+         padding-left: 1rem;
+         padding-right: 1rem;
+         
+         @media only screen and (max-width: 768px) {
+            display: block;
+            padding-left: 0.5rem;
          }
 
-         @media only screen and (max-width: 540px) {
-            display: block;
+         span {
+            position: relative;
+            overflow-wrap: break-word;
          }
       }
       .albumInfo[data-visible="false"] {
-         @media only screen and (max-width: 540px) {
+         @media only screen and (max-width: 768px) {
             display: none;
          }
       }
 
       .albumLinker {
          cursor: pointer;
+         font-weight: bold;
+      }
+      .albumArtistInfo {
+         font-size: small;
+         font-style: italic;
       }
    }
    .left:hover {
       background-color: var(--tint-level2-color);
 
-      @media only screen and (max-width: 540px) {
+      @media only screen and (max-width: 768px) {
          background-color: initial;
       }
    }
    .right {
       flex: 1;
-      text-align: right;
+      justify-content: flex-end;
+      align-items: center;
+      padding-right: 1rem;
 
       // thanks: https://stackoverflow.com/a/17967969/6262571
       transform: translate3D(0, 0, 0);
 
-      @media only screen and (max-width: 540px) {
+      @media only screen and (max-width: 768px) {
          display: none;
       }
    }
    .center {
       flex: 1;
+      flex-direction: column;
       text-align: center;
       padding-top: 0.3rem;
       padding-bottom: 0.3rem;
 
       min-width: calc(
-         3 * (24px + (2 * 1rem) + (2 * 1px) + (2 * 0.3rem)) + 2 * (1rem)
+        3 * (24px + (2 * 1rem) + (2 * 1px) + (2 * 0.3rem)) + 2 * (1rem) + 2 * ((15px + 1rem) + (2 * 1px) + (2 * 0.3rem))
       );
-      // 3 x play-button + 2 x padding
+      // 3 x play-button + 2 x padding + 2 x small-button
       // play-button = width + 2 x padding + 2 x border + 2 x margin
+      // small-button = width + 2 x border + 2 x margin
+
+      @media only screen and (max-width: 768px) {
+         flex: 1;
+         min-width: calc(
+            3 * (24px + (2 * 1rem) + (2 * 1px) + (2 * 0.3rem)) + 2 * (1rem)
+         );
+         // just remove the width of small-buttons
+         padding-right: 1rem;
+      }
+
+      .controlsWrapper {
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         justify-content: center;
+      }
    }
 
    button {
@@ -134,10 +158,32 @@
          vertical-align: middle;
       }
    }
+   .buttonSmall {
+      padding: 0;
+      height: calc(15px + 1rem);
+      width: calc(15px + 1rem);
+      vertical-align: middle;
+
+      img {
+         width: 15px;
+         height: 15px;
+         margin-top: -0.2rem;
+      }
+   }
+   .buttonSmall[data-visible="false"] {
+      @media only screen and (max-width: 768px) {
+         display: none;
+      }
+   }
+   .buttonSmall[data-active="true"] {
+      background-color: var(--highlight-color-no-alpha);
+      // more styles added at the end of style-sheet
+      // related to color config of button icon
+   }
    button:hover {
       background-color: var(--tint-level2-color);
 
-      @media only screen and (max-width: 540px) {
+      @media only screen and (max-width: 768px) {
          background-color: var(--tint-level1-color);
       }
    }
@@ -170,3 +216,15 @@
       transform: translateX(-50%);
    }
 }
+
+// color switching of push buttons shuffle and repeat {
+
+body .playerBar .buttonSmall[data-active="true"] img {
+   filter: none;
+}
+// :global would prevent renaming of .light-mode
+:global(body.light-mode) .playerBar .buttonSmall[data-active="true"] img {
+   filter: invert(0.9);
+}
+
+// }

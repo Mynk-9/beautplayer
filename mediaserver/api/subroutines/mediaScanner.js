@@ -1,8 +1,6 @@
-const mongoose = require('mongoose');
 const fs = require('fs');
 const glob = require('glob-promise');
 
-const Files = require('../models/files');
 let configs = require('../configs');
 
 module.exports = async () => {
@@ -23,19 +21,6 @@ module.exports = async () => {
                 throw e;
             });
     }
-
-    await mongoose.connection.db.dropCollection('files')
-        .then(() => {
-            Files.insertMany(files)
-                .catch(e => {
-                    console.log(e);
-                    throw e;
-                });
-        })
-        .catch(e => {
-            console.log(e);
-            throw e;
-        });
 
     return files;
 };

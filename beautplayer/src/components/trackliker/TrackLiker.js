@@ -20,11 +20,13 @@ const TrackLiker = (props) => {
             .then(resp => {
                 if (resp.status === 200 && resp.data.found === true)
                     setLiked(true);
+                else
+                    setLiked(false);
             })
             .catch(err => {
                 console.log(err);
             });
-    }, []);
+    }, [props.trackId]); // eslint-disable-line react-hooks/exhaustive-deps
 
     let updateLikeStatus = async (newState) => {
         if (newState)
@@ -40,12 +42,7 @@ const TrackLiker = (props) => {
                     console.log(err);
                 });
         else
-            axios.delete(API + '/playlists/', {
-                data: {
-                    trackId: props.trackId,
-                    playlistName: 'liked'
-                }
-            })
+            axios.delete(`${API}/playlists/liked/${props.trackId}`)
                 .then(resp => {
                     if (resp.status === 200)
                         setLiked(false);
