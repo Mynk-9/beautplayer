@@ -27,7 +27,7 @@ router.post('/', async (req, res, next) => {
             res.status(500).json({
                 error: err
             });
-        })
+        });
 
     ////////////////////////////////////////
     //////////////// STEP 1 ////////////////
@@ -44,7 +44,10 @@ router.post('/', async (req, res, next) => {
         });
 
     // refresh the files collection
-    await mongoose.connection.db.dropCollection('files')
+    await mongoose.connection.db.collection('files')
+        .drop()
+        .catch(e => console.log(e));
+    await mongoose.connection.db.createCollection('files')
         .then(() => {
             Files.insertMany(files)
                 .catch(e => {

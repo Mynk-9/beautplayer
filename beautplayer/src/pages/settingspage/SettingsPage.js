@@ -124,12 +124,17 @@ const SettingsPage = props => {
                             {
                                 'option': 'Refresh Library',
                                 'component':
-                                    <button
-                                        className={Styles.button}
-                                        onClick={refreshLibrary}
-                                    >
-                                        {'Refresh Media Library'}
-                                    </button>,
+                                    <>
+                                        <button
+                                            className={Styles.button}
+                                            onClick={refreshLibrary}
+                                        >
+                                            {'Refresh Media Library'}
+                                        </button>
+                                        <br />
+                                        <br />
+                                        <label></label>
+                                    </>,
                             },
                         ]}
                     />
