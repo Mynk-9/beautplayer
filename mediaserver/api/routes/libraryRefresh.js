@@ -88,8 +88,6 @@ router.post('/', async (req, res, next) => {
     await mongoose.connection.db.collection('tracks')
         .drop()
         .catch(e => console.log(e));
-    await mongoose.connection.db.createCollection('tracks')
-        .catch(e => console.log(e));
     await Tracks.insertMany(files)
         .catch(e => {
             console.log(e);
@@ -97,6 +95,9 @@ router.post('/', async (req, res, next) => {
                 error: e
             });
         });
+    Tracks.createIndexes([
+        { title: 'text', album: 'text', albumArtist: 'text', contributingArtists: 'text' }
+    ]);
 
     // return if headers already sent
     if (res.headersSent)
