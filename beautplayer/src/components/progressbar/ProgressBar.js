@@ -3,13 +3,30 @@ import Styles from './ProgressBar.module.scss';
 
 import PlayerManager from '../playermanager';
 import PlayerContext from './../playercontext';
+import ThemeContext from '../themecontext';
 
 const ProgressBar = props => {
     const { audioDuration, playPause } = useContext(PlayerContext);
+    const { letAcrylicTints, acrylicColor } = useContext(ThemeContext);
     const [progressVal, setProgressVal] = useState(0);
     const [progressInterval, setProgressInterval] = useState(null);
+    const [rangeThumbAcrylicColorStyle, setRangeThumbAcrylicColorStyle] = useState({});
 
     const playerManager = PlayerManager.getInstance();
+
+    useEffect(() => {
+        if (!letAcrylicTints) {
+            setRangeThumbAcrylicColorStyle({ '--acrylic-color-range-thumb': 'var(--primary-color)' });
+        }
+        else {
+            if (acrylicColor && acrylicColor !== '--acrylic-color-range-thumb' && acrylicColor !== '') {
+                setRangeThumbAcrylicColorStyle({ '--acrylic-color-range-thumb': String(acrylicColor.slice(0, acrylicColor.length - 6) + ', 1)') });
+            }
+            else {
+                setRangeThumbAcrylicColorStyle({ '--acrylic-color-range-thumb': 'var(--primary-color)' });
+            }
+        }
+    }, [acrylicColor, letAcrylicTints]);
 
     const convertSecondsToMinsSecs = (secs) => {
         if (isNaN(secs))
@@ -80,7 +97,10 @@ const ProgressBar = props => {
                 value={progressVal}
                 min={0}
                 max={100}
-                style={{ '--progress': `${progressVal}%` }}
+                style={{
+                    '--progress': `${progressVal}%`,
+                    ...rangeThumbAcrylicColorStyle
+                }}
             />
             <span className={Styles.time}>
                 {convertSecondsToMinsSecs(parseInt(audioDuration))}
