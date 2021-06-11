@@ -9,7 +9,7 @@ It has two components:
 
 ### Use Case
 
-Some people (including me) like to maintain their own collection of favourite music on their devices, offline. Over time, these collections grow big in size and it becomes infeasible to store and sync the copies on each device (PC/phone/etc). This was my urge to make this application. User can simply put the collection onto one machine in their home (generally any old pc lying in the garage would work), and setup this player. Then, all the tracks can be easily streamed over the local network through an eye-candy UI, all the basic features someone might need in a music player - albums, playlists, fading/crossfading, gapless playback, equaliser (coming in future version) and obviously, great control over the looks and feel of the player.
+Some people (including me) like to maintain their collection of favourite music on their devices, offline. Over time, these collections grow big and it becomes infeasible to store and sync the copies on each device (PC/phone/etc). This was my urge to make this application. User can simply put the collection onto one machine in their home (generally any old pc lying in the garage would work), and setup this player. Then, all the tracks can be easily streamed over the local network through an eye-candy UI, all the basic features someone might need in a music player - albums, playlists, fading/crossfading, gapless playback, equaliser (coming in future version) and obviously, great control over the looks and feel of the player.
 
 ## Getting Started
 
