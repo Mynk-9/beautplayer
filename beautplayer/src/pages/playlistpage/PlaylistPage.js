@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import TrackList from './../../components/tracklist/TrackList';
 import Modal from '../../components/modal/Modal';
+import PlayerManager from '../../components/playermanager';
 import QueueManager from './../../components/queuemanager';
 import { albumArt } from './../../components/coverArtAPI';
 
@@ -42,9 +43,11 @@ const PlaylistPage = props => {
     const imgRef = useRef(null);
 
     // player context
-    const { playerQueue, setPlayerQueue, setPlayPause, setCurrentTrack,
+    const { setPlayPause, setCurrentTrack,
         setAlbumTitle, setAlbumArtist, setLinkBack, setAlbumArt, setAudioSrc,
         setAudioDuration } = useContext(PlayerContext);
+    
+    const playerManager = PlayerManager.getInstance();
 
     // modal state hooks
     const [showModal, setShowModal] = useState({
@@ -246,16 +249,23 @@ const PlaylistPage = props => {
 
     const addPlaylistToQueue = () => {
         let trackDataList = tracks.tracks.map(data => getTrackData(data));
-        QueueManager.addTracksMany(playerQueue, trackDataList, setPlayerQueue);
+        QueueManager.addTracksMany(trackDataList);
     };
 
     const playPlaylist = () => {
         // clear the queue and add many
         let trackDataList = tracks.tracks.map(data => getTrackData(data));
-        QueueManager.addTracksMany([], trackDataList, setPlayerQueue);
+        QueueManager.clearQueue();
+        QueueManager.addTracksMany(trackDataList);
         // start the play
-        setTheTrack(getTrackData(tracks.tracks[0]));
+        let track0Data = getTrackData(tracks.tracks[0]);
+        let track0DurationSplit = track0Data.audioDuration.split(":");
+        let track0Duration = parseFloat(track0DurationSplit[0]) * 60 + parseFloat(track0DurationSplit[1]);
+        setTheTrack(track0Data);
         setPlayPause('play');
+        playerManager.setCurrentTrack(track0Data.trackId, track0Duration);
+        playerManager.play();
+        playerManager.forcePrefetch();
     };
 
     return (

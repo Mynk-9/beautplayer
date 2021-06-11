@@ -1,9 +1,10 @@
-import { React, useState, useEffect, useContext, useRef } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import { useHistory, useLocation } from 'react-router-dom'
 import ProgressBar from './../progressbar/ProgressBar';
 import './../commonstyles.scss';
 import Styles from './PlayerBar.module.scss';
 
+import PlayerManager from './../playermanager';
 import QueueManager from './../queuemanager';
 
 import PlayerContext from './../playercontext';
@@ -29,11 +30,10 @@ const ColorThief = require('color-thief');
 
 const PlayerBar = props => {
     const { playPause, albumArt, currentTrack, albumArtist,
-        audioVolume, audioSrc, linkBack, playerQueue,
+        audioVolume, audioSrc, linkBack,
         setCurrentTrack, setAlbumTitle, setAlbumArtist, setLinkBack,
         setAlbumArt, setAudioSrc, setAudioDuration, setPlayPause,
-        setAudioVolume, setPlayerQueue } = useContext(PlayerContext);
-    let audioPlayerRef = useRef(null);
+        setAudioVolume } = useContext(PlayerContext);
     let history = useHistory();
     // location hook required to retain after navigation the updated document
     // title containing the track name
@@ -62,18 +62,14 @@ const PlayerBar = props => {
         }
     }, [acrylicColor, letAcrylicTints]);
 
-    // api endpoint -- same domain, port 5000
-    let API = window.location.origin;
-    API = API.substring(0, API.lastIndexOf(':'));
-    API += ':5000';
+    // player manager instance
+    const playerManager = PlayerManager.getInstance();
 
     let togglePlay = () => {
-        if (playPause === 'play') {
+        if (playPause === 'play')
             setPlayPause('pause');
-        }
-        else {
+        else
             setPlayPause('play');
-        }
     };
 
     // advance on the playlist
@@ -116,61 +112,41 @@ const PlayerBar = props => {
 
         //////// } copied from play button 
     };
-    let nextTrack = () => {
-        setPlayPause('pause');      // temporary pause
-
+    let nextTrack = (autoSwitch = false) => {
         let trackId = audioSrc;     // both are same
-        let trackData = QueueManager.getNextTrack(
-            playerQueue,
-            trackId,
-            setPlayerQueue,
-            null,
-            shuffle
-        );
-        if (!trackData) return;
+        let trackData = QueueManager.getNextTrack(trackId);
+        if (!trackData) {
+            setPlayPause('pause');
+            return;
+        }
         setTheTrack(trackData);
 
-        setPlayPause('play');
+        // if nextTrack is triggered from button press then autoSwitch is an 
+        // Event, in that case make sure autoSwitch is made false (Boolean)
+        if (autoSwitch !== true || autoSwitch !== false)
+            autoSwitch = false;
+        playerManager.next(autoSwitch);
     };
     let prevTrack = () => {
         // go to prev track if current time < 5s
         // else set current time to 0s
-        if (audioPlayerRef.current.currentTime < 5) {
-            setPlayPause('pause');      // temporary pause
-
+        if (playerManager.getPlayer().currentTime < 5) {
             let trackId = audioSrc;     // both are same
-            let trackData = QueueManager.getPrevTrack(playerQueue, trackId);
-            if (!trackData) return;
+            let trackData = QueueManager.getPrevTrack(trackId);
+            if (!trackData) {
+                setPlayPause('pause');
+                return;
+            }
             setTheTrack(trackData);
 
-            setPlayPause('play');
+            playerManager.prev();
         } else {
-            audioPlayerRef.current.currentTime = 0;
+            playerManager.getPlayer().currentTime = 0;
         }
     };
+    playerManager.setOnTrackEnd(() => nextTrack(true));
 
     useEffect(() => {
-
-        let audioSource = API + '/tracks/' + audioSrc + '/stream';
-        audioPlayerRef.current.src = audioSource;
-
-        if (playPause === 'pause') audioPlayerRef.current.pause();
-        else audioPlayerRef.current.play();
-
-    }, [audioSrc]); // eslint-disable-line react-hooks/exhaustive-deps
-    // linter recommendation here is inaccurate, 
-    // so disabled message for this line
-
-    useEffect(() => {
-        if (playPause === 'play')
-            audioPlayerRef.current.play();
-        else
-            audioPlayerRef.current.pause();
-    }, [playPause]);
-
-    useEffect(() => {
-        audioPlayerRef.current.volume = audioVolume;
-
         if (audioVolume >= 0.8)
             setVolumeStatus('high');
         else if (parseFloat(audioVolume) === 0.0)
@@ -178,12 +154,16 @@ const PlayerBar = props => {
         else
             setVolumeStatus('normal');
 
-        setVolumeDisplay(audioVolume * 100);
+        setVolumeDisplay(parseFloat(audioVolume).toFixed(2) * 100);
     }, [audioVolume]);
 
     useEffect(() => {
-        audioPlayerRef.current.loop = loopTrack;
+        playerManager.setLoop(loopTrack);
     }, [loopTrack]);
+
+    useEffect(() => {
+        playerManager.setShuffle(shuffle);
+    }, [shuffle]);
 
     useEffect(() => {
         document.title = 'BeautPlayer'
@@ -192,32 +172,35 @@ const PlayerBar = props => {
     }, [currentTrack, location]);
 
     let reduceVolume = () => {
-        if (audioVolume > 0)
-            setAudioVolume(
-                parseFloat(audioPlayerRef.current.volume - 0.1).toFixed(2));
+        setAudioVolume(prevVal => {
+            let newVol = parseFloat(parseFloat(prevVal).toFixed(2));
+            newVol -= 0.1;
+            if (newVol < 0.0)
+                newVol = 0.0;
+            else if (newVol > 1.0)
+                newVol = 1.0;
+            playerManager.setVolume(newVol);
+            return newVol;
+        });
     };
     let increaseVolume = () => {
-        if (audioVolume < 1)
-            setAudioVolume(
-                parseFloat(audioPlayerRef.current.volume + 0.1).toFixed(2));
+        setAudioVolume(prevVal => {
+            let newVol = parseFloat(parseFloat(prevVal).toFixed(2));
+            newVol += 0.1;
+            if (newVol < 0.0)
+                newVol = 0.0;
+            else if (newVol > 1.0)
+                newVol = 1.0;
+            playerManager.setVolume(newVol);
+            return newVol;
+        });
     };
-
-    let audioPlayerOnEndedHandler = () => {
-        if (!loopTrack)
-            nextTrack();
-    }
 
     return (
         <footer
             className={`${Styles.playerBar} acrylic`}
             style={acrylicColorStyle}
         >
-            {/* Audio Player */}
-            <audio
-                onEnded={audioPlayerOnEndedHandler}
-                ref={audioPlayerRef}
-            />
-
             <div className={Styles.left}>
                 <div
                     className={Styles.albumArt}
@@ -248,24 +231,21 @@ const PlayerBar = props => {
                             : 'false'
                     }
                 >
-                    <span>
-                        <span
-                            className={Styles.albumLinker}
-                            onClick={() => {
-                                history.push(linkBack);
-                            }}
-                        >
-                            {currentTrack}
-                        </span>
-                        <br />
-                        <span className={Styles.albumArtistInfo}>
-                            {albumArtist}
-                        </span>
-                    </span>
+                    <div
+                        className={Styles.albumLinker}
+                        onClick={() => {
+                            history.push(linkBack);
+                        }}
+                    >
+                        {currentTrack}
+                    </div>
+                    <div className={Styles.albumArtistInfo}>
+                        {albumArtist}
+                    </div>
                 </div>
             </div>
             <div className={Styles.center}>
-                <div>
+                <div className={Styles.controlsWrapper}>
                     <button
                         className={`${Styles.buttonSmall} cursor-pointer display-desktop-only`}
                         data-visible={mobileOpenAlbumDetails}
@@ -303,6 +283,18 @@ const PlayerBar = props => {
                             src={NextIcon}
                         />
                     </button>
+                    <button
+                        className={`${Styles.buttonSmall} cursor-pointer display-desktop-only`}
+                        data-visible={mobileOpenAlbumDetails}
+                        data-active={loopTrack}
+                        onClick={
+                            () => setLoopTrack(!loopTrack)
+                        }
+                    >
+                        <img data-dark-mode-compatible alt="Repeat" src={RepeatIcon} />
+                    </button>
+                </div>
+                <div>
                     {/* cloned above shuffle button for mobile displays */}
                     <button
                         className={`${Styles.buttonSmall} cursor-pointer display-mobile-only`}
@@ -319,7 +311,7 @@ const PlayerBar = props => {
                         />
                     </button>
                     <button
-                        className={`${Styles.buttonSmall} cursor-pointer`}
+                        className={`${Styles.buttonSmall} cursor-pointer display-mobile-only`}
                         data-visible={mobileOpenAlbumDetails}
                         data-active={loopTrack}
                         onClick={
@@ -329,7 +321,7 @@ const PlayerBar = props => {
                         <img data-dark-mode-compatible alt="Repeat" src={RepeatIcon} />
                     </button>
                 </div>
-                <ProgressBar playerRef={audioPlayerRef} />
+                <ProgressBar />
             </div>
             <div className={Styles.right}>
                 <button className={"cursor-pointer"} onClick={reduceVolume}>

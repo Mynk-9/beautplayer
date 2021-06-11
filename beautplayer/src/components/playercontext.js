@@ -2,46 +2,43 @@ import { createContext } from 'react';
 
 const PlayerContext = createContext({
     playPause: 'pause',
-    albumArt: '',
-    albumTitle: '',
-    albumArtist: '',
-    currentTrack: '',
-    audioSrc: '',
-    audioDuration: 0,
-    audioVolume: 1.0,
-    linkBack: '',
-
-    playerQueue: [],
-    /*
-        see components/tracklist/TrackList.js for more info
-        [
-            {
-                'trackId': ...,
-                'audioSrc': ...,
-                'audioDuration': ...,
-                'track': ...,
-                'albumArt': ...,
-                'albumTitle': ...,
-                'albumArtist': ...,
-                'isPlaylist': ...,
-                'playlistTitle': ...,
-                'linkBack': ...
-            }, 
-            ...
-        ]
-    */
-
     setPlayPause: () => { },
+
+    albumArt: '',
     setAlbumArt: () => { },
+
+    albumTitle: '',
     setAlbumTitle: () => { },
+
+    albumArtist: '',
     setAlbumArtist: () => { },
+
+    currentTrack: '',
     setCurrentTrack: () => { },
+
+    audioSrc: '',
     setAudioSrc: () => { },
+
+    audioDuration: 0,
     setAudioDuration: () => { },
+
+    audioVolume: 1.0,
     setAudioVolume: () => { },
+
+    linkBack: '',
     setLinkBack: () => { },
 
-    setPlayerQueue: () => { },
+    playPauseFadeEnable: true,
+    setPlayPauseFadeEnable: () => { },
+
+    crossfadeEnable: true,
+    setCrossfadeEnable: () => { },
+    crossfadePlaylist: true,
+    setCrossfadePlaylist: () => { },
+    crossfadeNextPrev: false,
+    setCrossfadeNextPrev: () => { },
+    crossfadeDuration: 1,
+    setCrossfadeDuration: () => { },
 });
 
 export default PlayerContext;

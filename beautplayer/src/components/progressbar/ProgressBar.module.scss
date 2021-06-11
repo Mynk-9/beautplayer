@@ -1,46 +1,74 @@
 .progressBarContainer {
    display: flex;
-}
-
-.progressBar {
    position: relative;
-   display: inline-block;
-   flex: 1;
-
-   // width: 10em;
-   height: 0.3rem;
-   margin: 0.7rem 1rem 0.3rem 1rem;
-   vertical-align: baseline;
-
-   background-color: var(--acrylic-color);
-   border-radius: var(--border-radius);
+   align-items: center;
+   margin: auto 2rem 0 2rem;
 
    @media only screen and (max-width: 768px) {
-      width: 7em;
+      margin: 0;
    }
 
-   .progressValue {
-      position: absolute;
-      left: 0;
-      height: 100%;
+   // range styling: https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
+   input[type="range"] {
+      flex: 1;
+      margin: 0 1rem;
 
-      background-color: var(--primary-color);
-      border-radius: var(--border-radius);
-   }
-   .progressValue:hover::after {
-      content: attr(data-value);
-      font-size: small;
-      position: absolute;
-      right: 0;
-      top: -300%;
+      -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+      width: 100%; /* Specific width is required for Firefox. */
+      background: transparent; /* Otherwise white in Chrome */
 
-      @media only screen and (max-width: 768px) {
-         display: none;
+      @mixin trackStyles {
+         width: 100%;
+         height: 0.2rem;
+         cursor: pointer;
+         border-radius: var(--border-radius);
+
+         background: linear-gradient(
+            to right,
+            var(--primary-color) var(--progress),
+            var(--acrylic-color) var(--progress) 100%
+         );
+
+         transition: background-color var(--std-color-transition-time) ease;
+      }
+      @mixin thumbStyles {
+         -webkit-appearance: none;
+         position: static;
+
+         height: 0.8rem; // 2x 0.3rem
+         width: 0.8rem;
+         border: 0.1rem solid var(--primary-color);
+         border-radius: var(--border-radius);
+
+         background-color: var(--acrylic-color-range-thumb);
+         cursor: pointer;
+      }
+
+      &::-webkit-slider-thumb {
+         @include thumbStyles;
+
+         // adjust positioning of thumb in webkit
+         transform: translateY(-0.3rem);
+      }
+      &::-moz-range-thumb {
+         @include thumbStyles;
+      }
+
+      &::-webkit-slider-runnable-track {
+         @include trackStyles;
+      }
+      &::-moz-range-track {
+         @include trackStyles;
+      }
+
+      /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+      &:focus {
+         outline: none;
       }
    }
 }
 
 .time {
-   display: contents;
+   // display: contents;
    font-size: small;
 }

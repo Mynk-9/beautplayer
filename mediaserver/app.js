@@ -16,7 +16,7 @@ const playlists = require('./api/routes/playlists');
 const searchRoute = require('./api/routes/search');
 
 mongoose
-    .connect('mongodb://localhost:27017/player', {
+    .connect('mongodb://localhost:27017/beautplayer', {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
