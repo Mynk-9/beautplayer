@@ -1,5 +1,8 @@
 import { React, useState, useEffect } from 'react';
 import axios from 'axios';
+
+import API from './../apiLink';
+
 import './../commonstyles.scss';
 // import Styles from './TrackLike.module.scss';
 
@@ -8,11 +11,6 @@ import HeartIconEmpty from './../../assets/buttonsvg/heart.svg';
 
 const TrackLiker = (props) => {
     const [liked, setLiked] = useState(false);
-
-    // api endpoint -- same domain, port 5000
-    let API = window.location.origin;
-    API = API.substring(0, API.lastIndexOf(':'));
-    API += ':5000';
 
     useEffect(() => {
         // fetch like status

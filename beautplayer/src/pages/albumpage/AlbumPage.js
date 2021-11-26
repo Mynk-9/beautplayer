@@ -1,16 +1,19 @@
 import { React, useState, useEffect, useContext, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
+
 import TrackList from './../../components/tracklist/TrackList';
+import { albumArt } from '../../components/coverArtAPI';
+
+import API from './../../components/apiLink';
+
 import './../../components/commonstyles.scss';
 import Styles from './AlbumPage.module.scss';
 
 import ThemeContext from '../../components/themecontext';
 
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg'
-
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
-import { albumArt } from '../../components/coverArtAPI';
 
 const AlbumPage = props => {
     // tracks has the format: [title, artist, duration, trackId]
@@ -29,11 +32,6 @@ const AlbumPage = props => {
     const { setArtContext } = useContext(ThemeContext);
     const imgRef = useRef(null);
 
-    // api endpoint -- same domain, port 5000
-    let API = window.location.origin;
-    API = API.substring(0, API.lastIndexOf(':'));
-    API += ':5000';
-
 
     let tracksArray = {
         album: '',
@@ -48,7 +46,7 @@ const AlbumPage = props => {
     }, [props.match.params.albumName]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        if (!albumPageAlbumName) return; 
+        if (!albumPageAlbumName) return;
         // fixed double call to this function
         // on opening of AlbumPage, this function is triggered twice, once at
         // mounting and once at albumPageAlbumName change

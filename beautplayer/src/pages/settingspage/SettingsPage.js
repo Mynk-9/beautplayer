@@ -1,17 +1,19 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import ColorModeSwitcher from '../../components/colormodeswitch/ColorModeSwitch';
 
+import ColorModeSwitcher from '../../components/colormodeswitch/ColorModeSwitch';
 import AccordionSection from '../../components/accordionsection/AccordionSection';
 import Switcher from '../../components/switcher/Switcher';
+
+import API from './../../components/apiLink';
+import PersistentStorage from './../persistentstorage';
 
 import './../../components/commonstyles.scss';
 import Styles from './SettingsPage.module.scss';
 
 import ThemeContext from './../../components/themecontext';
 import PlayerContext from '../../components/playercontext';
-import PersistentStorage from './../persistentstorage';
 
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg';
 import PlusIcon from './../../assets/buttonsvg/plus.svg';
@@ -26,15 +28,8 @@ const SettingsPage = props => {
         crossfadeDuration, setCrossfadeDuration,
         playPauseFadeEnable, setPlayPauseFadeEnable,
     } = useContext(PlayerContext);
-    // const crossfadeDurationComponentRef = useRef(null);
 
     let history = useHistory();
-
-    // api endpoint -- same domain, port 5000
-    let API = window.location.origin;
-    API = API.substring(0, API.lastIndexOf(':'));
-    API += ':5000';
-
     let loadingText = 'Working';
 
     let refreshLibrary = e => {

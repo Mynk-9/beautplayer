@@ -1,11 +1,15 @@
 import { React, useState, useEffect, useContext, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
+
 import TrackList from './../../components/tracklist/TrackList';
 import Modal from '../../components/modal/Modal';
+import { albumArt, playlistArt } from './../../components/coverArtAPI';
+
+import API from './../../components/apiLink';
 import PlayerManager from '../../components/playermanager';
 import QueueManager from './../../components/queuemanager';
-import { albumArt } from './../../components/coverArtAPI';
+import PersistentStorage from '../persistentstorage';
 
 import './../../components/commonstyles.scss';
 import Styles from './PlaylistPage.module.scss';
@@ -17,11 +21,7 @@ import LeftIcon from './../../assets/buttonsvg/chevron-left.svg'
 import PlayIcon from './../../assets/buttonsvg/play.svg';
 import TrashIcon from './../../assets/buttonsvg/trash-2.svg';
 import PlusCircleIcon from './../../assets/buttonsvg/plus-circle.svg';
-// import ListIcon from './../../assets/buttonsvg/list.svg';
-
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
-import { playlistArt } from './../../components/coverArtAPI';
-import PersistentStorage from '../persistentstorage';
 
 const ColorThief = require('color-thief');
 
@@ -46,7 +46,7 @@ const PlaylistPage = props => {
     const { setPlayPause, setCurrentTrack,
         setAlbumTitle, setAlbumArtist, setLinkBack, setAlbumArt, setAudioSrc,
         setAudioDuration } = useContext(PlayerContext);
-    
+
     const playerManager = PlayerManager.getInstance();
 
     // modal state hooks
@@ -56,11 +56,6 @@ const PlaylistPage = props => {
         'body': null,
         'buttons': null,
     });
-
-    // api endpoint -- same domain, port 5000
-    let API = window.location.origin;
-    API = API.substring(0, API.lastIndexOf(':'));
-    API += ':5000';
 
 
     let tracksArray = {

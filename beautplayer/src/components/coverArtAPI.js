@@ -1,6 +1,4 @@
-let API = window.location.origin;
-API = API.substring(0, API.lastIndexOf(':'));
-API += ':5000';
+import API from './apiLink';
 
 // thanks to https://stackoverflow.com/a/8485137/6262571 for the regex
 

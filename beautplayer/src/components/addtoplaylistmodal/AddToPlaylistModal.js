@@ -4,6 +4,7 @@ import axios from 'axios';
 import './../../components/commonstyles.scss';
 import Styles from './AddToPlaylistModal.module.scss';
 
+import API from './../apiLink';
 import PersistentStorage from './../../pages/persistentstorage';
 
 import XIcon from './../../assets/buttonsvg/x.svg';
@@ -14,11 +15,6 @@ const PlaylistsModal = props => {
     const [playlists, setPlaylists] = useState([]);
     const [okButtonText, setOkButtonText] = useState('Ok');
     const textBoxRef = useRef(null);
-
-    // api endpoint -- same domain, port 5000
-    let API = window.location.origin;
-    API = API.substring(0, API.lastIndexOf(':'));
-    API += ':5000';
 
     const fetchPlaylists = () => {
         let _playlists = playlists;

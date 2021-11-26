@@ -1,4 +1,5 @@
 import QueueManager from './queuemanager';
+import API from './apiLink';
 
 var PlayerManager = (() => {
     var instance;
@@ -71,12 +72,6 @@ var PlayerManager = (() => {
             _next = _current < 2 ? _current + 1 : 0;
             _prev = _current > 0 ? _current - 1 : 2;
         };
-
-        // temporary setup of API link /////////////////////////
-        let API = window.location.origin;                     //
-        API = API.substring(0, API.lastIndexOf(':'));         //
-        API += ':5000';                                       //
-        ////////////////////////////////////////////////////////
 
         // logging function
         const makeLog = (...log) => {

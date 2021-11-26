@@ -6,6 +6,10 @@ import TrackLiker from './../../components/trackliker/TrackLiker';
 import TrackOptions from './../../components/trackoptions/TrackOptions';
 import PlayButton from './../../components/playbutton/PlayButton';
 import AddToPlaylistModal from '../../components/addtoplaylistmodal/AddToPlaylistModal';
+import { albumArt } from '../../components/coverArtAPI';
+
+import API from './../../components/apiLink';
+import QueueManager from './../../components/queuemanager';
 
 import './../../components/commonstyles.scss';
 import Styles from './SearchPage.module.scss';
@@ -13,13 +17,10 @@ import Styles from './SearchPage.module.scss';
 import ThemeContext from './../../components/themecontext';
 import SearchContext from './../../components/searchcontext';
 
-import QueueManager from './../../components/queuemanager';
-
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg';
 import PlusIcon from './../../assets/buttonsvg/plus.svg';
 import PlusCircleIcon from './../../assets/buttonsvg/plus-circle.svg';
 import CheckIcon from './../../assets/buttonsvg/check.svg';
-import { albumArt } from '../../components/coverArtAPI';
 
 const SearchPage = () => {
     const [acrylicColorStyle, setAcrylicColorStyle] = useState({});
@@ -51,11 +52,6 @@ const SearchPage = () => {
     }, [acrylicColor, letAcrylicTints]);
 
     let history = useHistory();
-
-    // api endpoint -- same domain, port 5000
-    let API = window.location.origin;
-    API = API.substring(0, API.lastIndexOf(':'));
-    API += ':5000';
 
     // picked from TrackList.js
     const getTrackData = (data) => {

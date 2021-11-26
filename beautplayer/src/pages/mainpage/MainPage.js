@@ -1,13 +1,16 @@
 import { React, useEffect, useState } from 'react';
 import axios from 'axios';
+
 import AlbumCard from './../../components/albumcard/AlbumCard';
-import './../../components/commonstyles.scss';
+import { albumArtCompressed, playlistArtCompressed } from '../../components/coverArtAPI';
+
+import API from './../../components/apiLink';
 import PersistentStorage from './../persistentstorage';
+
+import './../../components/commonstyles.scss';
 import Styles from './MainPage.module.scss';
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg';
-
-import { albumArtCompressed, playlistArtCompressed } from '../../components/coverArtAPI';
 
 const MainPage = (props) => {
     const [allAlbums, setAllAlbums] = useState(
@@ -27,11 +30,6 @@ const MainPage = (props) => {
         PersistentStorage.MainPageAlbumsSort
         || localStorage.getItem('album-sortBy')
         || 'name';
-
-    // api endpoint -- same domain, port 5000
-    let API = window.location.origin;
-    API = API.substring(0, API.lastIndexOf(':'));
-    API += ':5000';
 
     // albums sort function
     const albumsSortFunctions = {
