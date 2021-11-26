@@ -1,0 +1,51 @@
+.trackOptions {
+    // .optionButton {
+    //     img {
+    //         // nothing
+    //     }
+    // }
+
+    .optionsMenu {
+        display: none;
+        position: absolute;
+        transform: translateX(-20%) translateY(calc(-100% - 1rem));
+
+        border-radius: var(--border-radius);
+
+        * {
+            vertical-align: middle;
+            vertical-align: -webkit-baseline-middle;
+        }
+
+        .optionsMenuItem {
+            padding: 0.5rem;
+
+            span {
+                border-radius: var(--border-radius);
+                padding: 0.5rem;
+                cursor: pointer;
+            }
+            span:nth-child(1) {
+                img {
+                    vertical-align: revert;
+                }
+            }
+        }
+        .optionsMenuItem:hover {
+            background-color: var(--tint-level2-color);
+        }
+        .optionsMenuItem:first-child {
+            border-top-left-radius: var(--border-radius);
+            border-top-right-radius: var(--border-radius);
+        }
+        .optionsMenuItem:last-child {
+            border-bottom-left-radius: var(--border-radius);
+            border-bottom-right-radius: var(--border-radius);
+        }
+    }
+}
+.trackOptions:hover {
+    .optionsMenu {
+        display: block;
+    }
+}

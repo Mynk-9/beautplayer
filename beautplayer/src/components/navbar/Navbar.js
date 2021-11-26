@@ -2,6 +2,8 @@ import { React, useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import SearchBox from './../searchbox/SearchBox';
 import ColorModeSwitch from './../../components/colormodeswitch/ColorModeSwitch';
+import BeautPlayerTitle from './../beautplayertitle/BeautPlayerTitle';
+
 import './../commonstyles.scss';
 import Styles from './Navbar.module.scss';
 
@@ -36,9 +38,11 @@ const Navbar = props => {
             }
             style={acrylicColorStyle}
         >
-            <span className={Styles.center}>
+            <span className={`${Styles.center} ${Styles.title}`}>
                 <span className={"cursor-pointer"}>
-                    <Link to={`/`}>BeautPlayer</Link>
+                    <Link to={`/`}>
+                        <BeautPlayerTitle />
+                    </Link>
                 </span>
             </span>
             <span className={Styles.right}>
@@ -52,6 +56,11 @@ const Navbar = props => {
             <span className={Styles.right}>
                 <span className={"cursor-pointer"}>
                     <Link to={`/settings`}>Settings</Link>
+                </span>
+            </span>
+            <span className={Styles.right}>
+                <span className={"cursor-pointer"}>
+                    <Link to={`/queue`}>Queue</Link>
                 </span>
             </span>
             <span className={Styles.right}>

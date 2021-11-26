@@ -1,8 +1,6 @@
 .nav {
-   --nav-padding: 1rem;
-
-   width: calc(100% - 2 * var(--nav-padding));
-   padding: var(--nav-padding);
+   width: 100%;
+   padding: 1rem;
    position: fixed;
    display: flex;
    flex-wrap: wrap;
@@ -14,6 +12,7 @@
    > * {
       display: block;
       padding: 1rem;
+      margin: auto;
    }
 
    // .left is unused
@@ -24,6 +23,14 @@
       flex: 1;
    }
 
+   .right,
+   .left,
+   .center {
+      span {
+         vertical-align: middle;
+      }
+   }
+
    a {
       text-decoration: none;
       color: inherit;
@@ -31,9 +38,7 @@
 
    .openNav {
       display: none;
-      position: absolute;
-      right: var(--nav-padding);
-      top: var(--nav-padding);
+      margin: auto;
       outline: 0;
       background: none;
 
@@ -41,7 +46,7 @@
    }
 }
 
-@media only screen and (max-width: 540px) {
+@media only screen and (max-width: 768px) {
    .nav .openNav {
       display: initial;
    }
@@ -55,4 +60,13 @@
          display: none;
       }
    }
+}
+
+.title {
+    padding: 0 1rem;
+    margin: auto;
+
+    @media only screen and (max-width: 768px) {
+        padding: 1rem 1rem;
+    }
 }

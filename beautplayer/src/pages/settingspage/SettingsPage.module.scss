@@ -5,7 +5,7 @@
    .header {
       padding: 3rem;
 
-      @media only screen and (max-width: 540px) {
+      @media only screen and (max-width: 768px) {
          padding: 1rem;
       }
 
@@ -17,7 +17,7 @@
          margin-left: -1rem;
          cursor: pointer;
 
-         @media only screen and (max-width: 540px) {
+         @media only screen and (max-width: 768px) {
             position: relative;
             margin: 0;
          }
@@ -29,7 +29,7 @@
          left: 50%;
          transform: translateX(-50%);
 
-         @media only screen and (max-width: 540px) {
+         @media only screen and (max-width: 768px) {
             position: initial;
             margin: 0;
             margin-right: -2rem;
@@ -42,14 +42,22 @@
    .content {
       padding: 0 8rem 1.5rem 8rem;
 
-      @media only screen and (max-width: 540px) {
+      @media only screen and (max-width: 768px) {
          padding: 1rem;
+      }
+
+      input[type="number"] {
+         color: var(--primary-color);
+         background-color: var(--secondary-color);
+
+         outline: none;
+         border: 1px solid var(--primary-color);
       }
 
       table {
          width: 100%;
 
-         @media only screen and (max-width: 540px) {
+         @media only screen and (max-width: 768px) {
             text-align: center;
          }
 
@@ -66,6 +74,10 @@
                   border-radius: var(--border-radius);
                   color: var(--primary-color);
                   cursor: pointer;
+
+                  transition: background-color var(--std-color-transition-time)
+                        ease,
+                     color var(--std-color-transition-time) ease;
                }
             }
             td:first-child {

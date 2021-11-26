@@ -25,4 +25,6 @@ const trackSchema = mongoose.Schema({
     path: { type: String, required: true },
 });
 
+trackSchema.index({ title: 'text', album: 'text', albumArtist: 'text', contributingArtists: 'text' });
+
 module.exports = mongoose.model('Tracks', trackSchema);

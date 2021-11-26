@@ -1,7 +1,6 @@
 import { React, useState, useEffect, useContext, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import * as base64 from 'byte-base64';
 import TrackList from './../../components/tracklist/TrackList';
 import './../../components/commonstyles.scss';
 import Styles from './AlbumPage.module.scss';
@@ -11,7 +10,7 @@ import ThemeContext from '../../components/themecontext';
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg'
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
-import { albumArt } from '../../components/albumArtAPI';
+import { albumArt } from '../../components/coverArtAPI';
 
 const AlbumPage = props => {
     // tracks has the format: [title, artist, duration, trackId]
@@ -19,6 +18,7 @@ const AlbumPage = props => {
         albumArt: '',
         tracks: [],
     });
+    const [albumPageAlbumName, setAlbumPageAlbumName] = useState('');
     const [albumPageAlbumYear, setAlbumPageAlbumYear] = useState('');
     const [albumPageAlbumGenre, setAlbumPageAlbumGenre] = useState('');
     const [albumPageAlbumArtist, setAlbumPageAlbumArtist] = useState('');
@@ -35,7 +35,6 @@ const AlbumPage = props => {
     API += ':5000';
 
 
-    let albumName = props.match.params.albumName;
     let tracksArray = {
         album: '',
         albumArt: '',
@@ -43,15 +42,21 @@ const AlbumPage = props => {
     };
 
     useEffect(() => {
-        albumName = props.match.params.albumName;
+        setAlbumPageAlbumName(props.match.params.albumName);
         setArtContext(imgRef);
         imgRef.current.crossOrigin = 'Anonymous'; // fix for: "canvas has been tainted by cross-origin data" security error
-    });
+    }, [props.match.params.albumName]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
+        if (!albumPageAlbumName) return; 
+        // fixed double call to this function
+        // on opening of AlbumPage, this function is triggered twice, once at
+        // mounting and once at albumPageAlbumName change
+        // at mounting, albumPageAlbumName is undefined
+        // would also prevent unnecessary api calls too
 
         // set album cover art
-        const src = albumArt(albumName.replace('%2F', '/'));
+        const src = albumArt(albumPageAlbumName.replace('%2F', '/'));
         setAlbumPageAlbumArt(src);
         tracksArray.albumArt = src;
 
@@ -59,9 +64,10 @@ const AlbumPage = props => {
 
         // fetch the album data
         // get the tracks of the album
-        axios.get(API + '/albums/' + albumName)
-            .then(async resp => {
+        axios.get(API + '/albums/' + albumPageAlbumName)
+            .then(resp => {
                 const album = resp.data.Album;
+                if (!album) console.log('album undefined');
                 const albumTracks = album.tracks;
 
                 setAlbumPageAlbumYear(album.year.join(", "));
@@ -87,12 +93,12 @@ const AlbumPage = props => {
                     );
                 }
             })
-            .then(() => tracksArray.album = albumName)
+            .then(() => tracksArray.album = albumPageAlbumName)
             .then(() => setTracks(tracksArray))
             .catch(err => {
                 console.log(err);
             });
-    }, [albumName]);
+    }, [albumPageAlbumName]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <>
@@ -117,7 +123,7 @@ const AlbumPage = props => {
                         <tbody>
                             <tr>
                                 <td>Album</td>
-                                <td>{albumName.replace('%2F', '/')}</td>
+                                <td>{albumPageAlbumName.replace('%2F', '/')}</td>
                             </tr>
                             <tr>
                                 <td>Artist</td>
@@ -135,7 +141,7 @@ const AlbumPage = props => {
                     </table>
                 </div>
                 <div className={Styles.content}>
-                    <TrackList tracks={tracks} />
+                    <TrackList tracks={tracks} showAddToQueueOption={true} />
                 </div>
             </div>
         </>
