@@ -63,10 +63,10 @@
          display: flex;
          flex-direction: column;
          justify-content: space-evenly;
-         
+
          padding-left: 1rem;
          padding-right: 1rem;
-         
+
          @media only screen and (max-width: 768px) {
             display: block;
             padding-left: 0.5rem;
@@ -120,7 +120,8 @@
       padding-bottom: 0.3rem;
 
       min-width: calc(
-        3 * (24px + (2 * 1rem) + (2 * 1px) + (2 * 0.3rem)) + 2 * (1rem) + 2 * ((15px + 1rem) + (2 * 1px) + (2 * 0.3rem))
+         3 * (24px + (2 * 1rem) + (2 * 1px) + (2 * 0.3rem)) + 2 * (1rem) + 2 *
+            ((15px + 1rem) + (2 * 1px) + (2 * 0.3rem))
       );
       // 3 x play-button + 2 x padding + 2 x small-button
       // play-button = width + 2 x padding + 2 x border + 2 x margin

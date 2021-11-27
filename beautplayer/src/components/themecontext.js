@@ -2,14 +2,14 @@ import { createContext } from 'react';
 
 const ThemeContext = createContext({
     colorConfig: 'dark',
-    setColorConfig: () => { },
+    setColorConfig: () => {},
 
     acrylicColor: '',
-    setAcrylicColor: () => { },
+    setAcrylicColor: () => {},
     letAcrylicTints: false,
-    setLetAcrylicTints: () => { },
+    setLetAcrylicTints: () => {},
     artContext: null,
-    setArtContext: () => { }
+    setArtContext: () => {},
 });
 
 export default ThemeContext;

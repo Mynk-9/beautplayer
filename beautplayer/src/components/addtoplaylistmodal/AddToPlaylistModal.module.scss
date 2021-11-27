@@ -1,101 +1,101 @@
 .modal {
-    display: block;
-    position: fixed;
-    z-index: 11;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
+   display: block;
+   position: fixed;
+   z-index: 11;
+   left: 0;
+   top: 0;
+   right: 0;
+   bottom: 0;
 
-    .box {
-        position: absolute;
-        width: 20rem;
-        max-width: 90%;
-        max-height: 70&;
-        height: auto;
+   .box {
+      position: absolute;
+      width: 20rem;
+      max-width: 90%;
+      max-height: 70&;
+      height: auto;
 
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        padding: 1rem;
-        border-radius: var(--border-radius);
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      padding: 1rem;
+      border-radius: var(--border-radius);
 
-        cursor: default;
+      cursor: default;
 
-        .head {
+      .head {
+         display: flex;
+         padding: 1rem;
+         border-bottom: 1px var(--primary-color) solid;
+
+         .heading {
+            flex: 1;
+            margin: auto;
+
+            font-weight: bold;
+         }
+         .close {
+            flex: 0;
+            cursor: pointer;
+         }
+      }
+      .body {
+         padding: 1rem;
+         margin-bottom: 1rem;
+
+         .trackName {
+            font-weight: bold;
+         }
+
+         .listBox {
+            color: var(--primary-color);
+
+            input[type="radio"] {
+               display: none;
+            }
+
+            input[type="radio"]:checked + .listItem {
+               background-color: var(--tint-level3-color);
+            }
+
+            .listItem {
+               display: block;
+               padding: 0.5rem;
+            }
+            .listItem:hover {
+               background-color: var(--tint-level2-color);
+            }
+         }
+
+         .newPlaylist {
             display: flex;
-            padding: 1rem;
-            border-bottom: 1px var(--primary-color) solid;
+            padding-top: 0.5rem;
 
-            .heading {
-                flex: 1;
-                margin: auto;
-
-                font-weight: bold;
-            }
-            .close {
-                flex: 0;
-                cursor: pointer;
-            }
-        }
-        .body {
-            padding: 1rem;
-            margin-bottom: 1rem;
-
-            .trackName {
-                font-weight: bold;
+            > * {
+               vertical-align: middle;
             }
 
-            .listBox {
-                color: var(--primary-color);
+            input {
+               padding: 0.5rem;
+               border: 0;
+               margin: 0;
+               outline: 0;
 
-                input[type="radio"] {
-                    display: none;
-                }
+               margin-right: 0.5rem;
 
-                input[type="radio"]:checked + .listItem {
-                    background-color: var(--tint-level3-color);
-                }
+               background-color: var(--tint-level3-color);
+               border-radius: var(--border-radius);
 
-                .listItem {
-                    display: block;
-                    padding: 0.5rem;
-                }
-                .listItem:hover {
-                    background-color: var(--tint-level2-color);
-                }
+               flex: 1;
             }
-
-            .newPlaylist {
-                display: flex;
-                padding-top: 0.5rem;
-
-                > * {
-                    vertical-align: middle;
-                }
-
-                input {
-                    padding: 0.5rem;
-                    border: 0;
-                    margin: 0;
-                    outline: 0;
-
-                    margin-right: 0.5rem;
-
-                    background-color: var(--tint-level3-color);
-                    border-radius: var(--border-radius);
-
-                    flex: 1;
-                }
-                img {
-                    text-align: right;
-                }
+            img {
+               text-align: right;
             }
-        }
-        .foot {
-            padding: 1rem;
-            
-            border-top: 1px var(--primary-color) solid;
-        }
-    }
+         }
+      }
+      .foot {
+         padding: 1rem;
+
+         border-top: 1px var(--primary-color) solid;
+      }
+   }
 }

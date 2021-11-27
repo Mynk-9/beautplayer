@@ -1,17 +1,19 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import ColorModeSwitcher from '../../components/colormodeswitch/ColorModeSwitch';
 
+import ColorModeSwitcher from '../../components/colormodeswitch/ColorModeSwitch';
 import AccordionSection from '../../components/accordionsection/AccordionSection';
 import Switcher from '../../components/switcher/Switcher';
+
+import API from './../../components/apiLink';
+import PersistentStorage from './../persistentstorage';
 
 import './../../components/commonstyles.scss';
 import Styles from './SettingsPage.module.scss';
 
 import ThemeContext from './../../components/themecontext';
 import PlayerContext from '../../components/playercontext';
-import PersistentStorage from './../persistentstorage';
 
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg';
 import PlusIcon from './../../assets/buttonsvg/plus.svg';
@@ -20,29 +22,29 @@ import MinusIcon from './../../assets/buttonsvg/minus.svg';
 const SettingsPage = props => {
     const { letAcrylicTints, setLetAcrylicTints } = useContext(ThemeContext);
     const {
-        crossfadeEnable, setCrossfadeEnable,
-        crossfadePlaylist, setCrossfadePlaylist,
-        crossfadeNextPrev, setCrossfadeNextPrev,
-        crossfadeDuration, setCrossfadeDuration,
-        playPauseFadeEnable, setPlayPauseFadeEnable,
+        crossfadeEnable,
+        setCrossfadeEnable,
+        crossfadePlaylist,
+        setCrossfadePlaylist,
+        crossfadeNextPrev,
+        setCrossfadeNextPrev,
+        crossfadeDuration,
+        setCrossfadeDuration,
+        playPauseFadeEnable,
+        setPlayPauseFadeEnable,
     } = useContext(PlayerContext);
-    // const crossfadeDurationComponentRef = useRef(null);
 
     let history = useHistory();
-
-    // api endpoint -- same domain, port 5000
-    let API = window.location.origin;
-    API = API.substring(0, API.lastIndexOf(':'));
-    API += ':5000';
-
     let loadingText = 'Working';
 
     let refreshLibrary = e => {
         let messageLabel = e.target.parentNode.querySelector('label');
-        messageLabel.innerHTML = "Don't press back button or redirect the page!";
+        messageLabel.innerHTML =
+            "Don't press back button or redirect the page!";
 
         // to prevent the browser back button while library is being refreshed.
-        let preventRedirect = () => window.history.pushState(null, null, document.URL);
+        let preventRedirect = () =>
+            window.history.pushState(null, null, document.URL);
         window.history.pushState(null, null, document.URL);
         window.addEventListener('popstate', preventRedirect);
 
@@ -64,7 +66,8 @@ const SettingsPage = props => {
         }, 1000);
 
         // post request to refresh library
-        axios.post(API + '/refreshlibrary')
+        axios
+            .post(API + '/refreshlibrary')
             .then(result => {
                 localStorage.clear();
                 PersistentStorage.MainPageAllAlbumCards = [];
@@ -74,7 +77,7 @@ const SettingsPage = props => {
                 clearInterval(loadingTextIteration);
                 e.target.innerHTML = 'Refresh Media Library';
 
-                messageLabel.innerHTML = 'Done :)'
+                messageLabel.innerHTML = 'Done :)';
             })
             .catch(err => {
                 localStorage.clear();
@@ -93,7 +96,8 @@ const SettingsPage = props => {
         <>
             <div className={Styles.section}>
                 <div className={Styles.header}>
-                    <img data-dark-mode-compatible
+                    <img
+                        data-dark-mode-compatible
                         alt="Go Back"
                         className={Styles.back}
                         src={LeftIcon}
@@ -107,29 +111,36 @@ const SettingsPage = props => {
                         opened={true}
                         options={[
                             {
-                                'option': 'Color Mode',
-                                'component': <ColorModeSwitcher />,
+                                option: 'Color Mode',
+                                component: <ColorModeSwitcher />,
                             },
                             {
-                                'option': 'Enable Acrylic Color Tint',
-                                'brief': 'The tint which top and bottom bars get according to current playing track',
-                                'component':
+                                option: 'Enable Acrylic Color Tint',
+                                brief: 'The tint which top and bottom bars get according to current playing track',
+                                component: (
                                     <Switcher
                                         state={letAcrylicTints}
-                                        onChange={(state) => {
+                                        onChange={state => {
                                             setLetAcrylicTints(state);
                                         }}
                                     />
+                                ),
                             },
                             {
-                                'option': 'Refresh Library',
-                                'component':
-                                    <button
-                                        className={Styles.button}
-                                        onClick={refreshLibrary}
-                                    >
-                                        {'Refresh Media Library'}
-                                    </button>,
+                                option: 'Refresh Library',
+                                component: (
+                                    <>
+                                        <button
+                                            className={Styles.button}
+                                            onClick={refreshLibrary}
+                                        >
+                                            {'Refresh Media Library'}
+                                        </button>
+                                        <br />
+                                        <br />
+                                        <label></label>
+                                    </>
+                                ),
                             },
                         ]}
                     />
@@ -137,62 +148,69 @@ const SettingsPage = props => {
                         title="Advanced Settings"
                         options={[
                             {
-                                'option': 'Track fade on play/pause',
-                                'component':
+                                option: 'Track fade on play/pause',
+                                component: (
                                     <Switcher
                                         state={playPauseFadeEnable}
-                                        onChange={(state) => {
+                                        onChange={state => {
                                             setPlayPauseFadeEnable(state);
                                         }}
-                                    />,
+                                    />
+                                ),
                             },
                             {
-                                'option': 'Crossfade',
-                                'brief': 'Make a track be heard gradually as another becomes silent',
-                                'component':
+                                option: 'Crossfade',
+                                brief: 'Make a track be heard gradually as another becomes silent',
+                                component: (
                                     <Switcher
                                         state={crossfadeEnable}
-                                        onChange={(state) => {
+                                        onChange={state => {
                                             setCrossfadeEnable(state);
                                         }}
-                                    />,
+                                    />
+                                ),
                             },
                             {
-                                'option': 'Crossfade for Playlist',
-                                'component':
+                                option: 'Crossfade for Playlist',
+                                component: (
                                     <Switcher
                                         state={crossfadePlaylist}
-                                        onChange={(state) => {
+                                        onChange={state => {
                                             setCrossfadePlaylist(state);
                                         }}
                                         enabled={crossfadeEnable}
-                                    />,
+                                    />
+                                ),
                             },
                             {
-                                'option': 'Crossfade when pressed Next/Prev',
-                                'brief': 'Crossfade when clicked on next or previous buttons',
-                                'component':
+                                option: 'Crossfade when pressed Next/Prev',
+                                brief: 'Crossfade when clicked on next or previous buttons',
+                                component: (
                                     <Switcher
                                         state={crossfadeNextPrev}
-                                        onChange={(state) => {
+                                        onChange={state => {
                                             setCrossfadeNextPrev(state);
                                         }}
                                         enabled={crossfadeEnable}
-                                    />,
+                                    />
+                                ),
                             },
                             {
-                                'option': 'Set Crossfade/Fade Duration',
-                                'brief':
-                                    (crossfadeDuration > 5 || crossfadeDuration < 1)
+                                option: 'Set Crossfade/Fade Duration',
+                                brief:
+                                    crossfadeDuration > 5 ||
+                                    crossfadeDuration < 1
                                         ? 'It is advised to keep duration between 1 to 5 seconds for best experience'
                                         : '',
-                                'component':
+                                component: (
                                     <>
                                         <button
                                             onClick={() => {
                                                 if (crossfadeDuration === 0)
                                                     return;
-                                                setCrossfadeDuration(crossfadeDuration - 1);
+                                                setCrossfadeDuration(
+                                                    crossfadeDuration - 1
+                                                );
                                             }}
                                             className={Styles.button}
                                             disabled={!crossfadeEnable}
@@ -204,7 +222,9 @@ const SettingsPage = props => {
                                         >
                                             <img
                                                 src={MinusIcon}
-                                                style={{ verticalAlign: 'middle' }}
+                                                style={{
+                                                    verticalAlign: 'middle',
+                                                }}
                                                 alt={''}
                                                 data-dark-mode-compatible
                                             />
@@ -214,7 +234,9 @@ const SettingsPage = props => {
                                             onClick={() => {
                                                 if (crossfadeDuration === 10)
                                                     return;
-                                                setCrossfadeDuration(crossfadeDuration + 1);
+                                                setCrossfadeDuration(
+                                                    crossfadeDuration + 1
+                                                );
                                             }}
                                             className={Styles.button}
                                             disabled={!crossfadeEnable}
@@ -227,23 +249,31 @@ const SettingsPage = props => {
                                             <img
                                                 src={PlusIcon}
                                                 alt={''}
-                                                style={{ verticalAlign: 'middle' }}
+                                                style={{
+                                                    verticalAlign: 'middle',
+                                                }}
                                                 data-dark-mode-compatible
                                             />
                                         </button>
-                                    </>,
+                                    </>
+                                ),
                             },
                         ]}
                     />
                     <hr />
                     <p className={Styles.credits}>
-                        {'Made with ❤ by Mayank.'}<br />
-                        {'See the source '}<a href="https://github.com/Mynk-9/beautplayer">{'here'}</a>{'.'}
+                        {'Made with ❤ by Mayank.'}
+                        <br />
+                        {'See the source '}
+                        <a href="https://github.com/Mynk-9/beautplayer">
+                            {'here'}
+                        </a>
+                        {'.'}
                     </p>
                 </div>
             </div>
         </>
     );
-}
+};
 
 export default SettingsPage;

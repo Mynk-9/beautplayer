@@ -18,7 +18,7 @@ const BeautPlayerTitle = props => {
             <span>e</span>
             <span>r</span>
         </span>
-    )
+    );
 };
 
 export default BeautPlayerTitle;
