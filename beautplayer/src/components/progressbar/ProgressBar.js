@@ -1,11 +1,11 @@
-import { React, useEffect, useState, useContext, useRef } from 'react';
+import { React, useEffect, useState, useContext } from 'react';
 import Styles from './ProgressBar.module.scss';
 
 import PlayerManager from '../playermanager';
 import PlayerContext from './../playercontext';
 import ThemeContext from '../themecontext';
 
-const ProgressBar = props => {
+const ProgressBar = () => {
     const { audioDuration, playPause } = useContext(PlayerContext);
     const { letAcrylicTints, acrylicColor } = useContext(ThemeContext);
     const [progressVal, setProgressVal] = useState(0);

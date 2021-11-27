@@ -89,43 +89,53 @@ function App() {
 
     // load the configurations as the app loads
     useEffect(() => {
-        let lat = localStorage.getItem('config-letAcrylicTints');
-        const cc = localStorage.getItem('config-colorConfig');
-        let av = parseFloat(
+        let acrylicTintData = localStorage.getItem('config-letAcrylicTints');
+        const colorConfigData = localStorage.getItem('config-colorConfig');
+        let audioVolData = parseFloat(
             parseFloat(localStorage.getItem('config-audioVolume')).toFixed(2)
         );
-        const cf = localStorage.getItem('config-crossfade') === 'true';
-        let cfP = localStorage.getItem('config-crossfade-playlists');
-        let cfNp = localStorage.getItem('config-crossfade-nextPrev');
-        const ppF = localStorage.getItem('config-fade-playpause') === 'true';
-        let cfD = parseInt(localStorage.getItem('config-crossfade-duration'));
-        const pmV =
+        const crossfadeData =
+            localStorage.getItem('config-crossfade') === 'true';
+        let crossfadePlaylistsData = localStorage.getItem(
+            'config-crossfade-playlists'
+        );
+        let crossfadeNextPrevData = localStorage.getItem(
+            'config-crossfade-nextPrev'
+        );
+        const fadePlayPause =
+            localStorage.getItem('config-fade-playpause') === 'true';
+        let crossfadeDurationData = parseInt(
+            localStorage.getItem('config-crossfade-duration')
+        );
+        const playerManagerVerbose =
             localStorage.getItem('config-playermanager-verbose') === 'true';
 
         // check for null and undefined
-        if (lat == null) lat = 'true';
+        if (acrylicTintData == null) acrylicTintData = 'true';
 
-        if (cc === 'light') document.body.classList.add('light-mode');
+        if (colorConfigData === 'light')
+            document.body.classList.add('light-mode');
         else document.body.classList.remove('light-mode');
 
-        if (isNaN(av)) av = 1.0;
-        else if (av > 1.0) av = 1.0;
-        else if (av < 0.0) av = 0.0;
+        if (isNaN(audioVolData)) audioVolData = 1.0;
+        else if (audioVolData > 1.0) audioVolData = 1.0;
+        else if (audioVolData < 0.0) audioVolData = 0.0;
 
-        if (cfP == null) cfP = true;
-        if (cfNp == null) cfNp = true;
-        if (isNaN(cfD)) cfD = 3;
+        if (crossfadePlaylistsData == null) crossfadePlaylistsData = true;
+        if (crossfadeNextPrevData == null) crossfadeNextPrevData = true;
+        if (isNaN(crossfadeDurationData)) crossfadeDurationData = 3;
 
-        setLetAcrylicTints(lat);
-        setColorConfig(cc);
-        playerManager.setVolume(av);
-        setAudioVolume(av);
-        setCrossfadeEnable(cf);
-        setCrossfadePlaylist(cfP);
-        setCrossfadeNextPrev(cfNp);
-        setCrossfadeDuration(cfD);
-        setPlayPauseFadeEnable(ppF);
-        playerManager.setVerbose(pmV);
+        setLetAcrylicTints(acrylicTintData);
+        setColorConfig(colorConfigData);
+        playerManager.setVolume(audioVolData);
+        setAudioVolume(audioVolData);
+        setCrossfadeEnable(crossfadeData);
+        setCrossfadePlaylist(crossfadePlaylistsData);
+        setCrossfadeNextPrev(crossfadeNextPrevData);
+        setCrossfadeDuration(crossfadeDurationData);
+        setPlayPauseFadeEnable(fadePlayPause);
+        playerManager.setVerbose(playerManagerVerbose);
+        // eslint-disable-next-line
     }, []);
 
     // save audioVolume

@@ -169,11 +169,11 @@ const PlayerBar = props => {
 
     useEffect(() => {
         playerManager.setLoop(loopTrack);
-    }, [loopTrack]);
+    }, [loopTrack, playerManager]);
 
     useEffect(() => {
         playerManager.setShuffle(shuffle);
-    }, [shuffle]);
+    }, [shuffle, playerManager]);
 
     useEffect(() => {
         document.title = 'BeautPlayer';
