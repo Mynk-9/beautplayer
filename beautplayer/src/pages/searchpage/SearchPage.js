@@ -30,23 +30,38 @@ const SearchPage = () => {
     const { searchTerm, setSearchTerm } = useContext(SearchContext);
     const [searchList, setSearchList] = useState([]);
 
-    const [addToPlaylistModalVisible, setAddToPlaylistModalVisible] = useState(false);
-    const [addToPlaylistModalTrackId, setAddToPlaylistModalTrackId] = useState(null);
-    const [addToPlaylistModalTrackName, setAddToPlaylistModalTrackName] = useState(null);
+    const [addToPlaylistModalVisible, setAddToPlaylistModalVisible] =
+        useState(false);
+    const [addToPlaylistModalTrackId, setAddToPlaylistModalTrackId] =
+        useState(null);
+    const [addToPlaylistModalTrackName, setAddToPlaylistModalTrackName] =
+        useState(null);
 
     useEffect(() => {
         if (!letAcrylicTints) {
             setAcrylicColorStyle({});
-            setTableAcrylicColorStyle({ '--acrylic-color': 'var(--non-transparent-acrylic-like-color)' });
-        }
-        else {
-            if (acrylicColor && acrylicColor !== '--acrylic-color' && acrylicColor !== '') {
+            setTableAcrylicColorStyle({
+                '--acrylic-color': 'var(--non-transparent-acrylic-like-color)',
+            });
+        } else {
+            if (
+                acrylicColor &&
+                acrylicColor !== '--acrylic-color' &&
+                acrylicColor !== ''
+            ) {
                 setAcrylicColorStyle({ '--acrylic-color': acrylicColor });
-                setTableAcrylicColorStyle({ '--acrylic-color': String(acrylicColor.slice(0, acrylicColor.length - 6) + ', 0.3)') });
-            }
-            else {
+                setTableAcrylicColorStyle({
+                    '--acrylic-color': String(
+                        acrylicColor.slice(0, acrylicColor.length - 6) +
+                            ', 0.3)'
+                    ),
+                });
+            } else {
                 setAcrylicColorStyle({});
-                setTableAcrylicColorStyle({ '--acrylic-color': 'var(--non-transparent-acrylic-like-color)' });
+                setTableAcrylicColorStyle({
+                    '--acrylic-color':
+                        'var(--non-transparent-acrylic-like-color)',
+                });
             }
         }
     }, [acrylicColor, letAcrylicTints]);
@@ -54,34 +69,28 @@ const SearchPage = () => {
     let history = useHistory();
 
     // picked from TrackList.js
-    const getTrackData = (data) => {
+    const getTrackData = data => {
         return {
-            'trackId': data[3],
-            'audioSrc': data[3],
-            'audioDuration': data[2],
-            'track': data[0],
-            'albumArt': (
-                albumArt(data[4])
-            ),
-            'albumTitle': (
-                data[4]
-            ),
-            'albumArtist': data[1],
-            'isPlaylist': false,
-            'playlistTitle': '',
-            'linkBack': (
-                `/album/${data[4]}`
-            ),
+            trackId: data[3],
+            audioSrc: data[3],
+            audioDuration: data[2],
+            track: data[0],
+            albumArt: albumArt(data[4]),
+            albumTitle: data[4],
+            albumArtist: data[1],
+            isPlaylist: false,
+            playlistTitle: '',
+            linkBack: `/album/${data[4]}`,
         };
     };
 
     // create new search if new searchTerm is provided
     useEffect(() => {
-        axios.get(`${API}/search/${searchTerm}`)
+        axios
+            .get(`${API}/search/${searchTerm}`)
             .then(resp => {
                 let trackList = resp.data.TrackList;
                 let newSearchList = trackList.map(trackInfo => {
-
                     // code taken from album page
                     const trackTitle = trackInfo.title;
                     const trackAlbumArtist = trackInfo.albumArtist;
@@ -93,9 +102,12 @@ const SearchPage = () => {
                     return getTrackData([
                         trackTitle,
                         trackAlbumArtist,
-                        trackMins + ':' + (trackSecs < 10 ? '0' : '') + trackSecs,
+                        trackMins +
+                            ':' +
+                            (trackSecs < 10 ? '0' : '') +
+                            trackSecs,
                         trackId,
-                        albumTitle
+                        albumTitle,
                     ]);
                 });
 
@@ -103,13 +115,13 @@ const SearchPage = () => {
             })
             .catch(err => {
                 console.log(err);
-            })
+            });
     }, [searchTerm]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // build track list from search list
     useEffect(() => {
         let key = 0;
-        let _trackList = searchList.map((data) => {
+        let _trackList = searchList.map(data => {
             ++key;
             return (
                 <tr key={key} className={Styles.trackEntry}>
@@ -117,41 +129,49 @@ const SearchPage = () => {
                         <TrackOptions
                             options={[
                                 {
-                                    'component': <TrackLiker trackId={data.trackId} />,
-                                    'text': 'Like',
+                                    component: (
+                                        <TrackLiker trackId={data.trackId} />
+                                    ),
+                                    text: 'Like',
                                 },
                                 {
-                                    'text': 'Add to Queue',
-                                    'component': (
+                                    text: 'Add to Queue',
+                                    component: (
                                         <img
-                                            alt={""}
+                                            alt={''}
                                             src={PlusCircleIcon}
                                             data-dark-mode-compatible
                                         />
                                     ),
-                                    'successComponent': (
+                                    successComponent: (
                                         <img
-                                            alt={"Done"}
+                                            alt={'Done'}
                                             src={CheckIcon}
                                             data-dark-mode-compatible
                                         />
                                     ),
-                                    'onClick': () =>
-                                        QueueManager.addTrack(data),
+                                    onClick: () => QueueManager.addTrack(data),
                                 },
                                 {
-                                    'component':
+                                    component: (
                                         <img
-                                            alt={""}
+                                            alt={''}
                                             src={PlusIcon}
                                             onClick={() => {
-                                                setAddToPlaylistModalTrackId(data.trackId);
-                                                setAddToPlaylistModalTrackName(data.track);
-                                                setAddToPlaylistModalVisible(true);
+                                                setAddToPlaylistModalTrackId(
+                                                    data.trackId
+                                                );
+                                                setAddToPlaylistModalTrackName(
+                                                    data.track
+                                                );
+                                                setAddToPlaylistModalVisible(
+                                                    true
+                                                );
                                             }}
                                             data-dark-mode-compatible
-                                        />,
-                                    'text': 'Add to Playlist',
+                                        />
+                                    ),
+                                    text: 'Add to Playlist',
                                 },
                             ]}
                         />
@@ -168,9 +188,7 @@ const SearchPage = () => {
                             isPlaylist={data.isPlaylist}
                             playlistTitle={data.playlistTitle}
                             linkBack={data.linkBack}
-                            addToQueue={() =>
-                                QueueManager.addTrack(data)
-                            }
+                            addToQueue={() => QueueManager.addTrack(data)}
                         />
                     </td>
                     <td>{data.track}</td>
@@ -185,19 +203,24 @@ const SearchPage = () => {
 
     return (
         <>
-            {
-                addToPlaylistModalVisible
-                    ? <AddToPlaylistModal
-                        trackId={addToPlaylistModalTrackId}
-                        trackName={addToPlaylistModalTrackName}
-                        close={() => setAddToPlaylistModalVisible(false)}
-                        acrylicColorStyle={acrylicColorStyle}
-                    />
-                    : <></>
-            }
-            <div className={Styles.section} style={acrylicColorStyle} data-animate-gradient={letAcrylicTints}>
+            {addToPlaylistModalVisible ? (
+                <AddToPlaylistModal
+                    trackId={addToPlaylistModalTrackId}
+                    trackName={addToPlaylistModalTrackName}
+                    close={() => setAddToPlaylistModalVisible(false)}
+                    acrylicColorStyle={acrylicColorStyle}
+                />
+            ) : (
+                <></>
+            )}
+            <div
+                className={Styles.section}
+                style={acrylicColorStyle}
+                data-animate-gradient={letAcrylicTints}
+            >
                 <div className={Styles.header}>
-                    <img data-dark-mode-compatible
+                    <img
+                        data-dark-mode-compatible
                         alt="Go Back"
                         className={Styles.back}
                         src={LeftIcon}
@@ -206,16 +229,16 @@ const SearchPage = () => {
                             history.goBack();
                         }}
                     />
-                    <h1 className={Styles.heading}>{`Search: ${searchTerm}`}</h1>
+                    <h1
+                        className={Styles.heading}
+                    >{`Search: ${searchTerm}`}</h1>
                 </div>
                 <div className={Styles.content}>
                     <table
                         className={Styles.trackList}
                         style={tableAcrylicColorStyle}
                     >
-                        <tbody>
-                            {trackList}
-                        </tbody>
+                        <tbody>{trackList}</tbody>
                     </table>
                 </div>
             </div>

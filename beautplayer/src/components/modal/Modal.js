@@ -10,46 +10,45 @@ const Modal = props => {
 
     useEffect(() => {
         let _buttons = props.buttons.map((data, i) => {
-            return <span
-                className={`cursor-pointer`}
-                onClick={() => {
-                    data.function();
-                    props.close();
-                }}
-                key={i}
-            >
-                {data.text}
-            </span>;
+            return (
+                <span
+                    className={`cursor-pointer`}
+                    onClick={() => {
+                        data.function();
+                        props.close();
+                    }}
+                    key={i}
+                >
+                    {data.text}
+                </span>
+            );
         });
         setButtons(_buttons);
     }, [props.buttons]);
 
     return (
         <div className={Styles.modal}>
-            <div className={`${Styles.box} acrylic`} style={props.acrylicColorStyle}>
+            <div
+                className={`${Styles.box} acrylic`}
+                style={props.acrylicColorStyle}
+            >
                 <div className={Styles.head}>
-                    <span className={Styles.heading}>
-                        {props.heading}
-                    </span>
+                    <span className={Styles.heading}>{props.heading}</span>
                     <span
                         className={Styles.close}
                         onClick={() => props.close()}
                     >
                         <img
-                            alt={"Close"}
+                            alt={'Close'}
                             src={XIcon}
                             data-dark-mode-compatible
                         />
                     </span>
                 </div>
                 <div className={Styles.body}>
-                    <p>
-                        {props.body}
-                    </p>
+                    <p>{props.body}</p>
                 </div>
-                <div className={Styles.foot}>
-                    {buttons}
-                </div>
+                <div className={Styles.foot}>{buttons}</div>
             </div>
         </div>
     );

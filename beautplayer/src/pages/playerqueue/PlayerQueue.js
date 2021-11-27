@@ -24,23 +24,38 @@ const PlayerQueue = () => {
     const [trackList, setTrackList] = useState([]);
     const { acrylicColor, letAcrylicTints } = useContext(ThemeContext);
 
-    const [addToPlaylistModalVisible, setAddToPlaylistModalVisible] = useState(false);
-    const [addToPlaylistModalTrackId, setAddToPlaylistModalTrackId] = useState(null);
-    const [addToPlaylistModalTrackName, setAddToPlaylistModalTrackName] = useState(null);
+    const [addToPlaylistModalVisible, setAddToPlaylistModalVisible] =
+        useState(false);
+    const [addToPlaylistModalTrackId, setAddToPlaylistModalTrackId] =
+        useState(null);
+    const [addToPlaylistModalTrackName, setAddToPlaylistModalTrackName] =
+        useState(null);
 
     useEffect(() => {
         if (!letAcrylicTints) {
             setAcrylicColorStyle({});
-            setTableAcrylicColorStyle({ '--acrylic-color': 'var(--non-transparent-acrylic-like-color)' });
-        }
-        else {
-            if (acrylicColor && acrylicColor !== '--acrylic-color' && acrylicColor !== '') {
+            setTableAcrylicColorStyle({
+                '--acrylic-color': 'var(--non-transparent-acrylic-like-color)',
+            });
+        } else {
+            if (
+                acrylicColor &&
+                acrylicColor !== '--acrylic-color' &&
+                acrylicColor !== ''
+            ) {
                 setAcrylicColorStyle({ '--acrylic-color': acrylicColor });
-                setTableAcrylicColorStyle({ '--acrylic-color': String(acrylicColor.slice(0, acrylicColor.length - 6) + ', 0.3)') });
-            }
-            else {
+                setTableAcrylicColorStyle({
+                    '--acrylic-color': String(
+                        acrylicColor.slice(0, acrylicColor.length - 6) +
+                            ', 0.3)'
+                    ),
+                });
+            } else {
                 setAcrylicColorStyle({});
-                setTableAcrylicColorStyle({ '--acrylic-color': 'var(--non-transparent-acrylic-like-color)' });
+                setTableAcrylicColorStyle({
+                    '--acrylic-color':
+                        'var(--non-transparent-acrylic-like-color)',
+                });
             }
         }
     }, [acrylicColor, letAcrylicTints]);
@@ -51,7 +66,7 @@ const PlayerQueue = () => {
     useEffect(() => {
         console.log('trigger player queue rebuild');
         let key = 0;
-        let _trackList = BeautPlayerQueue.queue.map((data) => {
+        let _trackList = BeautPlayerQueue.queue.map(data => {
             ++key;
             return (
                 <tr key={key} className={Styles.trackEntry}>
@@ -59,22 +74,31 @@ const PlayerQueue = () => {
                         <TrackOptions
                             options={[
                                 {
-                                    'component': <TrackLiker trackId={data.trackId} />,
-                                    'text': 'Like',
+                                    component: (
+                                        <TrackLiker trackId={data.trackId} />
+                                    ),
+                                    text: 'Like',
                                 },
                                 {
-                                    'component':
+                                    component: (
                                         <img
-                                            alt={""}
+                                            alt={''}
                                             src={PlusIcon}
                                             onClick={() => {
-                                                setAddToPlaylistModalTrackId(data.trackId);
-                                                setAddToPlaylistModalTrackName(data.track);
-                                                setAddToPlaylistModalVisible(true);
+                                                setAddToPlaylistModalTrackId(
+                                                    data.trackId
+                                                );
+                                                setAddToPlaylistModalTrackName(
+                                                    data.track
+                                                );
+                                                setAddToPlaylistModalVisible(
+                                                    true
+                                                );
                                             }}
                                             data-dark-mode-compatible
-                                        />,
-                                    'text': 'Add to Playlist',
+                                        />
+                                    ),
+                                    text: 'Add to Playlist',
                                 },
                             ]}
                         />
@@ -91,7 +115,7 @@ const PlayerQueue = () => {
                             isPlaylist={data.isPlaylist}
                             playlistTitle={data.playlistTitle}
                             linkBack={data.linkBack}
-                            addToQueue={() => { }}  // already in the queue
+                            addToQueue={() => {}} // already in the queue
                         />
                     </td>
                     <td>{data.track}</td>
@@ -102,7 +126,7 @@ const PlayerQueue = () => {
                             data-dark-mode-compatible
                             src={MinusIcon}
                             onClick={() => removeItem(data.trackId)}
-                            alt={"Remove"}
+                            alt={'Remove'}
                         />
                     </td>
                 </tr>
@@ -116,25 +140,30 @@ const PlayerQueue = () => {
         setTrackList(_trackList);
     }, [BeautPlayerQueue.queue]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    let removeItem = (trackId) => {
+    let removeItem = trackId => {
         QueueManager.removeTrack(trackId);
     };
 
     return (
         <>
-            {
-                addToPlaylistModalVisible
-                    ? <AddToPlaylistModal
-                        trackId={addToPlaylistModalTrackId}
-                        trackName={addToPlaylistModalTrackName}
-                        close={() => setAddToPlaylistModalVisible(false)}
-                        acrylicColorStyle={acrylicColorStyle}
-                    />
-                    : <></>
-            }
-            <div className={Styles.section} style={acrylicColorStyle} data-animate-gradient={letAcrylicTints}>
+            {addToPlaylistModalVisible ? (
+                <AddToPlaylistModal
+                    trackId={addToPlaylistModalTrackId}
+                    trackName={addToPlaylistModalTrackName}
+                    close={() => setAddToPlaylistModalVisible(false)}
+                    acrylicColorStyle={acrylicColorStyle}
+                />
+            ) : (
+                <></>
+            )}
+            <div
+                className={Styles.section}
+                style={acrylicColorStyle}
+                data-animate-gradient={letAcrylicTints}
+            >
                 <div className={Styles.header}>
-                    <img data-dark-mode-compatible
+                    <img
+                        data-dark-mode-compatible
                         alt="Go Back"
                         className={Styles.back}
                         src={LeftIcon}
@@ -147,9 +176,7 @@ const PlayerQueue = () => {
                         className={Styles.trackList}
                         style={tableAcrylicColorStyle}
                     >
-                        <tbody>
-                            {trackList}
-                        </tbody>
+                        <tbody>{trackList}</tbody>
                     </table>
                 </div>
             </div>

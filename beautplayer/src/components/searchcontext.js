@@ -2,7 +2,7 @@ import { createContext } from 'react';
 
 const SearchContext = createContext({
     searchTerm: '',
-    setSearchTerm: () => { },
+    setSearchTerm: () => {},
 });
 
 export default SearchContext;
