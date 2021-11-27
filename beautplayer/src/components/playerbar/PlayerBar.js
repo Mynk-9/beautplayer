@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useContext } from 'react';
+import { React, useState, useEffect, useContext, useRef } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import ProgressBar from './../progressbar/ProgressBar';
 import './../commonstyles.scss';
@@ -51,6 +51,15 @@ const PlayerBar = props => {
     // location hook required to retain after navigation the updated document
     // title containing the track name
     let location = useLocation();
+
+    // reference to the album art div on PlayerBar
+    const albumArtRef = useRef(null);
+    // hooks for album art div height
+    const [albumArtRefOffsetHeight, setAlbumArtRefOffsetHeight] = useState(0);
+    // fetch the height on render
+    useEffect(() => {
+        setAlbumArtRefOffsetHeight(albumArtRef.current.offsetHeight);
+    }, []);
 
     // volume states: high, normal, none, muted
     const [volumeStatus, setVolumeStatus] = useState('high');
@@ -209,10 +218,15 @@ const PlayerBar = props => {
             <div className={Styles.left}>
                 <div
                     className={Styles.albumArt}
-                    style={{ backgroundImage: `url(${albumArt})` }}
+                    style={{
+                        backgroundImage: `url(${albumArt})`,
+                        minWidth: `${albumArtRefOffsetHeight}px`,
+                        minHeight: `${albumArtRefOffsetHeight}px`,
+                    }}
                     onClick={() =>
                         setMobileOpenAlbumDetails(!mobileOpenAlbumDetails)
                     }
+                    ref={albumArtRef}
                 >
                     <img
                         alt=""

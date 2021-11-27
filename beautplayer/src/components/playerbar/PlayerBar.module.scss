@@ -1,14 +1,22 @@
 .playerBar {
-   width: 100%;
+   width: calc(100% - 2rem);
    position: fixed;
    bottom: 0;
    display: flex;
    flex-wrap: wrap;
    font-size: large;
-   border-radius: var(--border-radius) var(--border-radius) 0 0;
+   margin: 1rem;
+   border-radius: var(--border-radius);
+   transition: margin var(--std-color-transition-time) ease,
+      width var(--std-color-transition-time) ease;
 
    z-index: 10;
-   // transition: height 1s ease;
+
+   @media only screen and (max-width: 768px) {
+      width: 100%;
+      margin: 0;
+      border-radius: var(--border-radius) var(--border-radius) 0 0;
+   }
 
    > * {
       display: flex;
@@ -27,11 +35,6 @@
       padding: 0;
       padding-right: 1rem;
 
-      @media only screen and (max-width: 768px) {
-         display: block;
-         flex: 1;
-      }
-
       .albumArt {
          display: table;
          background-size: cover;
@@ -41,13 +44,19 @@
          //                   + 2*button-border
          //                   + 2*button-margin
          //                   + 2*playerBar-sections-padding
-         height: calc(24px + 2 * 1rem + 2 * 1px + 2 * 0.3rem + 2 * 1rem);
-         width: calc(24px + 2 * 1rem + 2 * 1px + 2 * 0.3rem + 2 * 1rem);
+         // height: calc(24px + 2 * 1rem + 2 * 1px + 2 * 0.3rem + 2 * 1rem);
+         // width: calc(24px + 2 * 1rem + 2 * 1px + 2 * 0.3rem + 2 * 1rem);
+
+         border-radius: var(--border-radius) 0 0 var(--border-radius);
+
+         @media only screen and (max-width: 768px) {
+            border-radius: var(--border-radius) 0 0 0;
+         }
 
          img {
             display: none;
             position: absolute;
-            padding: 0.3rem;
+            padding: 0.1rem;
             border-radius: 50%;
             background-color: rgba(100, 100, 100, 0.5);
 

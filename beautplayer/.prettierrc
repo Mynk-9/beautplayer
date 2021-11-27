@@ -4,7 +4,7 @@
     "semi": true,
     "singleQuote": true,
     "arrowParens": "avoid",
-    "endOfLine": "lf",
+    "endOfLine": "crlf",
     "overrides": [
         {
             "files": ["*.scss", "*.css"],
