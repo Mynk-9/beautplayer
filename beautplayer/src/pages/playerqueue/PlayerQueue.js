@@ -132,13 +132,8 @@ const PlayerQueue = () => {
                 </tr>
             );
         });
-        // oldest track would be at the bottom
-        // playing tracks would advance from down
-        // to top
-        _trackList.reverse();
-
         setTrackList(_trackList);
-    }, [BeautPlayerQueue.queue]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [setTrackList]);
 
     let removeItem = trackId => {
         QueueManager.removeTrack(trackId);

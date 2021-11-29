@@ -329,7 +329,10 @@ const PlayerBar = props => {
                 <ProgressBar />
             </div>
             <div className={Styles.right}>
-                <button className={'cursor-pointer'} onClick={reduceVolume}>
+                <button
+                    className={`${Styles.buttonMedium} cursor-pointer`}
+                    onClick={reduceVolume}
+                >
                     <img
                         data-dark-mode-compatible
                         alt="VolDown"
@@ -355,7 +358,10 @@ const PlayerBar = props => {
                         className={Styles.volumeStatus}
                     />
                 </span>
-                <button className={'cursor-pointer'} onClick={increaseVolume}>
+                <button
+                    className={`${Styles.buttonMedium} cursor-pointer`}
+                    onClick={increaseVolume}
+                >
                     <img data-dark-mode-compatible alt="VolUp" src={PlusIcon} />
                 </button>
             </div>
