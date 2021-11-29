@@ -108,6 +108,7 @@ const PlayButton = props => {
             onClick={play}
             src={playButtonState === 'play-button' ? PlayIcon : PauseIcon}
             alt="Play Button"
+            className={'cursor-pointer'}
         />
     );
 };

@@ -39,9 +39,8 @@ const TrackList = props => {
                 : props.tracks.albumArt,
             albumTitle: props.tracks.isPlaylist ? data[4] : props.tracks.album,
             albumArtist: data[1],
-            // not passed further
-            isPlaylist: props.tracks.isPlaylist // this is done to make
-                ? true // sure undefined is
+            isPlaylist: props.tracks.isPlaylist // this is done to make sure undefined is not passed further
+                ? true
                 : false,
             playlistTitle: props.tracks.playlistTitle,
             linkBack: props.tracks.isPlaylist
