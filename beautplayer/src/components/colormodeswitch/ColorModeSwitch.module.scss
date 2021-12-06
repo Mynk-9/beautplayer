@@ -1,5 +1,9 @@
 .button {
-    border: 0;
-    outline: 0;
-    background-color: var(--transparent-color);
+   border: 0;
+   outline: 0;
+   background-color: var(--transparent-color);
+
+   img {
+      vertical-align: middle;
+   }
 }

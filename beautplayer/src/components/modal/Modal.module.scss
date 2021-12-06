@@ -1,0 +1,9 @@
+@import "./../addtoplaylistmodal/AddToPlaylistModal.module.scss";
+// simply import from there
+
+// overloads
+.foot {
+   span + span {
+      margin-left: 1rem;
+   }
+}

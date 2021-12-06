@@ -6,6 +6,9 @@ const imageminMozjpeg = require('imagemin-mozjpeg');
 
 const Tracks = require('../models/tracks');
 
+// FOLLOWING ARE OBSOLETE, REDUNDANT METHODS
+// kept as backup option if a requirement arises
+
 // handle GET to /coverArt/:trackId
 router.get('/:trackId', (req, res, next) => {
     const id = req.params.trackId;

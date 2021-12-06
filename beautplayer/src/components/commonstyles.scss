@@ -16,6 +16,9 @@
    font-family: "Lato-LightItalic";
    src: url(./../assets/fonts/Lato/Lato-LightItalic.ttf) format("truetype");
 }
+* {
+   box-sizing: border-box;
+}
 body {
    // background-image: url("https://upload.wikimedia.org/wikipedia/commons/c/c9/Rainbow-diagram-ROYGBIV.svg");
    font-family: "Lato";
@@ -56,6 +59,8 @@ body {
 
    --same-tint-level1-color: rgba(70, 70, 70, 0.8);
 
+   --highlight-color-no-alpha: rgba(200, 200, 200, 1);
+
    --primary-color: #fafafa;
    --secondary-color: black;
 
@@ -66,6 +71,8 @@ body {
 
    // transition: color var(--std-color-transition-time) ease;
 
+   user-select: none;
+
    input {
       color: var(--primary-color);
    }
@@ -74,7 +81,7 @@ body {
       transition: filter ease var(--std-color-transition-time);
    }
 
-   @media only screen and (max-width: 540px) {
+   @media only screen and (max-width: 768px) {
       --std-color-transition-time: 0;
    }
 }
@@ -87,6 +94,8 @@ body.light-mode {
    --tint-level3-color: rgba(200, 200, 200, 0.8);
 
    --same-tint-level1-color: rgba(255, 255, 255, 0.8);
+
+   --highlight-color-no-alpha: rgba(100, 100, 100, 1);
 
    --primary-color: black;
    --secondary-color: white;
@@ -109,7 +118,7 @@ body::before {
    transition: opacity var(--std-color-transition-time) ease;
    z-index: -1;
 
-   @media only screen and (max-width: 540px) {
+   @media only screen and (max-width: 768px) {
       transition: none;
    }
 }
@@ -117,11 +126,61 @@ body.light-mode::before {
    opacity: 0;
 }
 
+// scrollbar
+@media screen and (min-width: 768px) {
+   body {
+      --scrollbar-track-color: rgba(0, 0, 0, 0.8);
+      --scrollbar-thumb-color: rgba(255, 255, 255, 0.5);
+      --scrollbar-width: 0.5rem;
+
+      // for firefox
+      scrollbar-width: var(--scrollbar-width);
+      scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
+
+      // for webkit
+      &::-webkit-scrollbar {
+         width: var(--scrollbar-width);
+      }
+      &::-webkit-scrollbar-track {
+         background-color: var(--scrollbar-track-color);
+
+         transition: background-color var(--std-color-transition-time) ease;
+      }
+      &::-webkit-scrollbar-thumb {
+         background-color: var(--scrollbar-thumb-color);
+         border-radius: var(--border-radius);
+         border: 0;
+         outline: 0;
+         box-shadow: none;
+
+         transition: background-color var(--std-color-transition-time) ease;
+      }
+   }
+   body.light-mode {
+      --scrollbar-track-color: rgba(200, 200, 200, 0.5);
+      --scrollbar-thumb-color: rgba(0, 0, 0, 0.5);
+   }
+}
+
 // Misc Classes
 .cursor-pointer {
    cursor: pointer;
 
-   @media only screen and (max-width: 540px) {
+   @media only screen and (max-width: 768px) {
       cursor: initial;
+   }
+}
+
+.display-mobile-only {
+   @media only screen and (min-width: 768px) {
+      display: none;
+   }
+   @media only screen and (width: 768px) {
+      display: initial;
+   }
+}
+.display-desktop-only {
+   @media only screen and (max-width: 768px) {
+      display: none;
    }
 }

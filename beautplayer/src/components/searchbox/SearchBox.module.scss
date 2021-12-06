@@ -1,22 +1,22 @@
 .searchBoxWrapper {
    padding: 0 0 0 0.5rem;
    // margin-right: 1rem;
-   margin: -0.5rem 1rem -0.5rem 0;
+   margin: -0.25rem 1rem -0.75rem 0;
    display: flex;
-   border-radius: 5rem;
+   border-radius: var(--border-radius);
    background-color: var(--same-tint-level1-color);
    max-width: 100%;
 
    transition: background-color var(--std-color-transition-time) ease;
 
-   @media only screen and (max-width: 540px) {
+   @media only screen and (max-width: 768px) {
       transition: none;
       margin: 0.5rem 0 0.5rem 0;
       width: 100%;
    }
 
    .searchBox {
-      --box-width: 15rem;
+      --box-width: calc(20vw - 5rem);
 
       padding: 0.5rem;
       margin: 0;
@@ -26,12 +26,16 @@
       width: var(--box-width);
 
       transition: width 0.3s ease;
+
+      @media only screen and (max-width: 768px) {
+         --box-width: calc(100vw - 6rem - 24px - 2rem);
+      }
    }
    .searchBox:focus {
-      --box-width: 20rem;
+      --box-width: 20vw;
 
-      @media only screen and (max-width: 540px) {
-         --box-width: 15rem;
+      @media only screen and (max-width: 768px) {
+         --box-width: calc(100vw - 6rem - 24px);
       }
    }
 }

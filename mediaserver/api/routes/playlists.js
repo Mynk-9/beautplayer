@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Playlists = require('../models/playlists');
+const playlistArtGenerator = require('./../subroutines/playlistArtGenerator');
 
 // handle GET to /playlists
 router.get('/', (req, res, next) => {
@@ -81,6 +82,7 @@ router.post('/', async (req, res, next) => {
                 track: track,
             });
         })
+        .then(() => playlistArtGenerator(playList))
         .catch(err => {
             console.log(err);
             res.status(500).json({
@@ -90,19 +92,14 @@ router.post('/', async (req, res, next) => {
         });
 });
 
-// handle DELETE requests on /playlists
-router.delete('/', (req, res, next) => {
-    const trackId = req.body.trackId;
-    const playlistName = req.body.playlistName;
+// handle DELETE requests on /playlists/:playlistName/
+// delete the playlist
+router.delete('/:playlistName', (req, res, next) => {
+    const playlistName = req.params.playlistName;
 
     Playlists
-        .findOneAndUpdate(
-            { _id: playlistName },
-            { $pullAll: { tracks: [trackId] } },
-            {
-                new: true,
-                useFindAndModify: false
-            }
+        .deleteOne(
+            { _id: playlistName }
         )
         .then(result => {
             res.status(200).json({
@@ -119,6 +116,35 @@ router.delete('/', (req, res, next) => {
         });
 });
 
-router.delete('/')
+// handle DELETE requests on /playlists/:playlistName/:trackId
+// delete the track from playlist
+router.delete('/:playlistName/:trackId', (req, res, next) => {
+    const trackId = req.params.trackId;
+    const playlistName = req.params.playlistName;
+
+    Playlists
+        .findOneAndUpdate(
+            { _id: playlistName },
+            { $pullAll: { tracks: [trackId] } },
+            {
+                new: true,
+                useFindAndModify: false
+            }
+        )
+        .then(result => {
+            res.status(200).json({
+                message: 'Removed successfully.',
+                systemMessage: result
+            });
+        })
+        .then(() => playlistArtGenerator(playlistName))
+        .catch(err => {
+            console.log(err);
+            res.status(404).json({
+                message: 'Encountered an error',
+                error: err
+            });
+        });
+});
 
 module.exports = router;

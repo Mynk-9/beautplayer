@@ -1,13 +1,21 @@
 import { React, useEffect, useState } from 'react';
 import axios from 'axios';
+
 import AlbumCard from './../../components/albumcard/AlbumCard';
-import './../../components/commonstyles.scss';
+import {
+    albumArtCompressed,
+    playlistArtCompressed,
+} from '../../components/coverArtAPI';
+
+import API from './../../components/apiLink';
 import PersistentStorage from './../persistentstorage';
+
+import './../../components/commonstyles.scss';
 import Styles from './MainPage.module.scss';
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg';
 
-const MainPage = (props) => {
+const MainPage = props => {
     const [allAlbums, setAllAlbums] = useState(
         PersistentStorage.MainPageAllAlbumCards.length > 0
             ? PersistentStorage.MainPageAllAlbumCards
@@ -20,19 +28,72 @@ const MainPage = (props) => {
             : []
     );
 
-    // api endpoint -- same domain, port 5000
-    let API = window.location.origin;
-    API = API.substring(0, API.lastIndexOf(':'));
-    API += ':5000';
+    // set sorting method from localStorage if PersistentStorage is empty
+    PersistentStorage.MainPageAlbumsSort =
+        PersistentStorage.MainPageAlbumsSort ||
+        localStorage.getItem('album-sortBy') ||
+        'name';
+
+    // albums sort function
+    const albumsSortFunctions = {
+        name: (a, b) => {
+            return a.props.albumTitle.localeCompare(b.props.albumTitle);
+        },
+        'name-reverse': (a, b) => {
+            // negate the output to reverse the sort
+            return parseInt(
+                -a.props.albumTitle.localeCompare(b.props.albumTitle)
+            );
+        },
+        'release-year': (a, b) => {
+            let releaseYearArrayA = a.props.year;
+            let releaseYearArrayB = b.props.year;
+            releaseYearArrayA.sort((a, b) => b - a);
+            releaseYearArrayB.sort((a, b) => b - a);
+            let lowerUpperLimit =
+                releaseYearArrayA.length < releaseYearArrayB.length
+                    ? releaseYearArrayA.length
+                    : releaseYearArrayB.length;
+
+            for (let i = 0; i < lowerUpperLimit; ++i) {
+                let cmp = releaseYearArrayA[i] - releaseYearArrayB[i];
+                if (cmp !== 0) return cmp;
+            }
+
+            // if everything else fails, sort by name in ascending order.
+            return a.props.albumTitle.localeCompare(b.props.albumTitle);
+        },
+        'release-year-reverse': (a, b) => {
+            let releaseYearArrayA = a.props.year;
+            let releaseYearArrayB = b.props.year;
+            releaseYearArrayA.sort((a, b) => b - a);
+            releaseYearArrayB.sort((a, b) => b - a);
+            let lowerUpperLimit =
+                releaseYearArrayA.length < releaseYearArrayB.length
+                    ? releaseYearArrayA.length
+                    : releaseYearArrayB.length;
+
+            for (let i = 0; i < lowerUpperLimit; ++i) {
+                let cmp = releaseYearArrayB[i] - releaseYearArrayA[i];
+                if (cmp !== 0) return cmp;
+            }
+
+            // if everything else fails, sort by name in ascending order.
+            return a.props.albumTitle.localeCompare(b.props.albumTitle);
+        },
+        default: (a, b) => {
+            // same as 'name'
+            return a.props.albumTitle.localeCompare(b.props.albumTitle);
+        },
+    };
 
     // for all album cards
     useEffect(() => {
         // skip if persistent storage already present
-        if (PersistentStorage.MainPageAllAlbumCards.length > 0)
-            return;
+        if (PersistentStorage.MainPageAllAlbumCards.length > 0) return;
 
         // fetch albums
-        let localStorageData = localStorage.getItem('all-albums')
+        let localStorageData = localStorage.getItem('all-albums');
         if (localStorageData) {
             localStorageData = JSON.parse(localStorageData);
             let albumCards = [];
@@ -43,15 +104,24 @@ const MainPage = (props) => {
                         albumArt={AlbumArt}
                         albumTitle={info.name}
                         albumArtist={info.albumArtist}
-                        coverArtAPI={API + '/coverart/compressed/' + info.track0Id}
+                        coverArtAPI={albumArtCompressed(info.name)}
+                        year={info.year}
                     />
                 );
             }
+
+            let sortBy =
+                PersistentStorage.MainPageAlbumsSort ||
+                localStorage.getItem('album-sortBy') ||
+                'name';
+            albumCards.sort(albumsSortFunctions[sortBy]);
+            PersistentStorage.MainPageAlbumsSort = sortBy;
+
             PersistentStorage.MainPageAllAlbumCards = albumCards;
             setAllAlbums(albumCards);
-        }
-        else
-            axios.get(API + '/albums')
+        } else
+            axios
+                .get(API + '/albums')
                 .then(async resp => {
                     if (resp.status === 200) {
                         const albumList = resp.data.AlbumsList;
@@ -60,8 +130,8 @@ const MainPage = (props) => {
                         for (const album of albumList) {
                             // console.log(album);
                             const name = album._id;
-                            const track0Id = album.tracks[0];
-                            let albumArtist = album.albumArtist.join(", ");
+                            const year = album.year;
+                            let albumArtist = album.albumArtist.join(', ');
 
                             albumCards.push(
                                 <AlbumCard
@@ -69,16 +139,21 @@ const MainPage = (props) => {
                                     albumArt={AlbumArt}
                                     albumTitle={name}
                                     albumArtist={albumArtist}
-                                    coverArtAPI={API + '/coverart/compressed/' + track0Id}
+                                    coverArtAPI={albumArtCompressed(name)}
+                                    year={year}
                                 />
                             );
                             localStorageData.push({
                                 name: name,
                                 albumArtist: albumArtist,
-                                track0Id: track0Id
+                                year: year,
                             });
                         }
-                        localStorage.setItem('all-albums', JSON.stringify(localStorageData));
+                        localStorage.setItem(
+                            'all-albums',
+                            JSON.stringify(localStorageData)
+                        );
+                        albumCards.sort(albumsSortFunctions.default);
                         PersistentStorage.MainPageAllAlbumCards = albumCards;
                         setAllAlbums(albumCards);
                     } else {
@@ -88,16 +163,15 @@ const MainPage = (props) => {
                 .catch(err => {
                     console.log(err);
                 });
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     // for playlists
     useEffect(() => {
         // skip if persistent storage already present
-        if (PersistentStorage.MainPagePlaylistCards.length > 0)
-            return;
+        if (PersistentStorage.MainPagePlaylistCards.length > 0) return;
 
-        // fetch albums
-        let localStorageData = localStorage.getItem('all-playlists')
+        // fetch playlists
+        let localStorageData = localStorage.getItem('all-playlists');
         if (localStorageData) {
             localStorageData = JSON.parse(localStorageData);
             let playlistCards = [];
@@ -108,14 +182,15 @@ const MainPage = (props) => {
                         albumArt={AlbumArt}
                         albumTitle={info}
                         isPlaylist={true}
+                        coverArtAPI={playlistArtCompressed(info)}
                     />
                 );
             }
             PersistentStorage.MainPagePlaylistCards = playlistCards;
             setAllPlaylists(playlistCards);
-        }
-        else
-            axios.get(API + '/playlists')
+        } else
+            axios
+                .get(API + '/playlists')
                 .then(async resp => {
                     if (resp.status === 200) {
                         const playlists = resp.data.Playlists;
@@ -129,12 +204,18 @@ const MainPage = (props) => {
                                     albumArt={AlbumArt}
                                     albumTitle={playlist._id}
                                     isPlaylist={true}
+                                    coverArtAPI={playlistArtCompressed(
+                                        playlist._id
+                                    )}
                                 />
                             );
                             localStorageData.push(playlist._id);
                         }
 
-                        localStorage.setItem('all-playlists', JSON.stringify(localStorageData));
+                        localStorage.setItem(
+                            'all-playlists',
+                            JSON.stringify(localStorageData)
+                        );
                         PersistentStorage.MainPagePlaylistCards = playlistCards;
                         setAllPlaylists(playlistCards);
                     } else {
@@ -144,33 +225,131 @@ const MainPage = (props) => {
                 .catch(err => {
                     console.log(err);
                 });
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    const selectSection = sectionHead => {
+        let sectionHeadParent = sectionHead.parentNode;
+        let sectionList = sectionHead.parentNode.parentNode.childNodes;
+        let sectionHeads = sectionHeadParent.querySelectorAll('span');
+        let sectionOptions = sectionHeadParent.querySelectorAll('div');
+        const sectionFor = sectionHead.getAttribute('data-for');
+
+        // set section head
+        for (const thisSectionHead of sectionHeads)
+            thisSectionHead.setAttribute('data-selected', false);
+        sectionHead.setAttribute('data-selected', true);
+
+        // set section
+        for (const thisSection of sectionList) {
+            if (thisSection.getAttribute('data-for') === sectionFor)
+                thisSection.setAttribute('data-selected', true);
+            else thisSection.setAttribute('data-selected', false);
+        }
+
+        // set options
+        for (const sectionOption of sectionOptions) {
+            sectionOption.setAttribute(
+                'data-visible',
+                sectionOption.getAttribute('data-for') === sectionFor
+            );
+        }
+
+        // set persistent storage
+        PersistentStorage.MainPageActivePage = sectionFor;
+    };
+
+    const sortChange = sortBy => {
+        let _allAlbums = [...allAlbums];
+        _allAlbums.sort(albumsSortFunctions[sortBy]);
+        setAllAlbums(_allAlbums);
+        PersistentStorage.MainPageAllAlbumCards = _allAlbums;
+        PersistentStorage.MainPageAlbumsSort = sortBy;
+        localStorage.setItem('album-sortBy', sortBy);
+    };
 
     return (
         <div>
             <div className={Styles.mainBody}>
-                <div className={Styles.section}>
-                    <div className={Styles.sectionHead}>Playlists</div>
-                    <div className={Styles.sectionBody}>
-                        {allPlaylists}
+                <div className={Styles.sectionHeadList}>
+                    <span
+                        className={Styles.sectionHead}
+                        onClick={e => selectSection(e.target)}
+                        data-for={'albums'}
+                        data-selected={
+                            PersistentStorage.MainPageActivePage === 'albums'
+                        }
+                    >
+                        Albums
+                    </span>
+                    <span
+                        className={Styles.sectionHead}
+                        onClick={e => selectSection(e.target)}
+                        data-for={'playlist'}
+                        data-selected={
+                            PersistentStorage.MainPageActivePage === 'playlist'
+                        }
+                    >
+                        Playlists
+                    </span>
+
+                    <div
+                        className={Styles.sectionOption}
+                        data-for={'albums'}
+                        data-visible={
+                            PersistentStorage.MainPageActivePage === 'albums'
+                        }
+                    >
+                        <span>
+                            <label>Sort by:</label>
+                            <select
+                                name={'main-page-album-sort'}
+                                id={'main-page-album-sort'}
+                                onChange={e => sortChange(e.target.value)}
+                                value={PersistentStorage.MainPageAlbumsSort}
+                            >
+                                <option value="name">Name</option>
+                                <option value="name-reverse">
+                                    Name (reverse)
+                                </option>
+                                <option value="release-year">
+                                    Release Year
+                                </option>
+                                <option value="release-year-reverse">
+                                    Release Year (reverse)
+                                </option>
+                            </select>
+                        </span>
                     </div>
                 </div>
-                <div className={Styles.section}>
-                    <div className={Styles.sectionHead}>All Albums</div>
-                    <div className={`${Styles.sectionBody} ${Styles.sectionBodyNoScroll}`}>
+                <div
+                    className={Styles.section}
+                    data-for={'albums'}
+                    data-selected={
+                        PersistentStorage.MainPageActivePage === 'albums'
+                    }
+                >
+                    <div
+                        className={`${Styles.sectionBody} ${Styles.sectionBodyNoScroll}`}
+                    >
                         {allAlbums}
                     </div>
                 </div>
+                <div
+                    className={Styles.section}
+                    data-for={'playlist'}
+                    data-selected={
+                        PersistentStorage.MainPageActivePage === 'playlist'
+                    }
+                >
+                    <div
+                        className={`${Styles.sectionBody} ${Styles.sectionBodyNoScroll}`}
+                    >
+                        {allPlaylists}
+                    </div>
+                </div>
             </div>
-            {/* <PlayerBar
-                acrylicColor={acrylicColor}
-                albumArt={AlbumArt}
-                AlbumTitle="Awesome Album"
-                albumArtist="Human"
-            /> */}
         </div>
     );
-}
-
+};
 
 export default MainPage;

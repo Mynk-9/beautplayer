@@ -4,7 +4,8 @@ const trackSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
 
     title: { type: String, required: true },
-    album: { type: String, default: 'Single' },
+    album: { type: String }, //default: 'Single' },
+    // default removes as this would create problem in album art generation/storage
     albumArtist: String,
     contributingArtists: [],
     year: Number,
@@ -23,5 +24,7 @@ const trackSchema = mongoose.Schema({
 
     path: { type: String, required: true },
 });
+
+trackSchema.index({ title: 'text', album: 'text', albumArtist: 'text', contributingArtists: 'text' });
 
 module.exports = mongoose.model('Tracks', trackSchema);

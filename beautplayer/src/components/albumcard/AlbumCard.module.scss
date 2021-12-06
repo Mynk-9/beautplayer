@@ -13,6 +13,7 @@
       width: var(--albumCard-width);
       height: var(--albumCard-width);
 
+      object-fit: cover;
       cursor: pointer;
    }
    span {
@@ -21,7 +22,7 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       text-align: center;
-      
+
       cursor: pointer;
    }
 }

@@ -13,11 +13,13 @@ const albumsRoutes = require('./api/routes/albums');
 const libraryRefreshRoute = require('./api/routes/libraryRefresh');
 const coverArtRoute = require('./api/routes/coverArt');
 const playlists = require('./api/routes/playlists');
+const searchRoute = require('./api/routes/search');
 
 mongoose
-    .connect('mongodb://localhost:27017/player', {
+    .connect('mongodb://localhost:27017/beautplayer', {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useCreateIndex: true,
     })
     .then(
         (e) => {
@@ -55,8 +57,10 @@ app.use((req, res, next) => {
 app.use('/tracks', tracksRoutes);
 app.use('/refreshlibrary', libraryRefreshRoute);
 app.use('/albums', albumsRoutes);
-app.use('/coverart', coverArtRoute);
+app.use('/legacy/coverart', coverArtRoute);
+app.use('/coverArt', express.static('./public/coverArt'));
 app.use('/playlists', playlists);
+app.use('/search', searchRoute);
 
 // error handling
 app.use((req, res, next) => {
