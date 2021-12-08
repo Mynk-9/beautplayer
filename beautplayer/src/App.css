@@ -36,3 +36,14 @@
       transform: rotate(360deg);
    }
 }
+
+
+/* animated switch */
+
+.switch-wrapper {
+  position: relative;
+}
+
+.switch-wrapper > div {
+  position: absolute;
+}
