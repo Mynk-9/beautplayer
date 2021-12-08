@@ -7,11 +7,13 @@ const AlbumCard = props => {
     let history = useHistory();
     let openAlbum;
     if (props.isPlaylist)
-        openAlbum = () => history.push('/playlist/' + props.albumTitle.replace('/', '%2F'));
+        openAlbum = () =>
+            history.push('/playlist/' + props.albumTitle.replace('/', '%2F'));
     else
-        openAlbum = () => history.push('/album/' + props.albumTitle.replace('/', '%2F'));
-    
-    const setDefaultAlbumArt = (img) => {
+        openAlbum = () =>
+            history.push('/album/' + props.albumTitle.replace('/', '%2F'));
+
+    const setDefaultAlbumArt = img => {
         img.target.src = props.albumArt;
     };
 
