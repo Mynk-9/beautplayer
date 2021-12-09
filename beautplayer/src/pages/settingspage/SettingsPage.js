@@ -6,14 +6,14 @@ import ColorModeSwitcher from '../../components/colormodeswitch/ColorModeSwitch'
 import AccordionSection from '../../components/accordionsection/AccordionSection';
 import Switcher from '../../components/switcher/Switcher';
 
-import API from './../../components/apiLink';
-import PersistentStorage from './../persistentstorage';
+import API from './../../utilities/apis/apiLink';
+import PersistentStorage from './../../utilities/persistentstorage';
 
 import './../../components/commonstyles.scss';
 import Styles from './SettingsPage.module.scss';
 
-import ThemeContext from './../../components/themecontext';
-import PlayerContext from '../../components/playercontext';
+import ThemeContext from './../../contexts/themecontext';
+import PlayerContext from '../../contexts/playercontext';
 
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg';
 import PlusIcon from './../../assets/buttonsvg/plus.svg';

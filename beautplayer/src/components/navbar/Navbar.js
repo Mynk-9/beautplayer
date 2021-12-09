@@ -7,7 +7,7 @@ import BeautPlayerTitle from './../beautplayertitle/BeautPlayerTitle';
 import './../commonstyles.scss';
 import Styles from './Navbar.module.scss';
 
-import ThemeContext from './../themecontext';
+import ThemeContext from './../../contexts/themecontext';
 
 import UpArrowIcon from './../../assets/buttonsvg/chevron-up.svg';
 import DownArrowIcon from './../../assets/buttonsvg/chevron-down.svg';

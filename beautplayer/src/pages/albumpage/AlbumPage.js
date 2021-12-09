@@ -3,14 +3,14 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 import TrackList from './../../components/tracklist/TrackList';
-import { albumArt } from '../../components/coverArtAPI';
+import { albumArt } from '../../utilities/apis/coverArtAPI';
 
-import API from './../../components/apiLink';
+import API from './../../utilities/apis/apiLink';
 
 import './../../components/commonstyles.scss';
 import Styles from './AlbumPage.module.scss';
 
-import ThemeContext from '../../components/themecontext';
+import ThemeContext from '../../contexts/themecontext';
 
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg';
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg';

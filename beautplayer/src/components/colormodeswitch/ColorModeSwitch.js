@@ -4,7 +4,7 @@ import Styles from './ColorModeSwitch.module.scss';
 import SunIcon from './../../assets/buttonsvg/sun.svg';
 import MoonIcon from './../../assets/buttonsvg/moon.svg';
 
-import ThemeContext from './../themecontext';
+import ThemeContext from './../../contexts/themecontext';
 
 const ColorModeSwitch = props => {
     // const [colorConfig, setColorConfig] = useState('dark');

@@ -1,9 +1,9 @@
 import { React, useEffect, useState, useContext } from 'react';
 import Styles from './ProgressBar.module.scss';
 
-import PlayerManager from '../playermanager';
-import PlayerContext from './../playercontext';
-import ThemeContext from '../themecontext';
+import PlayerManager from '../../utilities/player/playermanager';
+import PlayerContext from './../../contexts/playercontext';
+import ThemeContext from './../../contexts/themecontext';
 
 const ProgressBar = () => {
     const { audioDuration, playPause } = useContext(PlayerContext);

@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+
 import MainPage from './pages/mainpage/MainPage';
 import AlbumPage from './pages/albumpage/AlbumPage';
 import PlaylistPage from './pages/playlistpage/PlaylistPage';
@@ -10,11 +11,11 @@ import SearchPage from './pages/searchpage/SearchPage';
 import Navbar from './components/navbar/Navbar';
 import PlayerBar from './components/playerbar/PlayerBar';
 
-import PlayerManager from './components/playermanager';
+import PlayerManager from './utilities/player/playermanager';
 
-import ThemeContext from './components/themecontext';
-import PlayerContext from './components/playercontext';
-import SearchContext from './components/searchcontext';
+import ThemeContext from './contexts/themecontext';
+import PlayerContext from './contexts/playercontext';
+import SearchContext from './contexts/searchcontext';
 
 function App() {
     let playerManager = PlayerManager.getInstance();

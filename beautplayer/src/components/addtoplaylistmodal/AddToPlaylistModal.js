@@ -4,8 +4,8 @@ import axios from 'axios';
 import './../../components/commonstyles.scss';
 import Styles from './AddToPlaylistModal.module.scss';
 
-import API from './../apiLink';
-import PersistentStorage from './../../pages/persistentstorage';
+import API from './../../utilities/apis/apiLink';
+import PersistentStorage from './../../utilities/persistentstorage';
 
 import XIcon from './../../assets/buttonsvg/x.svg';
 import PlusIcon from './../../assets/buttonsvg/plus.svg';

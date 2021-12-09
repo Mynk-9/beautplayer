@@ -6,16 +6,16 @@ import TrackLiker from './../../components/trackliker/TrackLiker';
 import TrackOptions from './../../components/trackoptions/TrackOptions';
 import PlayButton from './../../components/playbutton/PlayButton';
 import AddToPlaylistModal from '../../components/addtoplaylistmodal/AddToPlaylistModal';
-import { albumArt } from '../../components/coverArtAPI';
+import { albumArt } from '../../utilities/apis/coverArtAPI';
 
-import API from './../../components/apiLink';
-import QueueManager from './../../components/queuemanager';
+import API from './../../utilities/apis/apiLink';
+import QueueManager from './../../utilities/player/queuemanager';
 
 import './../../components/commonstyles.scss';
 import Styles from './SearchPage.module.scss';
 
-import ThemeContext from './../../components/themecontext';
-import SearchContext from './../../components/searchcontext';
+import ThemeContext from './../../contexts/themecontext';
+import SearchContext from './../../contexts/searchcontext';
 
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg';
 import PlusIcon from './../../assets/buttonsvg/plus.svg';

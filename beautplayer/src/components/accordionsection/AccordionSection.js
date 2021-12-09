@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import './../commonstyles.scss';
 import Styles from './AccordionSection.module.scss';
 
-import ThemeContext from './../themecontext';
+import ThemeContext from './../../contexts/themecontext';
 
 import TriangleIcon from './../../assets/buttonsvg/triangle.svg';
 

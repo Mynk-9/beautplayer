@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import Styles from './Switcher.module.scss';
 import './../commonstyles.scss';
 
-import ThemeContext from './../themecontext';
+import ThemeContext from './../../contexts/themecontext';
 
 const Switcher = ({ state, onChange, enabled = true }) => {
     const [enable, setEnable] = useState(state === true);

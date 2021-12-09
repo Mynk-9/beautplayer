@@ -1,5 +1,5 @@
 import QueueManager from './queuemanager';
-import API from './apiLink';
+import API from '../apis/apiLink';
 
 var PlayerManager = (() => {
     var instance;

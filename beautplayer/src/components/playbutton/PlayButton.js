@@ -1,14 +1,14 @@
 import { React, useState, useEffect, useContext } from 'react';
 import './../commonstyles.scss';
 
-import PlayerContext from '../playercontext';
-import ThemeContext from '../themecontext';
+import PlayerContext from './../../contexts/playercontext';
+import ThemeContext from './../../contexts/themecontext';
 
 import PlayIcon from './../../assets/buttonsvg/play.svg';
 import PauseIcon from './../../assets/buttonsvg/pause.svg';
 
 import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg';
-import PlayerManager from '../playermanager';
+import PlayerManager from './../../utilities/player/playermanager';
 
 const ColorThief = require('color-thief');
 

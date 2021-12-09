@@ -5,10 +5,10 @@ import AlbumCard from './../../components/albumcard/AlbumCard';
 import {
     albumArtCompressed,
     playlistArtCompressed,
-} from '../../components/coverArtAPI';
+} from '../../utilities/apis/coverArtAPI';
 
-import API from './../../components/apiLink';
-import PersistentStorage from './../persistentstorage';
+import API from '../../utilities/apis/apiLink';
+import PersistentStorage from '../../utilities/persistentstorage';
 
 import './../../components/commonstyles.scss';
 import Styles from './MainPage.module.scss';

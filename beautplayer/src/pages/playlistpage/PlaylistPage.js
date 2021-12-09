@@ -4,18 +4,18 @@ import axios from 'axios';
 
 import TrackList from './../../components/tracklist/TrackList';
 import Modal from '../../components/modal/Modal';
-import { albumArt, playlistArt } from './../../components/coverArtAPI';
+import { albumArt, playlistArt } from './../../utilities/apis/coverArtAPI';
 
-import API from './../../components/apiLink';
-import PlayerManager from '../../components/playermanager';
-import QueueManager from './../../components/queuemanager';
-import PersistentStorage from '../persistentstorage';
+import API from '../../utilities/apis/apiLink';
+import PlayerManager from '../../utilities/player/playermanager';
+import QueueManager from '../../utilities/player/queuemanager';
+import PersistentStorage from './../../utilities/persistentstorage';
 
 import './../../components/commonstyles.scss';
 import Styles from './PlaylistPage.module.scss';
 
-import ThemeContext from './../../components/themecontext';
-import PlayerContext from './../../components/playercontext';
+import ThemeContext from './../../contexts/themecontext';
+import PlayerContext from './../../contexts/playercontext';
 
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg';
 import PlayIcon from './../../assets/buttonsvg/play.svg';

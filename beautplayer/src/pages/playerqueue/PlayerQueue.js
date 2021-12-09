@@ -6,13 +6,13 @@ import TrackOptions from './../../components/trackoptions/TrackOptions';
 import PlayButton from './../../components/playbutton/PlayButton';
 import AddToPlaylistModal from '../../components/addtoplaylistmodal/AddToPlaylistModal';
 
-import QueueManager from './../../components/queuemanager';
-import BeautPlayerQueue from '../../components/queue';
+import QueueManager from './../../utilities/player/queuemanager';
+import BeautPlayerQueue from './../../utilities/player/queue';
 
 import './../../components/commonstyles.scss';
 import Styles from './PlayerQueue.module.scss';
 
-import ThemeContext from './../../components/themecontext';
+import ThemeContext from './../../contexts/themecontext';
 
 import LeftIcon from './../../assets/buttonsvg/chevron-left.svg';
 import MinusIcon from './../../assets/buttonsvg/minus.svg';

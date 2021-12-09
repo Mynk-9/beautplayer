@@ -4,11 +4,11 @@ import ProgressBar from './../progressbar/ProgressBar';
 import './../commonstyles.scss';
 import Styles from './PlayerBar.module.scss';
 
-import PlayerManager from './../playermanager';
-import QueueManager from './../queuemanager';
+import PlayerManager from '../../utilities/player/playermanager';
+import QueueManager from '../../utilities/player/queuemanager';
 
-import PlayerContext from './../playercontext';
-import ThemeContext from './../themecontext';
+import PlayerContext from './../../contexts/playercontext';
+import ThemeContext from './../../contexts/themecontext';
 
 import BackIcon from './../../assets/buttonsvg/skip-back.svg';
 import PlayIcon from './../../assets/buttonsvg/play.svg';

@@ -4,7 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import Styles from './SearchBox.module.scss';
 import './../commonstyles.scss';
 
-import SearchContext from './../searchcontext';
+import SearchContext from './../../contexts/searchcontext';
 
 import SearchIcon from './../../assets/buttonsvg/search.svg';
 

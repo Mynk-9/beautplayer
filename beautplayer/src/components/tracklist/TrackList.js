@@ -4,12 +4,12 @@ import TrackOptions from '../trackoptions/TrackOptions';
 import TrackLiker from '../trackliker/TrackLiker';
 import AddToPlaylistModal from './../addtoplaylistmodal/AddToPlaylistModal';
 
-import QueueManager from './../queuemanager';
+import QueueManager from './../../utilities/player/queuemanager';
 
 import './../commonstyles.scss';
 import Styles from './TrackList.module.scss';
 
-import { albumArt } from '../coverArtAPI';
+import { albumArt } from './../../utilities/apis/coverArtAPI';
 
 import PlusIcon from './../../assets/buttonsvg/plus.svg';
 import MinusIcon from './../../assets/buttonsvg/minus.svg';
