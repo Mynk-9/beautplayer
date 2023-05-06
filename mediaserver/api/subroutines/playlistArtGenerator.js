@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const createCollage = require('nf-photo-collage');
 
-const imagemin = require('imagemin');
-const imageminMozjpeg = require('imagemin-mozjpeg');
+const imagemin = import('imagemin');
+const imageminMozjpeg = import('imagemin-mozjpeg');
 
 const Playlists = require('../models/playlists');
 

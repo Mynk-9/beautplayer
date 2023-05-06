@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const mm = require('music-metadata');
-const imagemin = require('imagemin');
-const imageminMozjpeg = require('imagemin-mozjpeg');
+const mm = import('music-metadata');
+const imagemin = import('imagemin');
+const imageminMozjpeg = import('imagemin-mozjpeg');
 
 const Tracks = require('../models/tracks');
 
