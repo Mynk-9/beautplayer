@@ -1,87 +1,87 @@
 .trackList {
-    width: 100%;
-    border-radius: var(--border-radius);
-    border-spacing: 0;
-    background-color: var(--non-transparent-acrylic-like-color);
+   width: 100%;
+   border-radius: var(--border-radius);
+   border-spacing: 0;
+   background-color: var(--non-transparent-acrylic-like-color);
 
-    transition: background-color var(--std-color-transition-time) ease;
+   transition: background-color var(--std-color-transition-time) ease;
 
-    .trackEntry {
-        td {
-            padding: 1rem;
-            border: 0;
+   .trackEntry {
+      td {
+         padding: 1rem;
+         border: 0;
 
-            > * {
-                vertical-align: middle;
-                vertical-align: -webkit-baseline-middle;
-            }
-            img {
-                vertical-align: middle;
-                vertical-align: -webkit-baseline-middle;
-            }
-        }
-        td:nth-child(4) {
-            @media only screen and (max-width: 768px) {
-                display: none;
-            }
-        }
-        td:nth-child(5) {
-            text-align: right;
-        }
+         > * {
+            vertical-align: middle;
+            vertical-align: -webkit-baseline-middle;
+         }
+         img {
+            vertical-align: middle;
+            vertical-align: -webkit-baseline-middle;
+         }
+      }
+      td:nth-child(4) {
+         @media only screen and (max-width: 768px) {
+            display: none;
+         }
+      }
+      td:nth-child(5) {
+         text-align: right;
+      }
 
-        // taken from player queue styles at PlayerQueue.module.scss
-        td:nth-child(1),
-        td:nth-child(2),
-        td:last-child {
-            width: 1%;
-            white-space: nowrap;
-        }
-    }
-    .trackEntry:first-child {
-        border-top-left-radius: var(--border-radius);
-        border-top-right-radius: var(--border-radius);
+      // taken from player queue styles at PlayerQueue.module.scss
+      td:nth-child(1),
+      td:nth-child(2),
+      td:last-child {
+         width: 1%;
+         white-space: nowrap;
+      }
+   }
+   .trackEntry:first-child {
+      border-top-left-radius: var(--border-radius);
+      border-top-right-radius: var(--border-radius);
 
-        td:first-child {
-            border-top-left-radius: var(--border-radius);
-        }
-        td:last-child {
-            border-top-right-radius: var(--border-radius);
-        }
-    }
-    .trackEntry:last-child {
-        border-bottom-left-radius: var(--border-radius);
-        border-bottom-right-radius: var(--border-radius);
+      td:first-child {
+         border-top-left-radius: var(--border-radius);
+      }
+      td:last-child {
+         border-top-right-radius: var(--border-radius);
+      }
+   }
+   .trackEntry:last-child {
+      border-bottom-left-radius: var(--border-radius);
+      border-bottom-right-radius: var(--border-radius);
 
-        td:first-child {
-            border-bottom-left-radius: var(--border-radius);
-        }
-        td:last-child {
-            border-bottom-right-radius: var(--border-radius);
-        }
-    }
-    .trackEntry:hover {
-        background-color: var(--tint-level2-color);
+      td:first-child {
+         border-bottom-left-radius: var(--border-radius);
+      }
+      td:last-child {
+         border-bottom-right-radius: var(--border-radius);
+      }
+   }
+   .trackEntry:hover {
+      background-color: var(--tint-level2-color);
 
-        @media only screen and (max-width: 768px) {
-            background-color: initial;
-        }
-    }
-    .trackEntry:active {
-        background-color: var(--tint-level3-color);
-    }
+      @media only screen and (max-width: 768px) {
+         background-color: initial;
+      }
+   }
+   .trackEntry:active {
+      background-color: var(--tint-level3-color);
+   }
 }
 
 body[class~="dark-mode"] {
-    .trackList {
-        .trackEntry:hover {
-            background-color: var(--tint-level1-color);
+   .trackList {
+      .trackEntry:hover {
+         background-color: var(--tint-level1-color);
 
-            @media only screen and (max-width: 768px) {
-                background-color: initial;
-            }
-        }
-        .trackEntry:active {
-            background-color: var(--tint-level2-color);
-        }
-    }
+         @media only screen and (max-width: 768px) {
+            background-color: initial;
+         }
+      }
+      .trackEntry:active {
+         background-color: var(--tint-level2-color);
+      }
+   }
 }

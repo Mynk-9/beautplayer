@@ -8,7 +8,6 @@ import MoreHorizontalIcon from './../../assets/buttonsvg/more-horizontal.svg';
 
 // prop: options: [{component: <component />, text: "text"}, ...]
 const TrackOptions = props => {
-
     let options = [];
     props.options.forEach((option, index) => {
         options.push(
@@ -27,13 +26,11 @@ const TrackOptions = props => {
             <div className={Styles.optionButton}>
                 <img
                     data-dark-mode-compatible
-                    alt={"More options"}
+                    alt={'More options'}
                     src={MoreHorizontalIcon}
                 />
             </div>
-            <div className={`${Styles.optionsMenu} acrylic`}>
-                {options}
-            </div>
+            <div className={`${Styles.optionsMenu} acrylic`}>{options}</div>
         </div>
     );
 };

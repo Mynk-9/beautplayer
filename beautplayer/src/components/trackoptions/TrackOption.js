@@ -10,14 +10,12 @@ const TrackOption = props => {
         <div
             className={Styles.optionsMenuItem}
             onClick={() => {
-                if (!props.onClick)
-                    return;
+                if (!props.onClick) return;
 
                 props.onClick();
 
                 // if success component exist then utilise
-                if (!props.successComponent)
-                    return;
+                if (!props.successComponent) return;
                 setCurrentComponent(props.successComponent);
                 setTimeout(() => {
                     setCurrentComponent(props.component);

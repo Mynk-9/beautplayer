@@ -2,43 +2,43 @@ import { createContext } from 'react';
 
 const PlayerContext = createContext({
     playPause: 'pause',
-    setPlayPause: () => { },
+    setPlayPause: () => {},
 
     albumArt: '',
-    setAlbumArt: () => { },
+    setAlbumArt: () => {},
 
     albumTitle: '',
-    setAlbumTitle: () => { },
+    setAlbumTitle: () => {},
 
     albumArtist: '',
-    setAlbumArtist: () => { },
+    setAlbumArtist: () => {},
 
     currentTrack: '',
-    setCurrentTrack: () => { },
+    setCurrentTrack: () => {},
 
     audioSrc: '',
-    setAudioSrc: () => { },
+    setAudioSrc: () => {},
 
     audioDuration: 0,
-    setAudioDuration: () => { },
+    setAudioDuration: () => {},
 
     audioVolume: 1.0,
-    setAudioVolume: () => { },
+    setAudioVolume: () => {},
 
     linkBack: '',
-    setLinkBack: () => { },
+    setLinkBack: () => {},
 
     playPauseFadeEnable: true,
-    setPlayPauseFadeEnable: () => { },
+    setPlayPauseFadeEnable: () => {},
 
     crossfadeEnable: true,
-    setCrossfadeEnable: () => { },
+    setCrossfadeEnable: () => {},
     crossfadePlaylist: true,
-    setCrossfadePlaylist: () => { },
+    setCrossfadePlaylist: () => {},
     crossfadeNextPrev: false,
-    setCrossfadeNextPrev: () => { },
+    setCrossfadeNextPrev: () => {},
     crossfadeDuration: 1,
-    setCrossfadeDuration: () => { },
+    setCrossfadeDuration: () => {},
 });
 
 export default PlayerContext;
