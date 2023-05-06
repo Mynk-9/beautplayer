@@ -153,10 +153,7 @@ router.post('/', async (req, res, next) => {
                     }
                 },
                 { $out: 'albums' }
-            ], c => {
-                if (c)
-                    console.log(c);
-            });
+            ]);
     } catch (e) {
         console.log(e);
         res.status(500).json({
@@ -173,14 +170,14 @@ router.post('/', async (req, res, next) => {
     ////////////////////////////////////////
 
     // get the album arts
-    try {
-        albumArtGenerator();
-    } catch (e) {
-        console.log(e);
-        res.status(500).json({
-            error: e
-        });
-    }
+    // try {
+    //     albumArtGenerator();
+    // } catch (e) {
+    //     console.log(e);
+    //     res.status(500).json({
+    //         error: e
+    //     });
+    // }
 
     // return if headers already sent
     if (res.headersSent)
@@ -191,15 +188,15 @@ router.post('/', async (req, res, next) => {
     ////////////////////////////////////////
 
     // get playlist arts
-    try {
-        for (const pl in playlistsData)
-            playlistArtGenerator(pl);
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({
-            error: err
-        });
-    }
+    // try {
+    //     for (const pl in playlistsData)
+    //         playlistArtGenerator(pl);
+    // } catch (err) {
+    //     console.log(err);
+    //     res.status(500).json({
+    //         error: err
+    //     });
+    // }
 
     // return if headers already sent
     if (res.headersSent)

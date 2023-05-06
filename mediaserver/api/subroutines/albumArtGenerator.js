@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-const mm = require('music-metadata');
-const imagemin = require('imagemin');
-const imageminMozjpeg = require('imagemin-mozjpeg');
+const mm = import('music-metadata');
+const imagemin = import('imagemin');
+const imageminMozjpeg = import('imagemin-mozjpeg');
 
 const Albums = require('./../models/albums');
 const Tracks = require('./../models/tracks');

@@ -4,10 +4,6 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-let configs = require('./api/configs');
-configs.musicFolders.push('D:/Music/Music');
-configs.musicFolders.push('D:/Music/Hindi');
-
 const tracksRoutes = require('./api/routes/tracks');
 const albumsRoutes = require('./api/routes/albums');
 const libraryRefreshRoute = require('./api/routes/libraryRefresh');
@@ -16,16 +12,12 @@ const playlists = require('./api/routes/playlists');
 const searchRoute = require('./api/routes/search');
 
 mongoose
-    .connect('mongodb://localhost:27017/beautplayer', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useCreateIndex: true,
-    })
+    .connect('mongodb://localhost:27017/beautplayer', {})
     .then(
         (e) => {
             console.log('Successfully connected to MongoDB Database.');
         }, (e) => {
-            console.log('Failure in connection to MongoDB Database.');
+            console.log('Failure in connection to MongoDB Database.', e);
         }
     );
 

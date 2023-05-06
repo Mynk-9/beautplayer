@@ -1,26 +1,12 @@
-const fs = require('fs');
-const glob = require('glob-promise');
-
-let configs = require('../configs');
+const { bucketClient } = require("../../connectors/aws");
+const { AWS_BUCKET_NAME: AWS_BUCKET } = require("../../constants/env");
+const aws = require('@aws-sdk/client-s3');
 
 module.exports = async () => {
-
-    const pattern = '/**/*';
-    let files = [];
-
-    for (const path of configs.musicFolders) {
-        await glob(path + pattern)
-            .then(result => {
-                result.forEach(eachPath => {
-                    if (fs.lstatSync(eachPath).isFile())
-                        files.push({ path: eachPath });
-                });
-            })
-            .catch(e => {
-                console.log(e);
-                throw e;
-            });
-    }
-
-    return files;
+  const objects = await bucketClient.send(
+    new aws.ListObjectsCommand({ Bucket: AWS_BUCKET })
+  );
+  return objects.Contents.map((content) => ({
+    path: content.Key,
+  }));
 };

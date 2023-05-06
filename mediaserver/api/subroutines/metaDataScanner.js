@@ -1,11 +1,16 @@
-const mm = require('music-metadata');
+const mm = import('music-metadata');
 const { basename, extname } = require('path');
+const { bucketClient } = require('./../../connectors/aws');
+const { GetObjectCommand } = require('@aws-sdk/client-s3');
+const { AWS_BUCKET_NAME, AWS_BUCKET_SERVER } = require("./../../constants/env");
 
 module.exports = async (files) => {
     let finalList = [];
     for (let file of files) {
         let path = file['path'];
-        await mm.parseFile(path)
+        const fileStream = (await bucketClient.send(new GetObjectCommand({ Bucket: AWS_BUCKET_NAME, Key: path }))).Body;
+        file['path'] = `${AWS_BUCKET_SERVER}/${path}`;
+        await (await mm).parseStream(fileStream)
             .then(metaData => {
                 file['title'] = metaData.common.title;
                 file['album'] = metaData.common.album;
