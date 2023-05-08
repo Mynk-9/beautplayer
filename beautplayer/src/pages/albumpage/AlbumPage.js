@@ -1,16 +1,19 @@
 import { React, useState, useEffect, useContext, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
+
 import TrackList from './../../components/tracklist/TrackList';
+import { albumArt } from '../../utilities/apis/coverArtAPI';
+
+import API from './../../utilities/apis/apiLink';
+
 import './../../components/commonstyles.scss';
 import Styles from './AlbumPage.module.scss';
 
-import ThemeContext from '../../components/themecontext';
+import ThemeContext from '../../contexts/themecontext';
 
-import LeftIcon from './../../assets/buttonsvg/chevron-left.svg'
-
-import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg'
-import { albumArt } from '../../components/coverArtAPI';
+import LeftIcon from './../../assets/buttonsvg/chevron-left.svg';
+import AlbumArt from './../../assets/images/pexels-steve-johnson-1234853.jpg';
 
 const AlbumPage = props => {
     // tracks has the format: [title, artist, duration, trackId]
@@ -29,16 +32,10 @@ const AlbumPage = props => {
     const { setArtContext } = useContext(ThemeContext);
     const imgRef = useRef(null);
 
-    // api endpoint -- same domain, port 5000
-    let API = window.location.origin;
-    API = API.substring(0, API.lastIndexOf(':'));
-    API += ':5000';
-
-
     let tracksArray = {
         album: '',
         albumArt: '',
-        tracks: []
+        tracks: [],
     };
 
     useEffect(() => {
@@ -48,7 +45,7 @@ const AlbumPage = props => {
     }, [props.match.params.albumName]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        if (!albumPageAlbumName) return; 
+        if (!albumPageAlbumName) return;
         // fixed double call to this function
         // on opening of AlbumPage, this function is triggered twice, once at
         // mounting and once at albumPageAlbumName change
@@ -64,15 +61,16 @@ const AlbumPage = props => {
 
         // fetch the album data
         // get the tracks of the album
-        axios.get(API + '/albums/' + albumPageAlbumName)
+        axios
+            .get(API + '/albums/' + albumPageAlbumName)
             .then(resp => {
                 const album = resp.data.Album;
                 if (!album) console.log('album undefined');
                 const albumTracks = album.tracks;
 
-                setAlbumPageAlbumYear(album.year.join(", "));
-                setAlbumPageAlbumArtist(album.albumArtist.join(", "));
-                setAlbumPageAlbumGenre(album.genre.join(", "));
+                setAlbumPageAlbumYear(album.year.join(', '));
+                setAlbumPageAlbumArtist(album.albumArtist.join(', '));
+                setAlbumPageAlbumGenre(album.genre.join(', '));
 
                 for (const track of albumTracks) {
                     const trackInfo = track;
@@ -83,17 +81,18 @@ const AlbumPage = props => {
                     const trackSecs = Math.round(trackInfo.length % 60);
                     const trackId = trackInfo._id;
 
-                    tracksArray.tracks.push(
-                        [
-                            trackTitle,
-                            trackAlbumArtist,
-                            trackMins + ':' + (trackSecs < 10 ? '0' : '') + trackSecs,
-                            trackId
-                        ]
-                    );
+                    tracksArray.tracks.push([
+                        trackTitle,
+                        trackAlbumArtist,
+                        trackMins +
+                            ':' +
+                            (trackSecs < 10 ? '0' : '') +
+                            trackSecs,
+                        trackId,
+                    ]);
                 }
             })
-            .then(() => tracksArray.album = albumPageAlbumName)
+            .then(() => (tracksArray.album = albumPageAlbumName))
             .then(() => setTracks(tracksArray))
             .catch(err => {
                 console.log(err);
@@ -104,7 +103,8 @@ const AlbumPage = props => {
         <>
             <div className={Styles.section}>
                 <div className={Styles.header}>
-                    <img data-dark-mode-compatible
+                    <img
+                        data-dark-mode-compatible
                         alt="Go Back"
                         className={Styles.back}
                         src={LeftIcon}
@@ -113,7 +113,7 @@ const AlbumPage = props => {
                     <img
                         alt="Album Art"
                         className={Styles.albumArt}
-                        onError={(img) => {
+                        onError={img => {
                             img.target.src = AlbumArt;
                         }}
                         src={albumPageAlbumArt || AlbumArt}
@@ -123,7 +123,9 @@ const AlbumPage = props => {
                         <tbody>
                             <tr>
                                 <td>Album</td>
-                                <td>{albumPageAlbumName.replace('%2F', '/')}</td>
+                                <td>
+                                    {albumPageAlbumName.replace('%2F', '/')}
+                                </td>
                             </tr>
                             <tr>
                                 <td>Artist</td>
@@ -146,6 +148,6 @@ const AlbumPage = props => {
             </div>
         </>
     );
-}
+};
 
 export default AlbumPage;

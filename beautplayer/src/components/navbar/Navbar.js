@@ -7,7 +7,7 @@ import BeautPlayerTitle from './../beautplayertitle/BeautPlayerTitle';
 import './../commonstyles.scss';
 import Styles from './Navbar.module.scss';
 
-import ThemeContext from './../themecontext';
+import ThemeContext from './../../contexts/themecontext';
 
 import UpArrowIcon from './../../assets/buttonsvg/chevron-up.svg';
 import DownArrowIcon from './../../assets/buttonsvg/chevron-down.svg';
@@ -18,28 +18,26 @@ const Navbar = props => {
     const { acrylicColor, letAcrylicTints } = useContext(ThemeContext);
 
     useEffect(() => {
-        if (!letAcrylicTints)
-            setAcrylicColorStyle({});
+        if (!letAcrylicTints) setAcrylicColorStyle({});
         else {
-            if (acrylicColor && acrylicColor !== '--acrylic-color' && acrylicColor !== '')
-                setAcrylicColorStyle({ '--acrylic-color': acrylicColor })
-            else
-                setAcrylicColorStyle({});
+            if (
+                acrylicColor &&
+                acrylicColor !== '--acrylic-color' &&
+                acrylicColor !== ''
+            )
+                setAcrylicColorStyle({ '--acrylic-color': acrylicColor });
+            else setAcrylicColorStyle({});
         }
     }, [acrylicColor, letAcrylicTints]);
 
     return (
         <nav
             className={`${Styles.nav} acrylic`}
-            data-nav-state={
-                navOpen
-                    ? 'open'
-                    : 'close'
-            }
+            data-nav-state={navOpen ? 'open' : 'close'}
             style={acrylicColorStyle}
         >
             <span className={`${Styles.center} ${Styles.title}`}>
-                <span className={"cursor-pointer"}>
+                <span className={'cursor-pointer'}>
                     <Link to={`/`}>
                         <BeautPlayerTitle />
                     </Link>
@@ -49,17 +47,17 @@ const Navbar = props => {
                 <SearchBox />
             </span>
             <span className={Styles.right}>
-                <span className={"cursor-pointer"}>
+                <span className={'cursor-pointer'}>
                     <Link to={`/`}>Home</Link>
                 </span>
             </span>
             <span className={Styles.right}>
-                <span className={"cursor-pointer"}>
+                <span className={'cursor-pointer'}>
                     <Link to={`/settings`}>Settings</Link>
                 </span>
             </span>
             <span className={Styles.right}>
-                <span className={"cursor-pointer"}>
+                <span className={'cursor-pointer'}>
                     <Link to={`/queue`}>Queue</Link>
                 </span>
             </span>
@@ -76,13 +74,10 @@ const Navbar = props => {
                     }
                 }}
             >
-                <img data-dark-mode-compatible
+                <img
+                    data-dark-mode-compatible
                     alt="Toggle"
-                    src={
-                        navOpen
-                            ? UpArrowIcon
-                            : DownArrowIcon
-                    }
+                    src={navOpen ? UpArrowIcon : DownArrowIcon}
                 />
             </button>
         </nav>

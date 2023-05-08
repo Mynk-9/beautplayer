@@ -52,7 +52,7 @@
          height: var(--albumArtHeight);
          padding-left: 2rem;
 
-         // width = 100% width of parent element 
+         // width = 100% width of parent element
          //          - width of album art
          //          - left margin of album art
          width: calc(100% - var(--albumArtHeight) - 5rem);

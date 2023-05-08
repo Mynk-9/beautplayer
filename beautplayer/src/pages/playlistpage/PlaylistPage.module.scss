@@ -6,90 +6,90 @@
 
 // blur backdrop
 .section .headerBackgroundWrapper {
-    background-repeat: no-repeat;
-    background-size: cover;
+   background-repeat: no-repeat;
+   background-size: cover;
 }
 .section .header {
-    backdrop-filter: blur(1rem) brightness(0.5);
-    position: relative;     // https://stackoverflow.com/a/37318487/6262571
-    
-    transition: backdrop-filter var(--std-color-transition-time) ease,
+   backdrop-filter: blur(1rem) brightness(0.5);
+   position: relative; // https://stackoverflow.com/a/37318487/6262571
+
+   transition: backdrop-filter var(--std-color-transition-time) ease;
 }
 .section .header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: linear-gradient(transparent, white);
+   content: "";
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background-image: linear-gradient(transparent, white);
 
-    z-index: -1;
-    opacity: 0;
-    transition: opacity var(--std-color-transition-time) ease;
+   z-index: -1;
+   opacity: 0;
+   transition: opacity var(--std-color-transition-time) ease;
 }
 .section .header::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: linear-gradient(transparent, black);
+   content: "";
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background-image: linear-gradient(transparent, black);
 
-    z-index: -1;
-    opacity: 1;
-    transition: opacity var(--std-color-transition-time) ease;
+   z-index: -1;
+   opacity: 1;
+   transition: opacity var(--std-color-transition-time) ease;
 }
 :global(body.light-mode) .section .header {
-    backdrop-filter: blur(1rem) brightness(1);
+   backdrop-filter: blur(1rem) brightness(1);
 }
 :global(body.light-mode) .section .header::before {
-    opacity: 1;
+   opacity: 1;
 }
 :global(body.light-mode) .section .header::after {
-    opacity: 0;
+   opacity: 0;
 }
 
 // table mods
 .section .header table {
-    table-layout: fixed;
+   table-layout: fixed;
 }
 .section .header table tr {
-    td * {
-        vertical-align: middle;
-        margin: auto;
-    }
+   td * {
+      vertical-align: middle;
+      margin: auto;
+   }
 
-    // action buttons
-    .actionButtonWrapper {
-        display: inline-block;
+   // action buttons
+   .actionButtonWrapper {
+      display: inline-block;
 
-        * {
-            display: block;
-        }
+      * {
+         display: block;
+      }
 
-        .actionButton {
-            outline: 0;
-            border: 0;
-            padding: 0.5rem;
+      .actionButton {
+         outline: 0;
+         border: 0;
+         padding: 0.5rem;
 
-            color: var(--primary-color);
-            border-radius: var(--border-radius);
-            background-color: var(--non-transparent-acrylic-like-color);
+         color: var(--primary-color);
+         border-radius: var(--border-radius);
+         background-color: var(--non-transparent-acrylic-like-color);
 
-            cursor: pointer;
+         cursor: pointer;
 
-            transition: background-color var(--std-color-transition-time) ease;
-        }
+         transition: background-color var(--std-color-transition-time) ease;
+      }
 
-        span {
-            padding-top: 0.25rem;
-            font-size: x-small;
-        }
-    }
+      span {
+         padding-top: 0.25rem;
+         font-size: x-small;
+      }
+   }
 
-    .actionButtonWrapper + .actionButtonWrapper {
-        margin-left: 0.5rem;
-    }
+   .actionButtonWrapper + .actionButtonWrapper {
+      margin-left: 0.5rem;
+   }
 }

@@ -1,19 +1,17 @@
 import QueueManager from './queuemanager';
+import API from '../apis/apiLink';
 
 var PlayerManager = (() => {
     var instance;
     function init() {
-
         // private members
 
         // audio context
         let AudioContext = window.AudioContext;
-        if (!AudioContext)
-            AudioContext = window.webkitAudioContext;
+        if (!AudioContext) AudioContext = window.webkitAudioContext;
         const audioContext = new AudioContext({
             latencyHint: 'playback',
         });
-
 
         // prev track, current track, next track
         let players = [
@@ -41,9 +39,7 @@ var PlayerManager = (() => {
             sourceNode.mediaElement.preload = 'auto';
             gainNode.gain.value = 1;
 
-            sourceNode
-                .connect(gainNode)
-                .connect(audioContext.destination);
+            sourceNode.connect(gainNode).connect(audioContext.destination);
         });
 
         // private variables for player state
@@ -59,24 +55,16 @@ var PlayerManager = (() => {
         let crossfadeNextPrev = true;
         let playPauseFade = true;
         let crossfadeDuration = 5;
-        let onTimeUpdateHandler = () => { };
+        let onTimeUpdateHandler = () => {};
         let onTimeUpdateHandlerExec = false;
         let verboseLog = false;
         const updateCurrentIndex = (moveAhead = true) => {
-            if (moveAhead)
-                _current = _current < 2 ? _current + 1 : 0;
-            else
-                _current = _current > 0 ? _current - 1 : 2;
+            if (moveAhead) _current = _current < 2 ? _current + 1 : 0;
+            else _current = _current > 0 ? _current - 1 : 2;
 
             _next = _current < 2 ? _current + 1 : 0;
             _prev = _current > 0 ? _current - 1 : 2;
         };
-
-        // temporary setup of API link /////////////////////////
-        let API = window.location.origin;                     //
-        API = API.substring(0, API.lastIndexOf(':'));         //
-        API += ':5000';                                       //
-        ////////////////////////////////////////////////////////
 
         // logging function
         const makeLog = (...log) => {
@@ -90,7 +78,10 @@ var PlayerManager = (() => {
          * Prefetch the next track. Track details fetched from player queue.
          */
         const prefetchNextTrack = () => {
-            let nextTrack = QueueManager.getNextTrack(players[_current].trackId, shuffle);
+            let nextTrack = QueueManager.getNextTrack(
+                players[_current].trackId,
+                shuffle
+            );
             let nextTrackId = nextTrack?.trackId;
             let duration = nextTrack?.audioDuration.split(':');
 
@@ -101,8 +92,9 @@ var PlayerManager = (() => {
                     'data-duration',
                     parseFloat(duration[0]) * 60 + parseFloat(duration[1])
                 );
-                players[_next].sourceNode.mediaElement.src =
-                    `${API}/tracks/${nextTrackId}/stream`;
+                players[
+                    _next
+                ].sourceNode.mediaElement.src = `${API}/tracks/${nextTrackId}/stream`;
                 players[_next].sourceNode.mediaElement.pause();
             }
         };
@@ -110,7 +102,9 @@ var PlayerManager = (() => {
          * Prefetch the previous track. Track details fetched from player queue.
          */
         const prefetchPrevTrack = () => {
-            let prevTrack = QueueManager.getPrevTrack(players[_current].trackId);
+            let prevTrack = QueueManager.getPrevTrack(
+                players[_current].trackId
+            );
             let prevTrackId = prevTrack?.trackId;
             let duration = prevTrack?.audioDuration.split(':');
 
@@ -121,13 +115,14 @@ var PlayerManager = (() => {
                     'data-duration',
                     parseFloat(duration[0]) * 60 + parseFloat(duration[1])
                 );
-                players[_prev].sourceNode.mediaElement.src =
-                    `${API}/tracks/${prevTrackId}/stream`;
+                players[
+                    _prev
+                ].sourceNode.mediaElement.src = `${API}/tracks/${prevTrackId}/stream`;
                 players[_prev].sourceNode.mediaElement.pause();
             }
         };
 
-        // HTMLAudioElement play state management functions for 
+        // HTMLAudioElement play state management functions for
         // working with async calls
         /**
          * Sets and returns play state of individual player
@@ -138,11 +133,12 @@ var PlayerManager = (() => {
             let stateId = parseInt(
                 player.sourceNode.mediaElement.getAttribute('play-state')
             );
-            if (isNaN(stateId))
-                stateId = 0;
-            else
-                stateId++;
-            player.sourceNode.mediaElement.setAttribute('play-state', String(stateId));
+            if (isNaN(stateId)) stateId = 0;
+            else stateId++;
+            player.sourceNode.mediaElement.setAttribute(
+                'play-state',
+                String(stateId)
+            );
             return stateId;
         };
         /**
@@ -151,7 +147,9 @@ var PlayerManager = (() => {
          * @returns {Number} stateId
          */
         const getLocalPlayState = (player = players[_current]) => {
-            return parseInt(player.sourceNode.mediaElement.getAttribute('play-state'));
+            return parseInt(
+                player.sourceNode.mediaElement.getAttribute('play-state')
+            );
         };
         /**
          * Compares current state with a previous stateId
@@ -159,67 +157,85 @@ var PlayerManager = (() => {
          * @param {Number} oldState previous stateId
          * @returns {Boolean} true if states are same, false otherwise
          */
-        const compareCurrentLocalState = (player = players[_current], oldState) => {
-            makeLog('newState:', getLocalPlayState(player), 'oldState:', oldState);
-            return (getLocalPlayState(player) === oldState);
+        const compareCurrentLocalState = (
+            player = players[_current],
+            oldState
+        ) => {
+            makeLog(
+                'newState:',
+                getLocalPlayState(player),
+                'oldState:',
+                oldState
+            );
+            return getLocalPlayState(player) === oldState;
         };
 
         // player play/pause management functions
         /**
          * Pauses the player
-         * @param {{}} conf Object with the following properties: 
+         * @param {{}} conf Object with the following properties:
          *        player: denotes the player object as present in players array
          *                  defaults to current player if not provided
          *        autoSwitch: denotes that operation is part of playlist auto
          *                  next, defaults to false
-         *        crossfade: denotes crossfade enable/disable boolean for this 
-         *                  operation, if not provided, it will set according 
+         *        crossfade: denotes crossfade enable/disable boolean for this
+         *                  operation, if not provided, it will set according
          *                  existing settings of crossfade
          * @returns {MediaElementAudioSourceNode} source node of player object
          */
-        const handlePlayerPause = async (conf) => {
+        const handlePlayerPause = async conf => {
             const getValOrDefault = (val, def) => {
                 // catch both null and undefined
-                if (val == null)
-                    return def;
+                if (val == null) return def;
                 return val;
             };
 
             let player = getValOrDefault(conf['player'], players[_current]);
-            makeLog('pause', player.sourceNode.mediaElement.getAttribute('data-duration'));
+            makeLog(
+                'pause',
+                player.sourceNode.mediaElement.getAttribute('data-duration')
+            );
             let autoSwitch = getValOrDefault(conf['autoSwitch'], false);
             let _crossfade = getValOrDefault(
                 conf['crossfade'],
-                (crossfade && (crossfadeNextPrev || (autoSwitch && crossfadePlaylist)))
+                crossfade &&
+                    (crossfadeNextPrev || (autoSwitch && crossfadePlaylist))
             );
 
             let localPlayState = setLocalPlayState(player);
 
             if (_crossfade) {
-                player.gainNode.gain.cancelAndHoldAtTime(audioContext.currentTime);
-                player
-                    .gainNode
-                    .gain
-                    .setTargetAtTime(
-                        0,
-                        audioContext.currentTime,
-                        crossfadeDuration / 5
-                    );
+                player.gainNode.gain.cancelAndHoldAtTime(
+                    audioContext.currentTime
+                );
+                player.gainNode.gain.setTargetAtTime(
+                    0,
+                    audioContext.currentTime,
+                    crossfadeDuration / 5
+                );
                 await new Promise(r => setTimeout(r, crossfadeDuration * 1000));
             }
             if (compareCurrentLocalState(player, localPlayState)) {
-                makeLog('pausing for:',
-                    'autoSwitch:', autoSwitch,
-                    'playState:', localPlayState,
-                    'player:', player.sourceNode.mediaElement.getAttribute('data-duration')
+                makeLog(
+                    'pausing for:',
+                    'autoSwitch:',
+                    autoSwitch,
+                    'playState:',
+                    localPlayState,
+                    'player:',
+                    player.sourceNode.mediaElement.getAttribute('data-duration')
                 );
 
                 player.sourceNode.mediaElement.pause();
             } else {
-                makeLog('NOT pausing for:',
-                    'autoSwitch:', autoSwitch,
-                    'playState:', localPlayState,
-                    'player:', player.sourceNode.mediaElement.getAttribute('data-duration')
+                makeLog(
+                    'NOT pausing for:',
+                    'autoSwitch:',
+                    autoSwitch,
+                    'playState:',
+                    localPlayState,
+                    'player:',
+                    player.sourceNode.mediaElement.getAttribute('data-duration')
                 );
             }
 
@@ -227,30 +243,33 @@ var PlayerManager = (() => {
         };
         /**
          * Plays/Resumes the player
-         * @param {{}} conf Object with the following properties: 
+         * @param {{}} conf Object with the following properties:
          *        player: denotes the player object as present in players array
          *                  defaults to current player if not provided
          *        autoSwitch: denotes that operation is part of playlist auto
          *                  next, defaults to false
-         *        crossfade: denotes crossfade enable/disable boolean for this 
-         *                  operation, if not provided, it will set according 
+         *        crossfade: denotes crossfade enable/disable boolean for this
+         *                  operation, if not provided, it will set according
          *                  existing settings of crossfade
          * @returns {MediaElementAudioSourceNode} source node of player object
          */
-        const handlePlayerPlay = async (conf) => {
+        const handlePlayerPlay = async conf => {
             const getValOrDefault = (val, def) => {
                 // catch both null and undefined
-                if (val == null)
-                    return def;
+                if (val == null) return def;
                 return val;
             };
 
             let player = getValOrDefault(conf['player'], players[_current]);
-            makeLog('play', player.sourceNode.mediaElement.getAttribute('data-duration'));
+            makeLog(
+                'play',
+                player.sourceNode.mediaElement.getAttribute('data-duration')
+            );
             let autoSwitch = getValOrDefault(conf['autoSwitch'], false);
             let _crossfade = getValOrDefault(
                 conf['crossfade'],
-                (crossfade && (crossfadeNextPrev || (autoSwitch && crossfadePlaylist)))
+                crossfade &&
+                    (crossfadeNextPrev || (autoSwitch && crossfadePlaylist))
             );
 
             let localPlayState = setLocalPlayState(player);
@@ -259,16 +278,15 @@ var PlayerManager = (() => {
                 if (player.sourceNode.mediaElement.currentTime === 0)
                     player.gainNode.gain.value = 0.0;
 
-                player.gainNode.gain.cancelAndHoldAtTime(audioContext.currentTime);
+                player.gainNode.gain.cancelAndHoldAtTime(
+                    audioContext.currentTime
+                );
 
-                player
-                    .gainNode
-                    .gain
-                    .setTargetAtTime(
-                        volume,
-                        audioContext.currentTime,
-                        crossfadeDuration / 5
-                    );
+                player.gainNode.gain.setTargetAtTime(
+                    volume,
+                    audioContext.currentTime,
+                    crossfadeDuration / 5
+                );
                 player.sourceNode.mediaElement.play();
                 await new Promise(r => setTimeout(r, crossfadeDuration * 1000));
                 makeLog('final vol:', player.gainNode.gain.value);
@@ -283,7 +301,6 @@ var PlayerManager = (() => {
 
             return player.sourceNode;
         };
-
 
         // public members
 
@@ -300,12 +317,14 @@ var PlayerManager = (() => {
              * @returns true if next playing, false if next not set
              */
             next: (autoSwitch = false) => {
-                if (!players[_next].sourceNode.mediaElement.src
-                    || players[_next].sourceNode.mediaElement.src === '') {
+                if (
+                    !players[_next].sourceNode.mediaElement.src ||
+                    players[_next].sourceNode.mediaElement.src === ''
+                ) {
                     handlePlayerPause({
                         player: players[_current],
                     }).then(({ mediaElement }) => {
-                        mediaElement.ontimeupdate = () => { };
+                        mediaElement.ontimeupdate = () => {};
                     });
                     return false;
                 }
@@ -315,7 +334,7 @@ var PlayerManager = (() => {
                     autoSwitch: autoSwitch,
                 }).then(({ mediaElement }) => {
                     // mediaElement.currentTime = 0;
-                    mediaElement.ontimeupdate = () => { };
+                    mediaElement.ontimeupdate = () => {};
                 });
                 if (globalPlayState) {
                     players[_next].sourceNode.mediaElement.currentTime = 0;
@@ -330,7 +349,7 @@ var PlayerManager = (() => {
 
                 players[_next].sourceNode.mediaElement.onended =
                     players[_current].sourceNode.mediaElement.onended;
-                players[_current].sourceNode.mediaElement.onended = () => { };
+                players[_current].sourceNode.mediaElement.onended = () => {};
 
                 updateCurrentIndex(true);
                 prefetchNextTrack();
@@ -341,12 +360,14 @@ var PlayerManager = (() => {
              * Go to prev track
              */
             prev: (autoSwitch = false) => {
-                if (!players[_prev].sourceNode.mediaElement.src
-                    || players[_prev].sourceNode.mediaElement.src === '') {
+                if (
+                    !players[_prev].sourceNode.mediaElement.src ||
+                    players[_prev].sourceNode.mediaElement.src === ''
+                ) {
                     handlePlayerPause({
                         player: players[_current],
                     }).then(({ mediaElement }) => {
-                        mediaElement.ontimeupdate = () => { };
+                        mediaElement.ontimeupdate = () => {};
                     });
                     return false;
                 }
@@ -356,7 +377,7 @@ var PlayerManager = (() => {
                     autoSwitch: autoSwitch,
                 }).then(({ mediaElement }) => {
                     // mediaElement.currentTime = 0;
-                    mediaElement.ontimeupdate = () => { };
+                    mediaElement.ontimeupdate = () => {};
                 });
                 if (globalPlayState) {
                     players[_prev].sourceNode.mediaElement.currentTime = 0;
@@ -371,7 +392,7 @@ var PlayerManager = (() => {
 
                 players[_prev].sourceNode.mediaElement.onended =
                     players[_current].sourceNode.mediaElement.onended;
-                players[_current].sourceNode.mediaElement.onended = () => { };
+                players[_current].sourceNode.mediaElement.onended = () => {};
 
                 updateCurrentIndex(false);
                 prefetchPrevTrack();
@@ -381,26 +402,26 @@ var PlayerManager = (() => {
             /**
              * Sets current track of player and begins prefetch of previous and
              * next tracks in the queue
-             * @param {String} trackId 
+             * @param {String} trackId
              * @returns false if trackId is null or empty, false if track is
              *          absent in queue, true otherwise
              */
             setCurrentTrack: (trackId, duration) => {
-                if (!trackId || trackId === '')
-                    return false;
-                if (!QueueManager.checkQueue(trackId))
-                    return false;
+                if (!trackId || trackId === '') return false;
+                if (!QueueManager.checkQueue(trackId)) return false;
 
                 // let playState = !players[_current].sourceNode.mediaElement.paused;
                 players[_current].trackId = trackId;
                 players[_current].sourceNode.mediaElement.setAttribute(
-                    'data-duration', duration
+                    'data-duration',
+                    duration
                 );
-                players[_current].sourceNode.mediaElement.src = `${API}/tracks/${trackId}/stream`;
+                players[
+                    _current
+                ].sourceNode.mediaElement.src = `${API}/tracks/${trackId}/stream`;
                 if (globalPlayState)
                     players[_current].sourceNode.mediaElement.play();
-                else
-                    players[_current].sourceNode.mediaElement.pause();
+                else players[_current].sourceNode.mediaElement.pause();
 
                 if (globalPlayState)
                     players[_current].sourceNode.mediaElement.play();
@@ -415,19 +436,19 @@ var PlayerManager = (() => {
              */
             play: () => {
                 // due to autoplay policy
-                if (audioContext.state === 'suspended')
-                    audioContext.resume();
+                if (audioContext.state === 'suspended') audioContext.resume();
 
-                if (players[_current].sourceNode.mediaElement.src
-                    && players[_current].sourceNode.mediaElement.src !== '') {
+                if (
+                    players[_current].sourceNode.mediaElement.src &&
+                    players[_current].sourceNode.mediaElement.src !== ''
+                ) {
                     handlePlayerPlay({
                         player: players[_current],
                         crossfade: playPauseFade,
-                    })
-                        .then(({ mediaElement }) => {
-                            mediaElement.ontimeupdate = onTimeUpdateHandler;
-                            onTimeUpdateHandlerExec = false;
-                        });
+                    }).then(({ mediaElement }) => {
+                        mediaElement.ontimeupdate = onTimeUpdateHandler;
+                        onTimeUpdateHandlerExec = false;
+                    });
                     globalPlayState = true;
                 }
             },
@@ -438,10 +459,9 @@ var PlayerManager = (() => {
                 handlePlayerPause({
                     player: players[_current],
                     crossfade: playPauseFade,
-                })
-                    .then(({ mediaElement }) => {
-                        mediaElement.ontimeupdate = () => { };
-                    });
+                }).then(({ mediaElement }) => {
+                    mediaElement.ontimeupdate = () => {};
+                });
                 globalPlayState = false;
             },
             /**
@@ -455,9 +475,9 @@ var PlayerManager = (() => {
              * Sets the volume for the player
              * @param {Number} volume number between 0.0 to 1.0 for audio volume
              */
-            setVolume: (_volume) => {
-                players.forEach(({ gainNode }) =>
-                    gainNode.gain.value = _volume
+            setVolume: _volume => {
+                players.forEach(
+                    ({ gainNode }) => (gainNode.gain.value = _volume)
                 );
                 volume = _volume;
             },
@@ -470,9 +490,9 @@ var PlayerManager = (() => {
             },
             /**
              * Sets shuffle parameter for player.
-             * @param {Boolean} _shuffle 
+             * @param {Boolean} _shuffle
              */
-            setShuffle: (_shuffle) => {
+            setShuffle: _shuffle => {
                 shuffle = _shuffle;
             },
             /**
@@ -482,12 +502,12 @@ var PlayerManager = (() => {
             getShuffle: () => shuffle,
             /**
              * Sets loop parameter for player.
-             * @param {Boolean} _loop 
+             * @param {Boolean} _loop
              */
-            setLoop: (_loop) => {
+            setLoop: _loop => {
                 loop = _loop;
-                players.forEach(({ sourceNode }) =>
-                    sourceNode.mediaElement.loop = _loop
+                players.forEach(
+                    ({ sourceNode }) => (sourceNode.mediaElement.loop = _loop)
                 );
             },
             /**
@@ -499,44 +519,50 @@ var PlayerManager = (() => {
              * On track end event function call. Behaviour dependent on crossfade.
              * If crossfade and playlist-crossfade are enabled and track is not
              * on loop, then the function would be called x seconds earlier than
-             * track end, where x is crossfade duration. Otherwise, function 
+             * track end, where x is crossfade duration. Otherwise, function
              * will be called when track ends if track is not on loop.
-             * @param {Function} func 
+             * @param {Function} func
              */
-            setOnTrackEnd: (func) => {
-                onTimeUpdateHandler = (e) => {
+            setOnTrackEnd: func => {
+                onTimeUpdateHandler = e => {
                     if (!crossfade || !crossfadePlaylist || loop) return;
                     let _audio = e.currentTarget;
                     let _currentTime = _audio.currentTime;
-                    let _duration = parseFloat(_audio.getAttribute('data-duration'));
+                    let _duration = parseFloat(
+                        _audio.getAttribute('data-duration')
+                    );
                     // ready state = 4 means that enough the data is loaded
                     let isReady = _audio.readyState === 4;
-                    if (isReady && _duration
-                        && Math.round(_duration - _currentTime) <= crossfadeDuration
-                        && !onTimeUpdateHandlerExec
+                    if (
+                        isReady &&
+                        _duration &&
+                        Math.round(_duration - _currentTime) <=
+                            crossfadeDuration &&
+                        !onTimeUpdateHandlerExec
                     ) {
                         onTimeUpdateHandlerExec = true;
-                        _audio.ontimeupdate = () => { };
+                        _audio.ontimeupdate = () => {};
                         func();
                     }
                 };
                 // onTimeUpdateHandler = () => { };
 
-                players[_current].sourceNode.mediaElement.ontimeupdate = onTimeUpdateHandler;
+                players[_current].sourceNode.mediaElement.ontimeupdate =
+                    onTimeUpdateHandler;
                 players[_current].sourceNode.mediaElement.onended = () => {
                     if (crossfade) return;
                     func();
                 };
             },
             /**
-             * 
-             * @param {Boolean} _crossfade set crossfade enabled/disabled, 
+             *
+             * @param {Boolean} _crossfade set crossfade enabled/disabled,
              *                default true
-             * @param {Boolean} _crossfadeNextPrev if crossfade is enabled, set 
+             * @param {Boolean} _crossfadeNextPrev if crossfade is enabled, set
              *                crossfade on next/prev button press, default true
-             * @param {Boolean} _crossfadePlaylist if crossfade is enabled, set 
+             * @param {Boolean} _crossfadePlaylist if crossfade is enabled, set
              *                crossfade on playlist track change, default true
-             * @param {Number} _crossfadeDuration if crossfade is enabled, set 
+             * @param {Number} _crossfadeDuration if crossfade is enabled, set
              *                duration of crossfade, default 1.0 sec
              */
             setCrossfade: ({
@@ -552,14 +578,19 @@ var PlayerManager = (() => {
                 };
                 makeLog(
                     getNotNullElseDefault(_crossfade, crossfade),
-                    getNotNullElseDefault(_crossfadePlaylist, crossfadePlaylist),
-                    getNotNullElseDefault(_crossfadeNextPrev, crossfadeNextPrev),
+                    getNotNullElseDefault(
+                        _crossfadePlaylist,
+                        crossfadePlaylist
+                    ),
+                    getNotNullElseDefault(
+                        _crossfadeNextPrev,
+                        crossfadeNextPrev
+                    ),
                     getNotNullElseDefault(_crossfadeDuration, crossfadeDuration)
                 );
 
-                const isBool = (val) => (val === true || val === false);
-                if (isBool(_crossfade))
-                    crossfade = _crossfade;
+                const isBool = val => val === true || val === false;
+                if (isBool(_crossfade)) crossfade = _crossfade;
                 if (isBool(_crossfadePlaylist))
                     crossfadePlaylist = _crossfadePlaylist;
                 if (isBool(_crossfadeNextPrev))
@@ -571,8 +602,8 @@ var PlayerManager = (() => {
              * Gets the crossfade parameters
              * @returns Object:
              *      crossfade: (crossfade in general),
-             *      crossfadeNextPrev: (crossfade for next/prev buttons), 
-             *      crossfadePlaylist: (crossfade for playlist playing), 
+             *      crossfadeNextPrev: (crossfade for next/prev buttons),
+             *      crossfadePlaylist: (crossfade for playlist playing),
              *      crossfadeDuration: (crossfade duration in seconds)
              */
             getCrossfade: () => {
@@ -584,11 +615,11 @@ var PlayerManager = (() => {
                 };
             },
             /**
-             * Sets if track should fade when pressed play/pause button. Fade 
+             * Sets if track should fade when pressed play/pause button. Fade
              * duration is same as crossfade duration.
              * @param {Boolean} _playPauseFade Boolean for enable/disable
              */
-            setPlayPauseFade: (_playPauseFade) => {
+            setPlayPauseFade: _playPauseFade => {
                 if (_playPauseFade === true || _playPauseFade === false)
                     playPauseFade = _playPauseFade;
             },
@@ -601,9 +632,8 @@ var PlayerManager = (() => {
              * Sets verbose logging
              * @param {Boolean} verbose enable/disable
              */
-            setVerbose: (verbose) => {
-                if (verbose === true || verbose === false)
-                    verboseLog = verbose;
+            setVerbose: verbose => {
+                if (verbose === true || verbose === false) verboseLog = verbose;
             },
             /**
              * Gets verbose logging
@@ -611,13 +641,11 @@ var PlayerManager = (() => {
              */
             getVerbose: () => verboseLog,
         };
-
-    };
+    }
 
     return {
         getInstance: () => {
-            if (!instance)
-                instance = init();
+            if (!instance) instance = init();
             return instance;
         },
     };

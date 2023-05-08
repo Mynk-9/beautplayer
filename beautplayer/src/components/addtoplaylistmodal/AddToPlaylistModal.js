@@ -4,7 +4,8 @@ import axios from 'axios';
 import './../../components/commonstyles.scss';
 import Styles from './AddToPlaylistModal.module.scss';
 
-import PersistentStorage from './../../pages/persistentstorage';
+import API from './../../utilities/apis/apiLink';
+import PersistentStorage from './../../utilities/persistentstorage';
 
 import XIcon from './../../assets/buttonsvg/x.svg';
 import PlusIcon from './../../assets/buttonsvg/plus.svg';
@@ -15,39 +16,36 @@ const PlaylistsModal = props => {
     const [okButtonText, setOkButtonText] = useState('Ok');
     const textBoxRef = useRef(null);
 
-    // api endpoint -- same domain, port 5000
-    let API = window.location.origin;
-    API = API.substring(0, API.lastIndexOf(':'));
-    API += ':5000';
-
     const fetchPlaylists = () => {
         let _playlists = playlists;
         setPlaylists([]);
 
-        axios.get(API + '/playlists')
+        axios
+            .get(API + '/playlists')
             .then(resp => {
-                setPlaylists(resp.data.Playlists.map((data, key) => {
-                    const playlistName = data._id;
-                    if (playlistName === 'liked')
-                        return null;
+                setPlaylists(
+                    resp.data.Playlists.map((data, key) => {
+                        const playlistName = data._id;
+                        if (playlistName === 'liked') return null;
 
-                    return (
-                        <div key={key}>
-                            <input
-                                type="radio"
-                                name="playlists"
-                                id={playlistName}
-                                value={playlistName}
-                            />
-                            <label
-                                className={Styles.listItem}
-                                htmlFor={playlistName}
-                            >
-                                {playlistName}
-                            </label>
-                        </div>
-                    );
-                }));
+                        return (
+                            <div key={key}>
+                                <input
+                                    type="radio"
+                                    name="playlists"
+                                    id={playlistName}
+                                    value={playlistName}
+                                />
+                                <label
+                                    className={Styles.listItem}
+                                    htmlFor={playlistName}
+                                >
+                                    {playlistName}
+                                </label>
+                            </div>
+                        );
+                    })
+                );
             })
             .catch(err => {
                 console.log(err);
@@ -55,21 +53,23 @@ const PlaylistsModal = props => {
             });
     };
     const addToPlaylist = async () => {
-        const selectedPlaylist = document.querySelector('input[type="radio"][name="playlists"]:checked')?.value;
-        if (!selectedPlaylist) // if no playlist is selected
+        const selectedPlaylist = document.querySelector(
+            'input[type="radio"][name="playlists"]:checked'
+        )?.value;
+        if (!selectedPlaylist)
+            // if no playlist is selected
             return -1;
 
         let success = 0;
 
-        await axios.post(API + '/playlists', {
-            "playlistName": selectedPlaylist,
-            "trackId": props.trackId
-        })
+        await axios
+            .post(API + '/playlists', {
+                playlistName: selectedPlaylist,
+                trackId: props.trackId,
+            })
             .then(resp => {
-                if (resp.status !== 201)
-                    console.log(resp);
-                else
-                    success = 1;
+                if (resp.status !== 201) console.log(resp);
+                else success = 1;
             })
             .catch(err => {
                 console.log(err);
@@ -87,10 +87,7 @@ const PlaylistsModal = props => {
                     id={newPlaylistName}
                     value={newPlaylistName}
                 />
-                <label
-                    className={Styles.listItem}
-                    htmlFor={newPlaylistName}
-                >
+                <label className={Styles.listItem} htmlFor={newPlaylistName}>
                     {newPlaylistName}
                 </label>
             </div>
@@ -111,17 +108,18 @@ const PlaylistsModal = props => {
 
     return (
         <div className={Styles.modal}>
-            <div className={`${Styles.box} acrylic`} style={props.acrylicColorStyle}>
+            <div
+                className={`${Styles.box} acrylic`}
+                style={props.acrylicColorStyle}
+            >
                 <div className={Styles.head}>
-                    <span className={Styles.heading}>
-                        Add to Playlist
-                    </span>
+                    <span className={Styles.heading}>Add to Playlist</span>
                     <span
                         className={Styles.close}
                         onClick={() => props.close()}
                     >
                         <img
-                            alt={"Close"}
+                            alt={'Close'}
                             src={XIcon}
                             data-dark-mode-compatible
                         />
@@ -129,18 +127,20 @@ const PlaylistsModal = props => {
                 </div>
                 <div className={Styles.body}>
                     <p>
-                        Add <span className={Styles.trackName}>{props.trackName}</span> to the selected playlist:
+                        Add{' '}
+                        <span className={Styles.trackName}>
+                            {props.trackName}
+                        </span>{' '}
+                        to the selected playlist:
                     </p>
-                    <div className={Styles.listBox}>
-                        {playlists}
-                    </div>
+                    <div className={Styles.listBox}>{playlists}</div>
                     {/* <p>
                         Add new playlist:
                     </p> */}
                     <div className={Styles.newPlaylist}>
                         <input type="text" ref={textBoxRef} />
                         <img
-                            alt={"Add"}
+                            alt={'Add'}
                             src={PlusIcon}
                             className={`cursor-pointer`}
                             onClick={() => {
@@ -156,15 +156,18 @@ const PlaylistsModal = props => {
                         className={`cursor-pointer`}
                         onClick={async () => {
                             let resp = await addToPlaylist();
-                            if (resp === 1) {        // success
+                            if (resp === 1) {
+                                // success
                                 setTimeout(() => props.close(), 500);
                                 setOkButtonText('Done!');
-                            } else if (resp === 0) { // failure
+                            } else if (resp === 0) {
+                                // failure
                                 setTimeout(() => {
                                     setOkButtonText('Ok');
                                 }, 2000);
                                 setOkButtonText('Error! Please try again.');
-                            } else if (resp === -1) { // playlist not selected
+                            } else if (resp === -1) {
+                                // playlist not selected
                                 setTimeout(() => {
                                     setOkButtonText('Ok');
                                 }, 2000);
