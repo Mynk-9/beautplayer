@@ -2,6 +2,9 @@ const fs = require('fs');
 const express = require('express');
 const router = express.Router();
 const Tracks = require('./../models/tracks');
+const { bucketClient } = require('../../connectors/aws');
+const { GetObjectCommand, HeadObjectCommand } = require('@aws-sdk/client-s3');
+const { AWS_BUCKET_NAME } = require('../../constants/env');
 
 // handle GET to /tracks
 router.get('/', (req, res, next) => {
@@ -36,19 +39,86 @@ router.get('/:trackId', (req, res, next) => {
         });
 });
 
+router.head('/:trackId/stream', async (req, res) => {
+    const id = req.params.trackId;
+    let contentLength = 0;
+    await Tracks.findById(id)
+        .then(track => {
+            bucketClient.send(new HeadObjectCommand({ Bucket: AWS_BUCKET_NAME, Key: track['path'] }))
+                .then(resp => {
+                    contentLength = resp.ContentLength;
+                });
+        });
+    res.status(200).json({
+        'Accept-Ranges': 'bytes',
+        'Content-Length': contentLength,
+    });
+});
+
 // for streaming
 router.get('/:trackId/stream', (req, res, next) => {
     const id = req.params.trackId;
     Tracks.findById(id)
-        .then(track => {
-
-            // code analysed picked from https://gist.github.com/DingGGu/8144a2b96075deaf1bac
+        .then(async track => {
 
             let music = '';
             music = track['path'];
-            
-            res.status(301).setHeader('Location', music).send();
 
+            const byteRange = req.headers.range;
+
+            let maxContentLength = 0;
+
+            await bucketClient.send(new HeadObjectCommand({ Bucket: AWS_BUCKET_NAME, Key: track['path'] }))
+                .then(resp => {
+                    maxContentLength = resp.ContentLength;
+                });
+
+            if (byteRange) {
+                let [rangeStart, rangeEnd] = byteRange.replace(/bytes=/, "").split("-").map(val => parseInt(val));
+                if (!rangeStart) rangeStart = 0;
+                if (!rangeEnd) rangeEnd = maxContentLength - 1;
+                if (rangeStart > rangeEnd)
+                    res.status(500).json({error: 'ERR_INCOMPLETE_CHUNKED_ENCODING'});
+
+                const contentLength = parseInt(rangeEnd)-parseInt(rangeStart);
+                const contentRange = "bytes " + rangeStart + "-" + rangeEnd + '/' + maxContentLength;
+
+                const headers = {
+                    'Accept-Ranges': 'bytes',
+                    'Content-Type': 'audio/mpeg',
+                    'Content-Length': contentLength,
+                    'Content-Range': contentRange
+                };
+                Object.keys(headers).forEach(header => {
+                    res.setHeader(header, headers[header]);
+                })
+                res.statusCode = 206;
+                bucketClient.send(new GetObjectCommand({ Bucket: AWS_BUCKET_NAME, Key: music, Range: contentRange }))
+                .then(async obj => {
+                    const readStream = obj.Body;
+                    readStream.pipe(res);
+                    readStream.on('close', () => {
+                        res.end();
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.status(500).json(err);
+                });
+            } else {
+                bucketClient.send(new GetObjectCommand({ Bucket: AWS_BUCKET_NAME, Key: music }))
+                .then(obj => {
+                    const readStream = obj.Body;
+                    readStream.pipe(res);
+                    readStream.on('close', () => {
+                        res.end();
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.status(500).json(err);
+                })
+            }
         })
         .catch(e => {
             console.log(e);

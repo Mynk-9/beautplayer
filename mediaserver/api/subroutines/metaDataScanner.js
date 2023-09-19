@@ -9,7 +9,7 @@ module.exports = async (files) => {
     for (let file of files) {
         let path = file['path'];
         const fileStream = (await bucketClient.send(new GetObjectCommand({ Bucket: AWS_BUCKET_NAME, Key: path }))).Body;
-        file['path'] = `${AWS_BUCKET_SERVER}/${path}`;
+        file['path'] = path;
         await (await mm).parseStream(fileStream)
             .then(metaData => {
                 file['title'] = metaData.common.title;
