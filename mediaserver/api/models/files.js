@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const trackSchema = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
-    path: { type: String, required: true }
+const trackSchema = Schema({
+   _id: Schema.Types.ObjectId,
+   path: { type: String, required: true },
 });
 
-module.exports = mongoose.model('Files', trackSchema);
+export default model('Files', trackSchema);

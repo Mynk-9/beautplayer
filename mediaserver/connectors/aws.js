@@ -1,6 +1,5 @@
-const aws = require("@aws-sdk/client-s3");
-const { AWS_REGION } = require("../constants/env");
+import { S3Client } from '@aws-sdk/client-s3';
 
-const bucketClient = new aws.S3Client({ region: AWS_REGION });
+import { AWS_REGION } from '../constants/env.js';
 
-module.exports = { bucketClient };
+export const bucketClient = new S3Client({ region: AWS_REGION });

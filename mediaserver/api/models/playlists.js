@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const playlistsSchema = mongoose.Schema({
-    _id: String,        // also name of the playlist
-    tracks: [{type: mongoose.Schema.Types.ObjectId, ref: 'Tracks'}]
+const playlistsSchema = Schema({
+   _id: String, // also name of the playlist
+   tracks: [{ type: Schema.Types.ObjectId, ref: 'Tracks' }],
 });
 
-module.exports = mongoose.model('Playlists', playlistsSchema);
+export default model('Playlists', playlistsSchema);

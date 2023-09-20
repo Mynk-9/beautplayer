@@ -1,210 +1,210 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const router = express.Router();
+import { Router } from 'express';
+import mongoose from 'mongoose';
+const { connection } = mongoose;
 
-const Files = require('../models/files');
-const Tracks = require('./../models/tracks');
+const router = Router();
 
-const mediaScanner = require('../subroutines/mediaScanner');
-const metaDataScanner = require('../subroutines/metaDataScanner');
-const albumArtGenerator = require('../subroutines/albumArtGenerator');
-const handlePlaylists = require('../subroutines/handlePlaylists');
-const playlistArtGenerator = require('../subroutines/playlistArtGenerator');
+import Files from '../models/files.js';
+import Tracks from '../models/tracks.js';
+
+import mediaScanner from '../subroutines/mediaScanner.js';
+import metaDataScanner from '../subroutines/metaDataScanner.js';
+import albumArtGenerator from '../subroutines/albumArtGenerator.js';
+import { getPlaylists, save } from '../subroutines/handlePlaylists.js';
+import playlistArtGenerator from '../subroutines/playlistArtGenerator.js';
 
 router.post('/', async (req, res, next) => {
+   let files = [];
+   let playlistsData = {};
 
-    let files = [];
-    let playlistsData = {};
+   /// /////////////////////////////////////
+   /// ///////////// STEP 0.1 //////////////
+   /// /////////////////////////////////////
 
-    ////////////////////////////////////////
-    //////////////// STEP 0.1 //////////////
-    ////////////////////////////////////////
+   // store playlists data to restore later
+   playlistsData = await getPlaylists().catch((err) => {
+      console.log(err);
+      res.status(500).json({
+         error: err,
+      });
+   });
 
-    // store playlists data to restore later
-    playlistsData = await handlePlaylists.getPlaylists()
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
+   /// /////////////////////////////////////
+   /// ///////////// STEP 1 ////////////////
+   /// /////////////////////////////////////
 
-    ////////////////////////////////////////
-    //////////////// STEP 1 ////////////////
-    ////////////////////////////////////////
+   // scan the library
+   await mediaScanner()
+      .then((result) => (files = result))
+      .catch((e) => {
+         console.log(e);
+         res.status(500).json({
+            error: e,
+         });
+      });
 
-    // scan the library
-    await mediaScanner()
-        .then(result => files = result)
-        .catch(e => {
+   // refresh the files collection
+   await connection.db
+      .collection('files')
+      .drop()
+      .catch((e) => console.log(e));
+   await connection.db
+      .createCollection('files')
+      .then(() => {
+         Files.insertMany(files).catch((e) => {
             console.log(e);
             res.status(500).json({
-                error: e
+               error: e,
             });
-        });
+         });
+      })
+      .catch((e) => {
+         console.log(e);
+         res.status(500).json({
+            error: e,
+         });
+      });
 
-    // refresh the files collection
-    await mongoose.connection.db.collection('files')
-        .drop()
-        .catch(e => console.log(e));
-    await mongoose.connection.db.createCollection('files')
-        .then(() => {
-            Files.insertMany(files)
-                .catch(e => {
-                    console.log(e);
-                    res.status(500).json({
-                        error: e
-                    });
-                });
-        })
-        .catch(e => {
-            console.log(e);
-            res.status(500).json({
-                error: e
-            });
-        });
+   // return if headers already sent
+   if (res.headersSent) return;
 
-    // return if headers already sent
-    if (res.headersSent)
-        return;
+   /// /////////////////////////////////////
+   /// ///////////// STEP 2 ////////////////
+   /// /////////////////////////////////////
 
-    ////////////////////////////////////////
-    //////////////// STEP 2 ////////////////
-    ////////////////////////////////////////
+   // add meta data to the files
+   await metaDataScanner(files)
+      .then((result) => {
+         files = result;
+      })
+      .catch((e) => {
+         console.log(e);
+         res.status(500).json({
+            error: e,
+         });
+      });
 
-    // add meta data to the files
-    await metaDataScanner(files)
-        .then(result => {
-            files = result
-        })
-        .catch(e => {
-            console.log(e);
-            res.status(500).json({
-                error: e
-            });
-        });
+   // refresh the tracks collection
+   await connection.db
+      .collection('tracks')
+      .drop()
+      .catch((e) => console.log(e));
+   await Tracks.insertMany(files).catch((e) => {
+      console.log(e);
+      res.status(500).json({
+         error: e,
+      });
+   });
+   Tracks.createIndexes([
+      {
+         title: 'text',
+         album: 'text',
+         albumArtist: 'text',
+         contributingArtists: 'text',
+      },
+   ]);
 
-    // refresh the tracks collection
-    await mongoose.connection.db.collection('tracks')
-        .drop()
-        .catch(e => console.log(e));
-    await Tracks.insertMany(files)
-        .catch(e => {
-            console.log(e);
-            res.status(500).json({
-                error: e
-            });
-        });
-    Tracks.createIndexes([
-        { title: 'text', album: 'text', albumArtist: 'text', contributingArtists: 'text' }
-    ]);
+   // return if headers already sent
+   if (res.headersSent) return;
 
-    // return if headers already sent
-    if (res.headersSent)
-        return;
+   /// /////////////////////////////////////
+   /// ///////////// STEP 0.2 //////////////
+   /// /////////////////////////////////////
 
-    ////////////////////////////////////////
-    //////////////// STEP 0.2 //////////////
-    ////////////////////////////////////////
+   // restore playlists
+   await save(playlistsData).catch((err) => {
+      console.log(err);
+      res.status(500).json({
+         error: err,
+      });
+   });
 
-    // restore playlists
-    await handlePlaylists.save(playlistsData)
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
+   // return if headers already sent
+   if (res.headersSent) return;
 
-    // return if headers already sent
-    if (res.headersSent)
-        return;
+   /// /////////////////////////////////////
+   /// ///////////// STEP 3 ////////////////
+   /// /////////////////////////////////////
 
-    ////////////////////////////////////////
-    //////////////// STEP 3 ////////////////
-    ////////////////////////////////////////
+   // aggregate tracks into albums collection and add info
+   try {
+      await connection.db
+         .collection('albums')
+         .drop()
+         .catch((e) => console.log(e));
+      await connection.db
+         .createCollection('albums')
+         .catch((e) => console.log(e));
 
-    // aggregate tracks into albums collection and add info
-    try {
-        await mongoose.connection.db.collection('albums')
-            .drop()
-            .catch(e => console.log(e));
-        await mongoose.connection.db.createCollection('albums')
-            .catch(e => console.log(e));
+      // aggregate
+      await Tracks.aggregate([
+         {
+            $group: {
+               _id: '$album',
+               tracks: {
+                  $push: '$_id',
+               },
+               albumArtist: {
+                  $addToSet: '$albumArtist',
+               },
+               year: {
+                  $addToSet: '$year',
+               },
+               genre: {
+                  $first: '$genre',
+               },
+            },
+         },
+         { $out: 'albums' },
+      ]);
+   } catch (e) {
+      console.log(e);
+      res.status(500).json({
+         error: e,
+      });
+   }
 
-        // aggregate
-        await Tracks
-            .aggregate([
-                {
-                    $group: {
-                        _id: '$album',
-                        tracks: {
-                            $push: '$_id'
-                        },
-                        albumArtist: {
-                            $addToSet: "$albumArtist"
-                        },
-                        year: {
-                            $addToSet: "$year"
-                        },
-                        genre: {
-                            $first: "$genre"
-                        }
-                    }
-                },
-                { $out: 'albums' }
-            ]);
-    } catch (e) {
-        console.log(e);
-        res.status(500).json({
-            error: e
-        });
-    }
+   // return if headers already sent
+   if (res.headersSent) return;
 
-    // return if headers already sent
-    if (res.headersSent)
-        return;
+   /// /////////////////////////////////////
+   /// ///////////// STEP 4 ////////////////
+   /// /////////////////////////////////////
 
-    ////////////////////////////////////////
-    //////////////// STEP 4 ////////////////
-    ////////////////////////////////////////
+   // get the album arts
+   // try {
+   //     albumArtGenerator();
+   // } catch (e) {
+   //     console.log(e);
+   //     res.status(500).json({
+   //         error: e
+   //     });
+   // }
 
-    // get the album arts
-    // try {
-    //     albumArtGenerator();
-    // } catch (e) {
-    //     console.log(e);
-    //     res.status(500).json({
-    //         error: e
-    //     });
-    // }
+   // return if headers already sent
+   if (res.headersSent) return;
 
-    // return if headers already sent
-    if (res.headersSent)
-        return;
+   /// /////////////////////////////////////
+   /// ///////////// STEP 5 ////////////////
+   /// /////////////////////////////////////
 
-    ////////////////////////////////////////
-    //////////////// STEP 5 ////////////////
-    ////////////////////////////////////////
+   // get playlist arts
+   // try {
+   //     for (const pl in playlistsData)
+   //         playlistArtGenerator(pl);
+   // } catch (err) {
+   //     console.log(err);
+   //     res.status(500).json({
+   //         error: err
+   //     });
+   // }
 
-    // get playlist arts
-    // try {
-    //     for (const pl in playlistsData)
-    //         playlistArtGenerator(pl);
-    // } catch (err) {
-    //     console.log(err);
-    //     res.status(500).json({
-    //         error: err
-    //     });
-    // }
+   // return if headers already sent
+   if (res.headersSent) return;
 
-    // return if headers already sent
-    if (res.headersSent)
-        return;
-
-    res.status(201).json({
-        files: files
-    });
+   res.status(201).json({
+      files,
+   });
 });
 
-module.exports = router;
+export { router };

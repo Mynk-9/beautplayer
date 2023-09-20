@@ -1,27 +1,27 @@
-const express = require('express');
+import express from 'express';
+import morgan from 'morgan';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+
+import { router as tracksRoutes } from './api/routes/tracks.js';
+import { router as albumsRoutes } from './api/routes/albums.js';
+import { router as playlists } from './api/routes/playlists.js';
+import { router as libraryRefreshRoute } from './api/routes/libraryRefresh.js';
+import { router as coverArtRoute } from './api/routes/coverArt.js';
+import { router as searchRoute } from './api/routes/search.js';
+
 const app = express();
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
 
-const tracksRoutes = require('./api/routes/tracks');
-const albumsRoutes = require('./api/routes/albums');
-const libraryRefreshRoute = require('./api/routes/libraryRefresh');
-const coverArtRoute = require('./api/routes/coverArt');
-const playlists = require('./api/routes/playlists');
-const searchRoute = require('./api/routes/search');
+mongoose.connect('mongodb://localhost:27017/beautplayer', {}).then(
+   (e) => {
+      console.log('Successfully connected to MongoDB Database.');
+   },
+   (e) => {
+      console.log('Failure in connection to MongoDB Database.', e);
+   }
+);
 
-mongoose
-    .connect('mongodb://localhost:27017/beautplayer', {})
-    .then(
-        (e) => {
-            console.log('Successfully connected to MongoDB Database.');
-        }, (e) => {
-            console.log('Failure in connection to MongoDB Database.', e);
-        }
-    );
-
-// logging 
+// logging
 app.use(morgan('dev'));
 
 // body parsing
@@ -30,19 +30,19 @@ app.use(bodyParser.json());
 
 // allow CORS
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header(
-        'Access-Control-Allow-Headers',
-        'Origin, X-Request-With, Content-Type, Accept, Authorization'
-    );
-    if (req.method === 'OPTIONS') {
-        res.header(
-            'Access-Control-Allow-Methods',
-            'PUT, POST, PATCH, DELETE, GET'
-        );
-        return res.status(200).json({});
-    }
-    next();
+   res.header('Access-Control-Allow-Origin', '*');
+   res.header(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Request-With, Content-Type, Accept, Authorization'
+   );
+   if (req.method === 'OPTIONS') {
+      res.header(
+         'Access-Control-Allow-Methods',
+         'PUT, POST, PATCH, DELETE, GET'
+      );
+      return res.status(200).json({});
+   }
+   return next();
 });
 
 // routes which should handle requests
@@ -56,17 +56,17 @@ app.use('/search', searchRoute);
 
 // error handling
 app.use((req, res, next) => {
-    const error = new Error('Not found');
-    error.status = 404;
-    next(error);
+   const error = new Error('Not found');
+   error.status = 404;
+   next(error);
 });
 app.use((error, req, res, next) => {
-    res.status(error.status || 500);
-    res.json({
-        error: {
-            message: error.message,
-        }
-    });
+   res.status(error.status || 500);
+   res.json({
+      error: {
+         message: error.message,
+      },
+   });
 });
 
-module.exports = app;
+export default app;

@@ -1,11 +1,11 @@
-require('dotenv').config();
+import 'dotenv/config';
 
-const http = require('http');
-const app = require('./app');
+import { createServer } from 'http';
+import app from './app.js';
+import { SERVER_PORT } from './constants/env.js';
 
-const port = require('./constants/env').SERVER_PORT || 5000;
+const server = createServer(app);
 
-const server = http.createServer(app);
-
-server.listen(port)
+const port = SERVER_PORT || 5000;
+server.listen(port);
 console.log(`Server started at port: ${port}`);

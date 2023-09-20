@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
 // here _id is the name of album
 
-const compressedCoverArtSchema = mongoose.Schema({
-    _id: String,
-    base64: String
+const compressedCoverArtSchema = Schema({
+   _id: String,
+   base64: String,
 });
 
-module.exports = mongoose.model('CompressedCoverArt', compressedCoverArtSchema);
+export default model('CompressedCoverArt', compressedCoverArtSchema);

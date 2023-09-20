@@ -1,12 +1,12 @@
-const { bucketClient } = require("../../connectors/aws");
-const { AWS_BUCKET_NAME: AWS_BUCKET } = require("../../constants/env");
-const aws = require('@aws-sdk/client-s3');
+import { ListObjectsCommand } from '@aws-sdk/client-s3';
+import { bucketClient } from '../../connectors/aws.js';
+import { AWS_BUCKET_NAME as AWS_BUCKET } from '../../constants/env.js';
 
-module.exports = async () => {
-  const objects = await bucketClient.send(
-    new aws.ListObjectsCommand({ Bucket: AWS_BUCKET })
-  );
-  return objects.Contents.map((content) => ({
-    path: content.Key,
-  }));
+export default async () => {
+   const objects = await bucketClient.send(
+      new ListObjectsCommand({ Bucket: AWS_BUCKET })
+   );
+   return objects.Contents.map((content) => ({
+      path: content.Key,
+   }));
 };
