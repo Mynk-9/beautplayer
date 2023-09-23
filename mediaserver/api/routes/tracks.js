@@ -88,28 +88,37 @@ router.get('/:trackId/stream', (req, res) => {
             let [rangeStart, rangeEnd] = byteRange
                .replace(/bytes=/, '')
                .split('-')
-               .map((val) => parseInt(val));
+               .map((val) => parseInt(val, 10));
             if (!rangeStart) rangeStart = 0;
             if (!rangeEnd) rangeEnd = maxContentLength - 1;
             if (rangeStart > rangeEnd) {
-               res.status(500).json({
+               res.status(416).json({
                   error: 'ERR_INCOMPLETE_CHUNKED_ENCODING',
                });
+               return;
             }
 
-            const contentLength = parseInt(rangeEnd) - parseInt(rangeStart);
+            const contentLength =
+               parseInt(rangeEnd, 10) - parseInt(rangeStart, 10);
             const contentRange = `bytes ${rangeStart}-${rangeEnd}/${maxContentLength}`;
-
             const headers = {
                'Accept-Ranges': 'bytes',
                'Content-Type': 'audio/mpeg',
                'Content-Length': contentLength,
                'Content-Range': contentRange,
             };
+
             Object.keys(headers).forEach((header) => {
                res.setHeader(header, headers[header]);
             });
             res.statusCode = 206;
+
+            // fix for repeated last byte request
+            if (rangeStart === maxContentLength - 1) {
+               res.send(Buffer.from([0x0]));
+               return;
+            }
+
             bucketClient
                .send(
                   new GetObjectCommand({
