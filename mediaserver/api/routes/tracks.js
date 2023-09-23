@@ -1,13 +1,14 @@
 import { Router } from 'express';
-
-export const router = Router();
 import { GetObjectCommand, HeadObjectCommand } from '@aws-sdk/client-s3';
+
 import Tracks from '../models/tracks.js';
-import { bucketClient } from '../../connectors/aws.js';
+import bucketClient from '../../connectors/aws.js';
 import { AWS_BUCKET_NAME } from '../../constants/env.js';
 
+const router = Router();
+
 // handle GET to /tracks
-router.get('/', (req, res, next) => {
+router.get('/', (_, res) => {
    Tracks.find()
       .exec()
       .then((tracks) => {
@@ -23,7 +24,7 @@ router.get('/', (req, res, next) => {
       });
 });
 
-router.get('/:trackId', (req, res, next) => {
+router.get('/:trackId', (req, res) => {
    const id = req.params.trackId;
    Tracks.findById(id)
       .then((track) => {
@@ -61,7 +62,7 @@ router.head('/:trackId/stream', async (req, res) => {
 });
 
 // for streaming
-router.get('/:trackId/stream', (req, res, next) => {
+router.get('/:trackId/stream', (req, res) => {
    const id = req.params.trackId;
    Tracks.findById(id)
       .then(async (track) => {
@@ -153,3 +154,5 @@ router.get('/:trackId/stream', (req, res, next) => {
          });
       });
 });
+
+export default router;

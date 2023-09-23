@@ -1,10 +1,11 @@
 import { Router } from 'express';
 
+import Tracks from '../models/tracks.js';
+
+// eslint-disable-next-line import/no-unresolved
 const mm = import('music-metadata');
 const imagemin = import('imagemin');
 const imageminMozjpeg = import('imagemin-mozjpeg');
-
-import Tracks from '../models/tracks.js';
 
 export const router = Router();
 
@@ -12,7 +13,7 @@ export const router = Router();
 // kept as backup option if a requirement arises
 
 // handle GET to /coverArt/:trackId
-router.get('/:trackId', (req, res, next) => {
+router.get('/:trackId', (req, res) => {
    const id = req.params.trackId;
    Tracks.findById(id)
       .then((track) => {
@@ -43,7 +44,7 @@ router.get('/:trackId', (req, res, next) => {
 });
 
 // handle GET to /coverArt/compressed/:trackID
-router.get('/compressed/:trackId', (req, res, next) => {
+router.get('/compressed/:trackId', (req, res) => {
    const id = req.params.trackId;
    Tracks.findById(id)
       .then((track) => {

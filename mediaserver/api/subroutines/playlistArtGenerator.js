@@ -2,34 +2,34 @@ import { createWriteStream } from 'fs';
 import { join } from 'path';
 import createCollage from 'nf-photo-collage';
 
+import Playlists from '../models/playlists.js';
+
 const imagemin = import('imagemin');
 const imageminMozjpeg = import('imagemin-mozjpeg');
 
-import Playlists from '../models/playlists.js';
-
 function getAlbumArtFilePath(name) {
-   name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase(); // thanks to https://stackoverflow.com/a/8485137/6262571
-   return join(__dirname, `/../../public/coverArt/${name}.jpg`);
+   const sanitisedName = name.replace(/[^a-z0-9]/gi, '_').toLowerCase(); // thanks to https://stackoverflow.com/a/8485137/6262571
+   return join(__dirname, `/../../public/coverArt/${sanitisedName}.jpg`);
 }
 function getPlaylistArtPath(name, isCompressed = false, directoryOnly = false) {
-   name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase(); // thanks to https://stackoverflow.com/a/8485137/6262571
+   const sanitisedName = name.replace(/[^a-z0-9]/gi, '_').toLowerCase(); // thanks to https://stackoverflow.com/a/8485137/6262571
 
    if (directoryOnly) {
       if (isCompressed) {
-         return join(
-            __dirname,
-            '/../../public/coverArt/playlists/compressed'
-         );
+         return join(__dirname, '/../../public/coverArt/playlists/compressed');
       }
       return join(__dirname, '/../../public/coverArt/playlists');
    }
    if (isCompressed) {
       return join(
          __dirname,
-         `/../../public/coverArt/playlists/compressed/${name}.jpg`
+         `/../../public/coverArt/playlists/compressed/${sanitisedName}.jpg`
       );
    }
-   return join(__dirname, `/../../public/coverArt/playlists/${name}.jpg`);
+   return join(
+      __dirname,
+      `/../../public/coverArt/playlists/${sanitisedName}.jpg`
+   );
 }
 
 export default (plName) => {
@@ -118,7 +118,7 @@ export default (plName) => {
                         false,
                         false
                      );
-                     if (process.platform == 'win32')
+                     if (process.platform === 'win32')
                         playlistArtPath = playlistArtPath.replace(/\\/g, '/');
 
                      await imagemin([playlistArtPath], {

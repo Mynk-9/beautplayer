@@ -1,11 +1,11 @@
 import { Router } from 'express';
-
-const router = Router();
 import Playlists from '../models/playlists.js';
 import playlistArtGenerator from '../subroutines/playlistArtGenerator.js';
 
+const router = Router();
+
 // handle GET to /playlists
-router.get('/', (req, res, next) => {
+router.get('/', (_, res) => {
    Playlists.find()
       .exec()
       .then((playlists) => {
@@ -22,7 +22,7 @@ router.get('/', (req, res, next) => {
 });
 
 // handle GET to /playlists:playlistName
-router.get('/:playlistName', (req, res, next) => {
+router.get('/:playlistName', (req, res) => {
    const plName = req.params.playlistName;
    Playlists.findById(plName)
       .populate('tracks')
@@ -40,7 +40,7 @@ router.get('/:playlistName', (req, res, next) => {
 });
 
 // handle GET to /playlists/:playlistName/:trackId
-router.get('/:playlistName/:trackId', (req, res, next) => {
+router.get('/:playlistName/:trackId', (req, res) => {
    const plName = req.params.playlistName;
    const { trackId } = req.params;
    Playlists.count({ _id: plName, tracks: { $in: [trackId] } })
@@ -58,7 +58,7 @@ router.get('/:playlistName/:trackId', (req, res, next) => {
 });
 
 // handle POST requests on /playlists
-router.post('/', async (req, res, next) => {
+router.post('/', async (req, res) => {
    const playList = req.body.playlistName;
    const { trackId } = req.body;
 
@@ -89,7 +89,7 @@ router.post('/', async (req, res, next) => {
 
 // handle DELETE requests on /playlists/:playlistName/
 // delete the playlist
-router.delete('/:playlistName', (req, res, next) => {
+router.delete('/:playlistName', (req, res) => {
    const { playlistName } = req.params;
 
    Playlists.deleteOne({ _id: playlistName })
@@ -110,7 +110,7 @@ router.delete('/:playlistName', (req, res, next) => {
 
 // handle DELETE requests on /playlists/:playlistName/:trackId
 // delete the track from playlist
-router.delete('/:playlistName/:trackId', (req, res, next) => {
+router.delete('/:playlistName/:trackId', (req, res) => {
    const { trackId } = req.params;
    const { playlistName } = req.params;
 
@@ -138,4 +138,4 @@ router.delete('/:playlistName/:trackId', (req, res, next) => {
       });
 });
 
-export { router };
+export default router;

@@ -2,10 +2,10 @@ import { Router } from 'express';
 
 import Albums from '../models/albums.js';
 
-export const router = Router();
+const router = Router();
 
 // handle GET to /albums
-router.get('/', (req, res, next) => {
+router.get('/', (_, res) => {
    Albums.find()
       .exec()
       .then((albums) => {
@@ -21,7 +21,7 @@ router.get('/', (req, res, next) => {
       });
 });
 
-router.get('/:albumName', (req, res, next) => {
+router.get('/:albumName', (req, res) => {
    const id = req.params.albumName;
    Albums.findOne({ _id: id })
       .populate('tracks')
@@ -38,3 +38,5 @@ router.get('/:albumName', (req, res, next) => {
          });
       });
 });
+
+export default router;

@@ -1,10 +1,10 @@
 import { Router } from 'express';
-
-const router = Router();
 import Tracks from '../models/tracks.js';
 
+const router = Router();
+
 // handle GET to /tracks
-router.get('/:query', (req, res, next) => {
+router.get('/:query', (req, res) => {
    const { query } = req.params;
    console.log('query:', query);
    Tracks.find({
@@ -26,4 +26,4 @@ router.get('/:query', (req, res, next) => {
       });
 });
 
-export { router };
+export default router;

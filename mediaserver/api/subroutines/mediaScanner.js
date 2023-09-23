@@ -1,5 +1,5 @@
 import { ListObjectsCommand } from '@aws-sdk/client-s3';
-import { bucketClient } from '../../connectors/aws.js';
+import bucketClient from '../../connectors/aws.js';
 import { AWS_BUCKET_NAME as AWS_BUCKET } from '../../constants/env.js';
 
 export default async () => {

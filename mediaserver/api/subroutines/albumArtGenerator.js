@@ -1,24 +1,28 @@
 import { createWriteStream } from 'fs';
 import { join } from 'path';
 
+import Albums from '../models/albums.js';
+import Tracks from '../models/tracks.js';
+
+// eslint-disable-next-line import/no-unresolved
 const mm = import('music-metadata');
 const imagemin = import('imagemin');
 const imageminMozjpeg = import('imagemin-mozjpeg');
 
-import Albums from '../models/albums.js';
-import Tracks from '../models/tracks.js';
-
 function saveFile(buffer, name, isCompressed = false) {
-   name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase(); // thanks to https://stackoverflow.com/a/8485137/6262571
-   const buff = new Buffer.from(buffer);
+   const sanitisedName = name.replace(/[^a-z0-9]/gi, '_').toLowerCase(); // thanks to https://stackoverflow.com/a/8485137/6262571
+   const buff = Buffer.from(buffer);
    let w;
    if (isCompressed) {
       w = createWriteStream(
-         join(__dirname, `/../../public/coverArt/compressed/${name}.jpg`)
+         join(
+            __dirname,
+            `/../../public/coverArt/compressed/${sanitisedName}.jpg`
+         )
       );
    } else {
       w = createWriteStream(
-         join(__dirname, `/../../public/coverArt/${name}.jpg`)
+         join(__dirname, `/../../public/coverArt/${sanitisedName}.jpg`)
       );
    }
    w.write(buff);
@@ -39,6 +43,7 @@ export default () => {
                   mm.parseFile(filePath)
                      .then(async (metadata) => {
                         const imageData = metadata.common.picture[0].data; // get album art
+                        // eslint-disable-next-line no-underscore-dangle
                         saveFile(imageData, album._id); // save the album art
 
                         const compressedImageData = await imagemin.buffer(
@@ -49,6 +54,7 @@ export default () => {
                               ],
                            }
                         );
+                        // eslint-disable-next-line no-underscore-dangle
                         saveFile(compressedImageData, album._id, true); // save the compressed album art
                      })
                      .catch((e) => {

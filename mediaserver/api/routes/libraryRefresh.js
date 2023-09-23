@@ -1,19 +1,20 @@
 import { Router } from 'express';
 import mongoose from 'mongoose';
-const { connection } = mongoose;
-
-const router = Router();
 
 import Files from '../models/files.js';
 import Tracks from '../models/tracks.js';
 
 import mediaScanner from '../subroutines/mediaScanner.js';
 import metaDataScanner from '../subroutines/metaDataScanner.js';
-import albumArtGenerator from '../subroutines/albumArtGenerator.js';
+// import albumArtGenerator from '../subroutines/albumArtGenerator.js';
 import { getPlaylists, save } from '../subroutines/handlePlaylists.js';
-import playlistArtGenerator from '../subroutines/playlistArtGenerator.js';
+// import playlistArtGenerator from '../subroutines/playlistArtGenerator.js';
 
-router.post('/', async (req, res, next) => {
+const { connection } = mongoose;
+
+const router = Router();
+
+router.post('/', async (_, res) => {
    let files = [];
    let playlistsData = {};
 
@@ -35,7 +36,9 @@ router.post('/', async (req, res, next) => {
 
    // scan the library
    await mediaScanner()
-      .then((result) => (files = result))
+      .then((result) => {
+         files = result;
+      })
       .catch((e) => {
          console.log(e);
          res.status(500).json({
@@ -207,4 +210,4 @@ router.post('/', async (req, res, next) => {
    });
 });
 
-export { router };
+export default router;

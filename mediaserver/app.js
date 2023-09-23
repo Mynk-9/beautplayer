@@ -3,17 +3,17 @@ import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 
-import { router as tracksRoutes } from './api/routes/tracks.js';
-import { router as albumsRoutes } from './api/routes/albums.js';
-import { router as playlists } from './api/routes/playlists.js';
-import { router as libraryRefreshRoute } from './api/routes/libraryRefresh.js';
-import { router as coverArtRoute } from './api/routes/coverArt.js';
-import { router as searchRoute } from './api/routes/search.js';
+import tracksRoutes from './api/routes/tracks.js';
+import albumsRoutes from './api/routes/albums.js';
+import playlists from './api/routes/playlists.js';
+import libraryRefreshRoute from './api/routes/libraryRefresh.js';
+import coverArtRoute from './api/routes/coverArt.js';
+import searchRoute from './api/routes/search.js';
 
 const app = express();
 
 mongoose.connect('mongodb://localhost:27017/beautplayer', {}).then(
-   (e) => {
+   () => {
       console.log('Successfully connected to MongoDB Database.');
    },
    (e) => {
@@ -60,7 +60,7 @@ app.use((req, res, next) => {
    error.status = 404;
    next(error);
 });
-app.use((error, req, res, next) => {
+app.use((error, _, res) => {
    res.status(error.status || 500);
    res.json({
       error: {

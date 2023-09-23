@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
-const { connection } = mongoose;
+
 import Playlists from '../models/playlists.js';
 import Tracks from '../models/tracks.js';
+
+const { connection } = mongoose;
 
 export async function getPlaylists() {
    // store playlists tracks path to restore
@@ -11,6 +13,7 @@ export async function getPlaylists() {
       .populate('tracks')
       .then((pls) => {
          pls.forEach((pl) => {
+            // eslint-disable-next-line no-underscore-dangle
             const name = pl._id;
             const tracks = pl.tracks.map((track) => track.path);
             playlistsData[name] = tracks;
@@ -37,19 +40,23 @@ export async function save(data) {
       .createCollection('playlists')
       .catch((e) => console.log(e));
    const playlists = [];
-   for (const pl in data) {
+   Object.keys(data).forEach(async (pl) => {
       const obj = {};
+      // eslint-disable-next-line no-underscore-dangle
       obj._id = pl;
       obj.tracks = [];
 
-      for (const path of data[pl]) {
-         await Tracks.findOne({ path }).then((track) => {
-            obj.tracks.push(String(track._id));
-         });
-      }
+      await Promise.allSettled(
+         data[pl].map(async (path) =>
+            Tracks.findOne({ path }).then((track) => {
+               // eslint-disable-next-line no-underscore-dangle
+               obj.tracks.push(String(track._id));
+            })
+         )
+      );
 
       playlists.push(obj);
-   }
+   });
 
    console.log('handlePlaylists: save: playlists:', playlists);
    await Playlists.insertMany(playlists).catch((err) => {
